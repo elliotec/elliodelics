@@ -172,9 +172,16 @@ const email = 'mike@mindscapecollective.org';
   // divided by fade alpha. Tune the pair together, not separately.
   const BG = 'oklch(0.29 0.09 152)'; // must match --void
   const FADE = 'oklch(0.29 0.09 152 / 0.35)';
-  const LINE = 'oklch(0.78 0.095 305 / 0.06)'; // lilac — apart from green and acid
+  const LINE = 'oklch(0.78 0.095 305 / 0.06)'; // pointer rings
+  const RING_LINE = 'oklch(0.78 0.095 305 / 0.05)'; // the interference field
+  const STAMP = 'oklch(0.78 0.095 305 / 0.24)'; // laid-down geometry — brighter, it stays
+  const RIPPLE = 'oklch(0.78 0.095 305)'; // solid; alpha applied per-ring
   const PULSE = 'oklch(0.92 0.21 113)';
-  const GAP = 34;
+  const TAU = Math.PI * 2;
+  const GAP = 34; // interference ring spacing
+  const STAMP_R = 30; // Flower-of-Life circle radius = lattice spacing
+  const BRUSH = STAMP_R * 1.55; // stamp the whole neighbourhood — petals, not a line
+  const STAMP_CAP = 900; // oldest circles retire past this, so the canvas never chokes
 
   let w = 0, h = 0, dpr = 1;
   let running = false;
@@ -183,11 +190,92 @@ const email = 'mike@mindscapecollective.org';
 
   const pointer = { x: -1, y: -1, tx: -1, ty: -1, active: false };
 
-  const sources = [
-    { ax: 0.22, ay: 0.30, rx: 0.16, ry: 0.12, sx: 0.000041, sy: 0.000053, p: 0 },
+  // the interference field — three drifting ring emitters
+  const ringSources = [
+    { ax: 0.22, ay: 0.3, rx: 0.16, ry: 0.12, sx: 0.000041, sy: 0.000053, p: 0 },
     { ax: 0.78, ay: 0.42, rx: 0.14, ry: 0.16, sx: 0.000047, sy: 0.000037, p: 2.1 },
-    { ax: 0.50, ay: 0.85, rx: 0.18, ry: 0.10, sx: 0.000035, sy: 0.000049, p: 4.2 },
+    { ax: 0.5, ay: 0.85, rx: 0.18, ry: 0.1, sx: 0.000035, sy: 0.000049, p: 4.2 },
   ];
+
+  function drawRings(cx: number, cy: number, shift: number, color = RING_LINE) {
+    const maxR = maxRadius() * 0.72;
+    const offset = ((shift % GAP) + GAP) % GAP;
+    ctx.strokeStyle = color;
+    ctx.lineWidth = 1;
+    for (let r = offset || 0.001; r < maxR; r += GAP) {
+      ctx.beginPath();
+      ctx.arc(cx, cy, r, 0, TAU);
+      ctx.stroke();
+    }
+  }
+
+  // -- Flower-of-Life stamping ------------------------------------------
+  // The pointer lays circles onto a fixed triangular lattice with spacing =
+  // radius, so every circle passes through its neighbours' centers — the
+  // classic construction. Stamped circles bloom in and STAY.
+  const stamps = new Map<string, { x: number; y: number; born: number }>();
+  const ROW_H = STAMP_R * (Math.sqrt(3) / 2);
+
+  function stampAt(px: number, py: number, t: number) {
+    const row = Math.round(py / ROW_H);
+    for (let dr = -2; dr <= 2; dr++) {
+      const r = row + dr;
+      const xOff = (r % 2 ? 0.5 : 0) * STAMP_R;
+      const col = Math.round((px - xOff) / STAMP_R);
+      for (let dc = -2; dc <= 2; dc++) {
+        const c = col + dc;
+        const x = c * STAMP_R + xOff;
+        const y = r * ROW_H;
+        if (Math.hypot(x - px, y - py) > BRUSH) continue;
+        const key = r + ',' + c;
+        if (stamps.has(key)) continue;
+        stamps.set(key, { x, y, born: t });
+        if (stamps.size > STAMP_CAP) {
+          stamps.delete(stamps.keys().next().value!);
+        }
+      }
+    }
+  }
+
+  function drawStamps(t: number) {
+    const RIPPLE_GAP = STAMP_R * 0.55;
+    const RIPPLE_MAX = STAMP_R * 2.4; // ripples stay local to their circle
+    ctx.lineWidth = 1;
+    stamps.forEach((s) => {
+      const age = t - s.born;
+      const k = Math.min(age / 700, 1);
+      const ease = 1 - Math.pow(1 - k, 4); // bloom: ease-out-quart
+      // every circle keeps growing after its bloom: 2px/s toward a 2.6× cap,
+      // so painted regions thicken into mandala overlap
+      const base =
+        STAMP_R * ease + Math.min(Math.max(age - 700, 0) * 0.002, STAMP_R * 1.6);
+      ctx.strokeStyle = STAMP;
+      ctx.globalAlpha = 0.35 + 0.65 * ease;
+      ctx.beginPath();
+      ctx.arc(s.x, s.y, base, 0, TAU);
+      ctx.stroke();
+      if (age < 300) {
+        // acid flash at birth
+        ctx.strokeStyle = PULSE;
+        ctx.globalAlpha = 0.4 * (1 - age / 300);
+        ctx.beginPath();
+        ctx.arc(s.x, s.y, base, 0, TAU);
+        ctx.stroke();
+        return;
+      }
+      // ripples ride the growing edge, fading as they travel
+      const span = RIPPLE_MAX - STAMP_R;
+      const shift = (age * 0.014) % RIPPLE_GAP;
+      ctx.strokeStyle = RIPPLE;
+      for (let r = base + shift; r < base + span; r += RIPPLE_GAP) {
+        ctx.globalAlpha = 0.2 * (1 - (r - base) / span);
+        ctx.beginPath();
+        ctx.arc(s.x, s.y, r, 0, TAU);
+        ctx.stroke();
+      }
+    });
+    ctx.globalAlpha = 1;
+  }
 
   function resize() {
     dpr = Math.min(window.devicePixelRatio || 1, 1.75);
@@ -205,18 +293,6 @@ const email = 'mike@mindscapecollective.org';
     return Math.hypot(w, h) * 0.72;
   }
 
-  function drawRings(cx: number, cy: number, shift: number) {
-    const maxR = maxRadius();
-    const offset = ((shift % GAP) + GAP) % GAP;
-    ctx.strokeStyle = LINE;
-    ctx.lineWidth = 1.1;
-    for (let r = offset || 0.001; r < maxR; r += GAP) {
-      ctx.beginPath();
-      ctx.arc(cx, cy, r, 0, Math.PI * 2);
-      ctx.stroke();
-    }
-  }
-
   function drawPulse(cx: number, cy: number, dist: number) {
     const maxR = maxRadius();
     const r = ((dist % maxR) + maxR) % maxR;
@@ -227,7 +303,7 @@ const email = 'mike@mindscapecollective.org';
     ctx.globalAlpha = a;
     ctx.lineWidth = 1.6;
     ctx.beginPath();
-    ctx.arc(cx, cy, r, 0, Math.PI * 2);
+    ctx.arc(cx, cy, r, 0, TAU);
     ctx.stroke();
     ctx.globalAlpha = 1;
   }
@@ -236,19 +312,20 @@ const email = 'mike@mindscapecollective.org';
     ctx.fillStyle = FADE;
     ctx.fillRect(0, 0, w, h); // phosphor decay instead of a hard clear
     const maxR = maxRadius();
-    sources.forEach((s, i) => {
+    ringSources.forEach((s, i) => {
       const cx = (s.ax + Math.sin(t * s.sx + s.p) * s.rx) * w;
       const cy = (s.ay + Math.cos(t * s.sy + s.p) * s.ry) * h;
       drawRings(cx, cy, t * 0.0045 + s.p * GAP);
       drawPulse(cx, cy, t * 0.021 + (i * maxR) / 3);
     });
+    drawStamps(t);
     if (pointer.active) {
       // time-based lerp: identical feel at any frame rate
       const k = 1 - Math.exp(-(Number.isFinite(dt) ? dt : 16) / 180);
       pointer.x += (pointer.tx - pointer.x) * k;
       pointer.y += (pointer.ty - pointer.y) * k;
-      drawRings(pointer.x, pointer.y, t * 0.008);
-      drawPulse(pointer.x, pointer.y, t * 0.03);
+      stampAt(pointer.x, pointer.y, t); // the moving rings leave geometry behind
+      drawRings(pointer.x, pointer.y, t * 0.008, LINE);
     }
   }
 
@@ -282,6 +359,7 @@ const email = 'mike@mindscapecollective.org';
       else setRunning(true);
     });
     window.addEventListener('pointermove', (e) => {
+      if (e.pointerType !== 'mouse') return; // touch-scroll must not paint
       const rect = canvas.getBoundingClientRect();
       if (e.clientY < rect.bottom && e.clientY > rect.top) {
         if (!pointer.active) {
