@@ -1,0 +1,165 @@
+/* ============================================================
+   Elliodelics — the green void
+   Drenched color strategy: the surface IS the green.
+   ============================================================ */
+
+:root {
+  /* -- color ------------------------------------------------ */
+  --void:        oklch(0.29 0.09 152);    /* the drench — deep forest, near-black green */
+  --void-deep:   oklch(0.245 0.075 152);  /* darker band               */
+  --void-abyss:  oklch(0.19 0.058 152);   /* footer / lowest band      */
+  --void-lift:   oklch(0.34 0.105 152);   /* hover lift on void        */
+  --ink:         oklch(0.975 0.008 152);  /* green-tinted white        */
+  --ink-dim:     oklch(0.975 0.008 152 / 0.8);
+  --ink-faint:   oklch(0.975 0.008 152 / 0.28); /* rules & hairlines only */
+  --acid:        oklch(0.92 0.21 113);    /* the one strange accent    */
+
+  /* -- type ------------------------------------------------- */
+  --font-display: 'Bricolage Grotesque Variable', 'Helvetica Neue', Arial, sans-serif;
+  --font-mono: 'Fragment Mono', 'SFMono-Regular', ui-monospace, monospace;
+
+  /* modular scale, ~1.33 ratio, fluid on top */
+  --text-body:  clamp(1.0625rem, 1rem + 0.3vw, 1.1875rem);
+  --text-lg:    clamp(1.375rem, 1.15rem + 1vw, 1.75rem);
+  --text-h3:    clamp(1.75rem, 1.3rem + 2vw, 2.6rem);
+  --text-h2:    clamp(2rem, 1.2rem + 4vw, 4.25rem);
+  --text-hero:  clamp(2.1rem, 0.5rem + 7.2vw, 6rem); /* floor sized so PSYCHEDELIC fits at 320px */
+  --text-mono:  0.8125rem;
+
+  /* -- space ------------------------------------------------ */
+  --space-section: clamp(7rem, 14vh + 3rem, 13rem);
+  --gutter: clamp(1.25rem, 4vw, 4rem);
+  --measure: 34em;
+
+  /* -- motion ----------------------------------------------- */
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);       /* quint-ish */
+  --ease-expo: cubic-bezier(0.16, 1, 0.3, 1);
+
+  /* -- z scale ---------------------------------------------- */
+  --z-canvas: 0;
+  --z-content: 1;
+  --z-header: 2;
+}
+
+/* -- reset --------------------------------------------------- */
+
+*,
+*::before,
+*::after { box-sizing: border-box; }
+
+body { margin: 0; }
+
+/* -- base ---------------------------------------------------- */
+
+html {
+  background: var(--void);
+  color: var(--ink);
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+}
+
+body {
+  font-family: var(--font-display);
+  font-size: var(--text-body);
+  font-weight: 420;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: clip;
+}
+
+::selection {
+  background: var(--acid);
+  color: var(--void-deep);
+}
+
+h1, h2, h3 { text-wrap: balance; }
+p { text-wrap: pretty; }
+
+a {
+  color: inherit;
+  text-underline-offset: 0.18em;
+  text-decoration-thickness: 1px;
+}
+
+:focus-visible {
+  outline: 2px solid var(--acid);
+  outline-offset: 3px;
+  border-radius: 1px;
+}
+
+/* -- shared vocabulary --------------------------------------- */
+
+.mono {
+  font-family: var(--font-mono);
+  font-size: var(--text-mono);
+  font-weight: 400;
+  letter-spacing: 0.02em;
+}
+
+.wordmark {
+  font-family: var(--font-display);
+  font-weight: 800;
+  letter-spacing: -0.015em;
+  text-transform: uppercase;
+}
+
+.display {
+  font-family: var(--font-display);
+  font-weight: 800;
+  line-height: 0.98;
+  letter-spacing: -0.028em;
+  text-transform: uppercase;
+}
+
+.container {
+  width: 100%; /* flex parents: don't collapse to fit-content under margin auto */
+  padding-inline: var(--gutter);
+  max-width: 90rem;
+  margin-inline: auto;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* -- scroll reveal (enhancement only: visible without JS) -----
+   Gated on .io, set by the observer script itself: if that bundle
+   never runs, nothing is ever hidden. */
+
+html.io .reveal {
+  opacity: 0;
+  transform: translateY(2.5rem);
+  transition:
+    opacity 0.9s var(--ease-out),
+    transform 0.9s var(--ease-out);
+  transition-delay: var(--reveal-delay, 0s);
+}
+
+html.io .reveal.in {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html.io .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+@media print {
+  html.io .reveal {
+    opacity: 1;
+    transform: none;
+  }
+}

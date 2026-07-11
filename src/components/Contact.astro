@@ -1,0 +1,176 @@
+---
+const email = 'mike@mindscapecollective.org';
+---
+
+<section class="contact" id="contact" aria-labelledby="contact-title" tabindex="-1">
+  <div class="container">
+    <h2 class="display big reveal" id="contact-title">
+      Tell us what you’re building<span class="dot">.</span>
+    </h2>
+    <div class="actions reveal" style="--reveal-delay: 0.1s">
+      <a class="mail" href={`mailto:${email}`} data-magnet>
+        {email}
+        <span class="sweep" aria-hidden="true"></span>
+      </a>
+      <button class="mono copy" type="button" data-copy={email}>
+        <span class="copy-label">copy address</span>
+        <span class="copy-done" aria-hidden="true">copied ✺</span>
+        <span class="copy-fail" aria-hidden="true">copy failed</span>
+      </button>
+      <span class="sr-only" role="status"></span>
+    </div>
+    <p class="mono next reveal" style="--reveal-delay: 0.15s">
+      goes straight to Mike — no funnel, no sales team
+    </p>
+  </div>
+
+  <footer class="footer container">
+    <p class="mono">Elliodelics © {new Date().getFullYear()}</p>
+    <p class="mono dim">software engineering for the psychedelic industry</p>
+    <p class="mono dim">no cookies, no trackers</p>
+  </footer>
+</section>
+
+<style>
+  .contact:focus-visible { outline: none; } /* scroll target, not a control */
+
+  .next {
+    margin: 1.6rem 0 0;
+    color: var(--ink-dim);
+  }
+
+  .contact {
+    background: var(--void-abyss);
+    padding-block-start: var(--space-section);
+    display: flex;
+    flex-direction: column;
+    min-height: 88svh;
+  }
+
+  .big {
+    font-size: var(--text-hero);
+    max-width: 12ch;
+    margin: 0;
+  }
+
+  .dot { color: var(--acid); }
+
+  .actions {
+    margin-block-start: clamp(3rem, 8vh, 5.5rem);
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1.5rem 2.5rem;
+  }
+
+  .mail {
+    position: relative;
+    display: inline-block;
+    font-family: var(--font-mono);
+    font-size: clamp(1.1rem, 0.6rem + 2.4vw, 2.1rem);
+    letter-spacing: 0.01em;
+    color: var(--acid);
+    text-decoration: none;
+    padding-block: 0.3em;
+    overflow-wrap: anywhere;
+  }
+
+  .sweep {
+    position: absolute;
+    inset-inline: 0;
+    bottom: 0;
+    height: 2px;
+    background: var(--acid);
+    transform-origin: left;
+    scale: 0 1;
+    transition: scale 0.5s var(--ease-expo);
+  }
+  .mail:hover .sweep,
+  .mail:focus-visible .sweep { scale: 1 1; }
+
+  .copy {
+    position: relative;
+    background: none;
+    border: 1px solid var(--ink-faint);
+    color: var(--ink-dim);
+    padding: 0.7em 1.3em;
+    border-radius: 99px;
+    cursor: pointer;
+    transition: border-color 0.3s var(--ease-out), color 0.3s var(--ease-out);
+  }
+  .copy:hover {
+    border-color: var(--acid);
+    color: var(--acid);
+  }
+
+  .copy-done,
+  .copy-fail {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    border-radius: 99px;
+    opacity: 0;
+    transition: opacity 0.25s var(--ease-out);
+    white-space: nowrap;
+  }
+  .copy-done {
+    background: var(--acid);
+    color: var(--void-abyss);
+  }
+  .copy-fail {
+    background: var(--void-lift);
+    color: var(--ink);
+    border: 1px solid var(--ink-faint);
+  }
+  .copy.did .copy-done { opacity: 1; }
+  .copy.failed .copy-fail { opacity: 1; }
+
+  .footer {
+    margin-block-start: auto;
+    padding-block: clamp(3rem, 8vh, 5rem) 1.8rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem 2.5rem;
+    justify-content: space-between;
+  }
+  .footer p { margin: 0; }
+  .dim { color: var(--ink-dim); }
+</style>
+
+<script>
+  // copy-to-clipboard with visible + announced confirmation, and an honest
+  // failure state (clipboard can be blocked or unavailable)
+  const btn = document.querySelector<HTMLButtonElement>('[data-copy]');
+  const status = document.querySelector<HTMLElement>('.actions [role="status"]');
+  btn?.addEventListener('click', async () => {
+    try {
+      await navigator.clipboard.writeText(btn.dataset.copy!);
+      btn.classList.remove('failed');
+      btn.classList.add('did');
+      if (status) status.textContent = 'Email address copied.';
+      setTimeout(() => btn.classList.remove('did'), 1600);
+    } catch {
+      btn.classList.remove('did');
+      btn.classList.add('failed');
+      if (status) status.textContent = 'Copy failed — use the email link instead.';
+      setTimeout(() => btn.classList.remove('failed'), 2400);
+    }
+  });
+
+  // magnetic pull on the email link — skipped for reduced motion
+  const mail = document.querySelector<HTMLAnchorElement>('[data-magnet]');
+  if (mail && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    const strength = 0.22;
+    mail.style.transition = 'translate 0.3s cubic-bezier(0.22, 1, 0.36, 1)';
+    mail.addEventListener('pointermove', (e) => {
+      const r = mail.getBoundingClientRect();
+      const dx = e.clientX - (r.left + r.width / 2);
+      const dy = e.clientY - (r.top + r.height / 2);
+      mail.style.translate = `${dx * strength}px ${dy * strength}px`;
+    });
+    mail.addEventListener('pointerleave', () => {
+      mail.style.translate = '0 0';
+    });
+  }
+</script>

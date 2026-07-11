@@ -1,0 +1,170 @@
+---
+const email = 'mike@mindscapecollective.org';
+const services = [
+  {
+    title: 'Product engineering',
+    desc: 'From prototype to production: platforms, APIs, and the unglamorous plumbing that keeps them standing. Fifteen years of shipping — most of them leading the teams that ship.',
+    glyph: 'M4 16 L12 16 M16 16 L24 16 M28 16 L36 16 M14 16 A2 2 0 1 0 14 15.99 M26 16 A2 2 0 1 0 26 15.99 M36 10 L36 22',
+  },
+  {
+    title: 'Privacy, security & compliance',
+    desc: 'Data protection as architecture, not paperwork: GDPR compliance, data minimization, encryption in transit and at rest, retention policies, and audit trails designed in from the first schema. Grounded in years of engineering inside regulated industries, cannabis included — and in a field where confidentiality is an ethic, not a checkbox.',
+    glyph: 'M13 15 V10 A7 7 0 0 1 27 10 V15 M9 15 H31 V27 H9 Z M20 19 V23',
+  },
+  {
+    title: 'Research & data infrastructure',
+    desc: 'Aggregation pipelines, search, and plain-language access to messy scientific literature. The systems behind Mindscape Collective’s open library of 25,000+ studies.',
+    glyph: 'M6 26 L6 6 M6 26 L34 26 M10 22 L14 14 L20 18 L28 8 M28 8 L34 8',
+  },
+  {
+    title: 'Fractional engineering leadership',
+    desc: 'A director of engineering when you need one, without the full-time hire. Hiring, architecture, process, and technical roadmaps that tell you the truth.',
+    glyph: 'M20 7 A2.5 2.5 0 1 0 20 6.99 M10 25 A2.5 2.5 0 1 0 10 24.99 M30 25 A2.5 2.5 0 1 0 30 24.99 M20 10 L20 14 M20 14 L11 22 M20 14 L29 22',
+  },
+];
+---
+
+<section class="services" aria-labelledby="services-title">
+  <div class="container">
+    <h2 class="display sec-title reveal" id="services-title">What we build</h2>
+    <ul class="index">
+      {services.map((s, i) => (
+        <li class="reveal" style={`--reveal-delay: ${i * 0.07}s`}>
+          <a
+            class="row"
+            href={`mailto:${email}?subject=${encodeURIComponent(`${s.title} — enquiry`)}`}
+          >
+            <svg class="glyph" viewBox="0 0 40 32" aria-hidden="true">
+              <path d={s.glyph} />
+            </svg>
+            <h3 class="row-title">{s.title}</h3>
+            <p class="row-desc">{s.desc}</p>
+            <span class="row-cue mono">email about this →</span>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>
+
+<style>
+  .services {
+    background: var(--void-deep);
+    padding-block: var(--space-section);
+  }
+
+  .sec-title {
+    font-size: var(--text-h2);
+    margin: 0 0 clamp(3rem, 7vh, 5rem);
+  }
+
+  .index {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    border-block-start: 1px solid var(--ink-faint);
+  }
+
+  .row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas: 'glyph' 'title' 'desc' 'cue';
+    column-gap: clamp(1rem, 3vw, 2.5rem);
+    align-items: start;
+    padding: clamp(1.6rem, 4vh, 2.6rem) clamp(0.5rem, 1.5vw, 1.25rem);
+    border-block-end: 1px solid var(--ink-faint);
+    color: inherit;
+    text-decoration: none;
+    transition: background 0.35s var(--ease-out), color 0.35s var(--ease-out);
+  }
+
+  @media (min-width: 40rem) {
+    .row {
+      grid-template-columns: 3.5rem minmax(0, 1fr);
+      grid-template-areas: 'glyph title' 'glyph desc' 'glyph cue';
+    }
+  }
+
+  @media (min-width: 52rem) {
+    .row {
+      grid-template-columns: 3.5rem minmax(0, 1.1fr) minmax(0, 1fr);
+      grid-template-areas: 'glyph title desc' 'glyph title cue';
+    }
+  }
+
+  .row-cue {
+    grid-area: cue;
+    margin-block-start: 0.9rem;
+    color: var(--acid);
+    transition: color 0.35s var(--ease-out);
+  }
+  @media (hover: hover) {
+    .row:hover .row-cue { color: var(--void-abyss); }
+  }
+  .row:focus-visible .row-cue { color: var(--void-abyss); }
+
+  /* the acid flood: hover-capable pointers only (touch would stick), plus
+     keyboard focus, which never sticks */
+  @media (hover: hover) {
+    .row:hover {
+      background: var(--acid);
+      color: var(--void-abyss);
+    }
+  }
+  .row:focus-visible {
+    background: var(--acid);
+    color: var(--void-abyss);
+  }
+
+  .glyph {
+    grid-area: glyph;
+    width: 2.6rem;
+    height: auto;
+    margin-block: 0.4rem 0.7rem;
+  }
+  @media (min-width: 40rem) {
+    .glyph { margin-block-end: 0; }
+  }
+  .glyph path {
+    fill: none;
+    stroke: var(--acid);
+    stroke-width: 1.6;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    transition: stroke 0.35s var(--ease-out);
+  }
+  @media (hover: hover) {
+    .row:hover .glyph path { stroke: var(--void-abyss); }
+  }
+  .row:focus-visible .glyph path { stroke: var(--void-abyss); }
+
+  .row-title {
+    grid-area: title;
+    font-family: var(--font-display);
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: -0.02em;
+    line-height: 1.02;
+    font-size: var(--text-h3);
+    margin: 0;
+  }
+  @media (max-width: 25rem) {
+    /* INFRASTRUCTURE is unbreakable; give it room on the smallest phones */
+    .row-title { font-size: 7vw; }
+  }
+
+  .row-desc {
+    grid-area: desc;
+    max-width: 44ch;
+    margin: 0.7rem 0 0;
+    color: var(--ink-dim);
+    transition: color 0.35s var(--ease-out);
+  }
+  @media (min-width: 52rem) {
+    .row-desc { margin-block-start: 0.35rem; }
+  }
+  @media (hover: hover) {
+    .row:hover .row-desc { color: var(--void-deep); }
+  }
+  .row:focus-visible .row-desc { color: var(--void-deep); }
+</style>

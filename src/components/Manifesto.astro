@@ -1,0 +1,120 @@
+---
+---
+
+<section class="manifesto container" id="manifesto" tabindex="-1">
+  <h2 class="display statement reveal">
+    Your engineers shouldn’t need a&nbsp;glossary<span class="dot">.</span>
+  </h2>
+
+  <div class="body reveal" style="--reveal-delay: 0.1s">
+    <p>
+      Most software shops won’t touch the psychedelic industry — the
+      compliance surface scares them off. The ones that will tend not to
+      understand it: they’ll ship you a beautiful booking flow that violates
+      your own protocol in three places.
+    </p>
+    <p>
+      Elliodelics is fluent in both worlds: fifteen years leading engineering
+      teams on one side, graduate work in psychedelics and consciousness
+      studies on the other. You should never have to translate your work for
+      the people building its infrastructure.
+    </p>
+    <p>
+      And the stakes here are different. A leaked customer list is a bad week
+      for a SaaS company; for a clinic or a retreat it’s people’s medical and
+      legal exposure. Privacy gets designed in at the first schema, not
+      bolted on before an audit.
+    </p>
+  </div>
+
+  <figure class="diagram reveal" style="--reveal-delay: 0.15s">
+    <svg
+      viewBox="45 0 290 185"
+      role="img"
+      aria-label="The skeletal structure of psilocybin, drawn as a line schematic"
+    >
+      <g class="stroke">
+        <!-- indole: benzene ring -->
+        <path d="M60 92 L100 69 L140 92 L140 138 L100 161 L60 138 Z" />
+        <!-- aromatic inner bonds -->
+        <path d="M104 78 L133 95" />
+        <path d="M133 135 L104 152" />
+        <path d="M67 132 L67 98" />
+        <!-- fused pyrrole -->
+        <path d="M140 92 L183 79 L210 115 L183 151 L140 138" />
+        <!-- C2=C3 double bond -->
+        <path d="M186 88 L206 114" />
+        <!-- side chain: C3 → CH2 → CH2 → N -->
+        <path d="M183 79 L212 52 L246 66 L272 46" />
+        <!-- N-methyls -->
+        <path d="M287 40 L316 50" />
+        <path d="M282 32 L288 12" />
+        <!-- 4-phosphoryloxy bond -->
+        <path d="M100 69 L100 44" />
+      </g>
+      <g class="label">
+        <text x="183" y="168">NH</text>
+        <text x="279" y="47">N</text>
+        <text x="100" y="34">OPO₃H₂</text>
+      </g>
+    </svg>
+    <figcaption class="mono">fig. 01 — psilocybin, as a chemist draws it</figcaption>
+  </figure>
+</section>
+
+<style>
+  .manifesto {
+    padding-block: var(--space-section);
+  }
+
+  /* scroll target only — the ring belongs on controls, not sections */
+  .manifesto:focus-visible { outline: none; }
+
+  .statement {
+    font-size: var(--text-h2);
+    max-width: 16ch;
+    margin: 0;
+  }
+
+  .dot { color: var(--acid); }
+
+  .body {
+    max-width: var(--measure);
+    margin-block: 3rem 0;
+    margin-inline-start: auto;
+  }
+  .body p { margin: 0; }
+  .body p + p { margin-block-start: 1.2em; }
+
+  .diagram {
+    margin: clamp(4rem, 9vh, 7rem) 0 0;
+  }
+
+  .diagram svg {
+    display: block;
+    width: 100%;
+    height: auto;
+    max-width: 23rem;
+  }
+
+  .stroke path,
+  .stroke rect {
+    fill: none;
+    stroke: var(--ink);
+    stroke-width: 1.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .label text {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    fill: var(--ink);
+    text-anchor: middle;
+  }
+
+  figcaption {
+    margin-block-start: 1.4rem;
+    color: var(--ink-dim);
+  }
+</style>

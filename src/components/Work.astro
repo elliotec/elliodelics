@@ -1,0 +1,162 @@
+---
+const cases = [
+  {
+    org: 'Mindscape Collective',
+    url: 'https://mindscapecollective.org',
+    role: 'founder & executive director',
+    body: 'An open library of the world’s psychedelic and consciousness research — 25,000+ peer-reviewed articles aggregated from a dozen sources, summarized in plain language, free to everyone. No paywall, no gatekeeping.',
+    img: {
+      src: '/mindscape-library.webp',
+      width: 1600,
+      height: 1000,
+      alt: 'The Mindscape Collective library: “The world’s psychedelic and consciousness research, in one open library” — 25,026 articles and counting',
+    },
+  },
+  {
+    org: 'Psymposia',
+    url: null,
+    role: 'infrastructure',
+    body: 'Moving the psychedelic media nonprofit’s tech stack to open-source, encrypted infrastructure. Privacy engineering for independent journalism in a sensitive field.',
+  },
+  {
+    org: 'Psychedelia-Stiftung',
+    url: 'https://psychedelia-stiftung.de',
+    role: 'engineering partner',
+    body: 'Websites and systems for the German foundation’s work on ethical, evidence-backed psychedelic retreats — Psychedelia Retreats among them.',
+  },
+  {
+    org: 'Dutchie',
+    url: 'https://business.dutchie.com',
+    role: 'director of engineering',
+    body: 'Grew the engineering department to 60 engineers across 10 teams, through funding rounds and acquisitions — cannabis dispensary software, where compliance is the product.',
+  },
+];
+---
+
+<section class="work container" aria-labelledby="work-title">
+  <h2 class="display sec-title reveal" id="work-title">Field reports</h2>
+  <p class="note mono reveal">no anonymized case studies — all of this is public record</p>
+
+  <ul class="reports">
+    {cases.map((c, i) => (
+      <li class="report reveal" style={`--reveal-delay: ${i * 0.08}s`}>
+        <span class="mark" aria-hidden="true">✺</span>
+        <h3 class="org">
+          {c.url ? (
+            <a href={c.url} target="_blank" rel="noopener">
+              {c.org}<span class="ext" aria-hidden="true">↗</span>
+              <span class="sr-only">(opens in new tab)</span>
+            </a>
+          ) : (
+            c.org
+          )}
+        </h3>
+        <p class="role mono">{c.role}</p>
+        <p class="body">{c.body}</p>
+        {c.img && (
+          <img
+            class="proof"
+            src={c.img.src}
+            width={c.img.width}
+            height={c.img.height}
+            alt={c.img.alt}
+            loading="lazy"
+            decoding="async"
+          />
+        )}
+      </li>
+    ))}
+  </ul>
+</section>
+
+<style>
+  .work {
+    padding-block: var(--space-section);
+  }
+
+  .sec-title {
+    font-size: var(--text-h2);
+    margin: 0;
+    text-align: right;
+  }
+
+  .note {
+    text-align: right;
+    color: var(--ink-dim);
+    margin: 0.8rem 0 clamp(3rem, 7vh, 5rem);
+  }
+
+  .reports {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: clamp(2.5rem, 6vh, 4rem);
+  }
+
+  .report {
+    display: grid;
+    grid-template-columns: 2rem minmax(0, 1fr);
+    column-gap: 1.2rem;
+    max-width: 46rem;
+  }
+
+  /* alternate: pull even reports right for rhythm */
+  .report:nth-child(even) { margin-inline-start: auto; }
+
+  .proof {
+    display: block;
+    width: 100%;
+    max-width: 40rem;
+    height: auto;
+    margin-block-start: 1.4rem;
+    border: 1px solid var(--ink-faint);
+  }
+
+  .mark {
+    grid-row: span 4;
+    color: var(--acid);
+    font-size: 1.1rem;
+    line-height: 1.6;
+  }
+
+  .org {
+    font-family: var(--font-display);
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: -0.02em;
+    line-height: 1.05;
+    font-size: clamp(1.5rem, 1.1rem + 1.8vw, 2.4rem);
+    margin: 0;
+  }
+
+  .org a {
+    color: inherit;
+    text-decoration: none;
+    transition: color 0.25s var(--ease-out);
+  }
+  .org a:hover,
+  .org a:focus-visible { color: var(--acid); }
+
+  .ext {
+    font-family: var(--font-mono);
+    font-size: 0.45em;
+    font-weight: 400;
+    vertical-align: 0.9em;
+    margin-inline-start: 0.4em;
+    color: var(--acid);
+  }
+
+  .role {
+    margin: 0.5rem 0 0;
+    color: var(--ink-dim);
+  }
+
+  .body {
+    margin: 0.9rem 0 0;
+    font-size: var(--text-body);
+    line-height: 1.55;
+    color: var(--ink-dim);
+    max-width: 52ch;
+  }
+</style>

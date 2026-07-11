@@ -1,0 +1,135 @@
+---
+// Dual-fluency vocabulary: one engineering term, one field term, per pair.
+const pairs = [
+  ['code review', 'peer review'],
+  ['data minimization', 'harm reduction'],
+  ['audit trails', 'altered states'],
+  ['GDPR', 'informed consent'],
+  ['Postgres', 'psilocybin research'],
+  ['role-based access', 'set & setting'],
+  ['encryption at rest', 'integration circles'],
+  ['zero-downtime deploys', 'non-ordinary states'],
+  ['data pipelines', 'dosing protocols'],
+];
+---
+
+<div class="ticker">
+  <div class="ticker-track" aria-hidden="true">
+    {[0, 1].map(() => (
+      <span class="ticker-run">
+        {pairs.map(([eng, field]) => (
+          <span class="pair">
+            <span class="eng">{eng}</span>
+            <span class="glyph">✺</span>
+            <span class="field">{field}</span>
+          </span>
+        ))}
+      </span>
+    ))}
+  </div>
+  <button class="mono ticker-toggle" type="button" aria-pressed="false">pause</button>
+  <p class="sr-only">
+    The vocabulary we speak, paired — one engineering term, one field term:
+    {pairs.map(([eng, field]) => `${eng} and ${field}`).join(', ')}.
+  </p>
+</div>
+
+<style>
+  .ticker {
+    position: relative;
+    background: var(--void-deep);
+    border-block: 1px solid var(--ink-faint);
+    overflow: hidden; /* not clip: clipped marquee content must not feed doc scrollWidth */
+    padding-block: 0.9rem;
+  }
+
+  .ticker-track {
+    display: flex;
+    width: max-content;
+  }
+
+  .ticker-run {
+    display: flex;
+    flex-shrink: 0;
+    animation: slide 52s linear infinite;
+  }
+
+  .pair {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 0.7em;
+    padding-inline: 1.4em;
+    white-space: nowrap;
+    font-family: var(--font-mono);
+    font-size: var(--text-mono);
+    letter-spacing: 0.02em;
+  }
+
+  .eng { color: var(--ink-dim); }
+  .glyph { color: var(--acid); font-size: 0.85em; }
+  .field { color: var(--ink); }
+
+  @keyframes slide {
+    to { translate: -100% 0; }
+  }
+
+  /* WCAG 2.2.2: moving content must be pausable */
+  .ticker:hover .ticker-run,
+  .ticker:focus-within .ticker-run,
+  .ticker.paused .ticker-run {
+    animation-play-state: paused;
+  }
+
+  .ticker-toggle {
+    position: absolute;
+    top: 50%;
+    right: clamp(0.75rem, 2vw, 1.5rem);
+    translate: 0 -50%;
+    background: var(--void-deep);
+    /* solid halo masks the marquee text sliding underneath */
+    box-shadow: 0 0 0 10px var(--void-deep);
+    border: 1px solid var(--ink-faint);
+    border-radius: 99px;
+    color: var(--ink-dim);
+    padding: 0.4em 1em;
+    cursor: pointer;
+  }
+  .ticker-toggle:hover { color: var(--acid); border-color: var(--acid); }
+  @media (pointer: coarse) {
+    .ticker-toggle { padding: 0.85em 1.2em; } /* thumb-sized */
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ticker-track { width: 100%; }
+    .ticker-run {
+      animation: none;
+      flex: 1 1 auto;   /* release flex-shrink:0 so wrapping can engage */
+      min-width: 0;
+      flex-wrap: wrap;
+      row-gap: 0.5rem;
+      justify-content: center;
+    }
+    .ticker-run:last-child { display: none; }
+    .ticker-toggle { display: none; } /* nothing moves; nothing to pause */
+  }
+
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+</style>
+
+<script>
+  const ticker = document.querySelector('.ticker')!;
+  const toggle = document.querySelector<HTMLButtonElement>('.ticker-toggle');
+  toggle?.addEventListener('click', () => {
+    const paused = ticker.classList.toggle('paused');
+    toggle.setAttribute('aria-pressed', String(paused));
+    toggle.textContent = paused ? 'play' : 'pause';
+  });
+</script>
