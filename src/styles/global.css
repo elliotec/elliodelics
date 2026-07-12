@@ -13,6 +13,7 @@
   --ink-dim:     oklch(0.975 0.008 152 / 0.8);
   --ink-faint:   oklch(0.975 0.008 152 / 0.28); /* rules & hairlines only */
   --acid:        oklch(0.76 0.19 155);    /* spring green — the elliot.ec accent */
+  --bloom:       oklch(0.7 0.13 305);     /* the canvas purple, now also brand */
 
   /* -- type ------------------------------------------------- */
   --font-display: 'Bricolage Grotesque', 'Helvetica Neue', Arial, sans-serif;

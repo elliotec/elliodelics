@@ -1,5 +1,7 @@
 ---
 import '@fontsource/bricolage-grotesque/800.css';
+import '@fontsource/museomoderno/700.css'; // the logo face
+import museoWoff from '@fontsource/museomoderno/files/museomoderno-latin-700-normal.woff2?url';
 import '@fontsource-variable/source-serif-4/wght.css';
 import '@fontsource/jetbrains-mono/400.css';
 import '../styles/global.css';
@@ -31,6 +33,9 @@ const { title, description } = Astro.props;
     <meta name="twitter:card" content="summary_large_image" />
     <link rel="canonical" href={Astro.site} />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="preload" href={museoWoff} as="font" type="font/woff2" crossorigin />
+    {/* the logo face must be ready at first paint, or the wordmark flashes
+        its Bricolage fallback on every navigation */}
     <script>
       document.documentElement.classList.add('js');
     </script>
