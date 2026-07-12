@@ -181,7 +181,9 @@ const email = 'mike@mindscapecollective.org';
   const GAP = 34; // interference ring spacing
   const STAMP_R = 30; // Flower-of-Life circle radius = lattice spacing
   const BRUSH = STAMP_R * 1.55; // stamp the whole neighbourhood — petals, not a line
-  const STAMP_CAP = 900; // oldest circles retire past this, so the canvas never chokes
+  const STAMP_CAP = 300; // beyond this the oldest start dissolving immediately
+  const STAMP_LIFE = 12000; // ms of growth before a circle starts to dissolve
+  const STAMP_FADE = 2500; // ms to dissolve
 
   let w = 0, h = 0, dpr = 1;
   let running = false;
@@ -213,7 +215,7 @@ const email = 'mike@mindscapecollective.org';
   // The pointer lays circles onto a fixed triangular lattice with spacing =
   // radius, so every circle passes through its neighbours' centers — the
   // classic construction. Stamped circles bloom in and STAY.
-  const stamps = new Map<string, { x: number; y: number; born: number }>();
+  const stamps = new Map<string, { x: number; y: number; born: number; die: number }>();
   const ROW_H = STAMP_R * (Math.sqrt(3) / 2);
 
   function stampAt(px: number, py: number, t: number) {
@@ -229,9 +231,12 @@ const email = 'mike@mindscapecollective.org';
         if (Math.hypot(x - px, y - py) > BRUSH) continue;
         const key = r + ',' + c;
         if (stamps.has(key)) continue;
-        stamps.set(key, { x, y, born: t });
+        stamps.set(key, { x, y, born: t, die: 0 });
         if (stamps.size > STAMP_CAP) {
-          stamps.delete(stamps.keys().next().value!);
+          // over budget: start dissolving the oldest still-living circle now
+          for (const s of stamps.values()) {
+            if (!s.die) { s.die = t; break; }
+          }
         }
       }
     }
@@ -241,8 +246,18 @@ const email = 'mike@mindscapecollective.org';
     const RIPPLE_GAP = STAMP_R * 0.55;
     const RIPPLE_MAX = STAMP_R * 2.4; // ripples stay local to their circle
     ctx.lineWidth = 1;
-    stamps.forEach((s) => {
+    stamps.forEach((s, key) => {
       const age = t - s.born;
+      // lifecycle: grow for STAMP_LIFE, then dissolve and free the slot
+      if (!s.die && age > STAMP_LIFE) s.die = t;
+      let fade = 1;
+      if (s.die) {
+        fade = 1 - (t - s.die) / STAMP_FADE;
+        if (fade <= 0) {
+          stamps.delete(key);
+          return;
+        }
+      }
       const k = Math.min(age / 700, 1);
       const ease = 1 - Math.pow(1 - k, 4); // bloom: ease-out-quart
       // every circle keeps growing after its bloom: 2px/s toward a 2.6× cap,
@@ -250,7 +265,7 @@ const email = 'mike@mindscapecollective.org';
       const base =
         STAMP_R * ease + Math.min(Math.max(age - 700, 0) * 0.002, STAMP_R * 1.6);
       ctx.strokeStyle = STAMP;
-      ctx.globalAlpha = 0.35 + 0.65 * ease;
+      ctx.globalAlpha = (0.35 + 0.65 * ease) * fade;
       ctx.beginPath();
       ctx.arc(s.x, s.y, base, 0, TAU);
       ctx.stroke();
@@ -268,7 +283,7 @@ const email = 'mike@mindscapecollective.org';
       const shift = (age * 0.014) % RIPPLE_GAP;
       ctx.strokeStyle = RIPPLE;
       for (let r = base + shift; r < base + span; r += RIPPLE_GAP) {
-        ctx.globalAlpha = 0.2 * (1 - (r - base) / span);
+        ctx.globalAlpha = 0.2 * (1 - (r - base) / span) * fade;
         ctx.beginPath();
         ctx.arc(s.x, s.y, r, 0, TAU);
         ctx.stroke();
