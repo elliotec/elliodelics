@@ -20,7 +20,7 @@ const email = 'mike@elliotec.com';
       <span class="sr-only" role="status"></span>
     </div>
     <p class="mono next reveal" style="--reveal-delay: 0.15s">
-      goes straight to Mike — no funnel, no sales team<br />
+      goes straight to Mike · no funnel, no sales team<br />
       a few engagements a year · replies typically within a few days
     </p>
   </div>
@@ -158,7 +158,7 @@ const email = 'mike@elliotec.com';
     } catch {
       btn.classList.remove('did');
       btn.classList.add('failed');
-      if (status) status.textContent = 'Copy failed — use the email link instead.';
+      if (status) status.textContent = 'Copy failed. Use the email link instead.';
       setTimeout(() => btn.classList.remove('failed'), 2400);
     }
   });
