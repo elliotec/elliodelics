@@ -15,9 +15,9 @@
   --acid:        oklch(0.76 0.19 155);    /* spring green — the elliot.ec accent */
 
   /* -- type ------------------------------------------------- */
-  --font-display: 'Bricolage Grotesque Variable', 'Helvetica Neue', Arial, sans-serif;
-  --font-serif: 'Source Serif 4 Variable', Georgia, serif;
-  --font-mono: 'JetBrains Mono Variable', 'Lucida Console', ui-monospace, monospace;
+  --font-display: 'Bricolage Grotesque', 'Helvetica Neue', Arial, sans-serif;
+  --font-serif: 'Source Serif 4 Variable', 'SS4 Fallback', Georgia, serif;
+  --font-mono: 'JetBrains Mono', 'Lucida Console', ui-monospace, monospace;
 
   /* modular scale, ~1.33 ratio, fluid on top */
   --text-body:  clamp(1.0625rem, 1rem + 0.3vw, 1.1875rem);
@@ -40,6 +40,16 @@
   --z-canvas: 0;
   --z-content: 1;
   --z-header: 2;
+}
+
+/* Georgia adjusted to Source Serif 4's metrics: the swap doesn't reflow */
+@font-face {
+  font-family: 'SS4 Fallback';
+  src: local('Georgia');
+  size-adjust: 95.2%; /* measured: SS4/Georgia advance ratio */
+  ascent-override: 97%;
+  descent-override: 25%;
+  line-gap-override: 0%;
 }
 
 /* -- reset --------------------------------------------------- */

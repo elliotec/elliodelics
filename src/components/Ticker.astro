@@ -2,12 +2,17 @@
 // Dual-fluency vocabulary: one engineering term, one field term, per pair.
 const pairs = [
   ['code review', 'peer review'],
-  ['data minimization', 'harm reduction'],
+  ['data privacy', 'harm reduction'],
   ['audit trails', 'altered states'],
+  ['observability', 'introspection'],
   ['GDPR', 'informed consent'],
-  ['Postgres', 'psilocybin research'],
+  ['feature flags', 'titration'],
   ['role-based access', 'set & setting'],
-  ['encryption at rest', 'integration circles'],
+  ['documentation', 'trip reports'],
+  ['3rd-party integrations', 'integration circles'],
+  ['SOC 2 security', 'trip sitting'],
+  ['incident response', 'challenging experiences'],
+  ['compliance', 'ceremony'],
   ['zero-downtime deploys', 'non-ordinary states'],
   ['data pipelines', 'dosing protocols'],
 ];
@@ -51,7 +56,9 @@ const pairs = [
   .ticker-run {
     display: flex;
     flex-shrink: 0;
-    animation: slide 52s linear infinite;
+    /* duration tracks pair count: the animation covers the run's full width,
+       so more pairs at a fixed duration = faster scroll */
+    animation: slide 88s linear infinite;
   }
 
   .pair {
@@ -73,9 +80,9 @@ const pairs = [
     to { translate: -100% 0; }
   }
 
-  /* WCAG 2.2.2: moving content must be pausable */
-  .ticker:hover .ticker-run,
-  .ticker:focus-within .ticker-run,
+  /* WCAG 2.2.2: moving content must be pausable. The button is the single
+     control — hover/focus auto-pause fought it (a focused "play" button kept
+     the track frozen via :focus-within, so play appeared broken) */
   .ticker.paused .ticker-run {
     animation-play-state: paused;
   }
@@ -96,7 +103,7 @@ const pairs = [
   }
   .ticker-toggle:hover { color: var(--acid); border-color: var(--acid); }
   @media (pointer: coarse) {
-    .ticker-toggle { padding: 0.85em 1.2em; } /* thumb-sized */
+    .ticker-toggle { padding: 1.05em 1.3em; } /* thumb-sized: ≥44px tall */
   }
 
   @media (prefers-reduced-motion: reduce) {

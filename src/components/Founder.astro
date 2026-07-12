@@ -16,7 +16,7 @@
       />
       <div>
         <p class="lede">
-          Elliodelics is <a class="mike" href="https://elliotec.com" target="_blank" rel="noopener">Mike Elliott<span class="ext" aria-hidden="true">↗</span><span class="sr-only"> (opens in new tab)</span></a> — fifteen years building
+          Elliodelics is <a class="mike" href="https://elliotec.com" target="_blank" rel="noopener" aria-describedby="founder-new-tab">Mike Elliott<span class="ext" aria-hidden="true">↗</span></a><span class="sr-only" id="founder-new-tab">opens in new tab</span> — fifteen years building
           products and leading engineering organizations, now studying
           psychedelics and consciousness at the graduate level.
         </p>
@@ -78,6 +78,7 @@
     font-weight: 700;
     color: var(--acid);
     text-decoration: none;
+    padding-block: 0.2em; /* inline link: extends hit box, not line height */
   }
   .mike:hover { text-decoration: underline; }
 

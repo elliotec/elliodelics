@@ -37,7 +37,7 @@ const services = [
           <p class="row-desc">{s.desc}</p>
           <a
             class="row-cue mono"
-            href={`mailto:${email}?subject=${encodeURIComponent(`${s.title} — enquiry`)}`}
+            href={`mailto:${email}?subject=${encodeURIComponent(`${s.title} — inquiry`)}`}
             aria-label={`Email about ${s.title.toLowerCase()}`}
           >email about this →</a>
         </li>
@@ -94,7 +94,8 @@ const services = [
     justify-self: start;
     margin-block-start: 0.4rem;
     /* generous hit area without moving the layout */
-    padding: 0.7em 0.9em 0.7em 0;
+    padding: 1.2em 0.9em 1.2em 0;
+    margin-block: -0.5em;
     color: var(--acid);
     text-decoration: none;
     transition: color 0.35s var(--ease-out);

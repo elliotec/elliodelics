@@ -61,11 +61,15 @@ const email = 'mike@elliotec.com';
   .brand {
     font-size: 1.3rem;
     text-decoration: none;
+    padding-block: 0.45em;
+    margin-block: -0.45em;
   }
 
   .top-mail {
     color: var(--ink-dim);
     text-decoration-color: var(--ink-faint);
+    padding-block: 1em;
+    margin-block: -1em;
   }
   .top-mail:hover { color: var(--acid); }
 
@@ -121,8 +125,8 @@ const email = 'mike@elliotec.com';
     color: var(--acid);
     text-decoration: none;
     /* thumb-sized target without shifting the layout */
-    padding-block: 0.85em;
-    margin-block: -0.85em;
+    padding-block: 1em;
+    margin-block: -1em;
   }
   .hero-cue:hover { text-decoration: underline; }
 
@@ -173,17 +177,23 @@ const email = 'mike@elliotec.com';
 
   // Trails multiply brightness: steady-state stroke intensity ≈ line alpha
   // divided by fade alpha. Tune the pair together, not separately.
-  const BG = 'oklch(0.29 0.09 152)'; // must match --void
-  const FADE = 'oklch(0.29 0.09 152 / 0.35)';
-  const LINE = 'oklch(0.78 0.095 305 / 0.06)'; // pointer rings
-  const RING_LINE = 'oklch(0.78 0.095 305 / 0.05)'; // the interference field
-  const STAMP = 'oklch(0.78 0.095 305 / 0.24)'; // laid-down geometry — brighter, it stays
-  const RIPPLE = 'oklch(0.78 0.095 305)'; // solid; alpha applied per-ring
+  // Ground color comes from the token, so a palette change can't desync it.
+  const VOID =
+    getComputedStyle(document.documentElement).getPropertyValue('--void').trim() ||
+    'oklch(0.29 0.09 152)';
+  const BG = VOID;
+  const FADE = VOID.replace(')', ' / 0.35)');
+  const LINE = 'oklch(0.7 0.13 305 / 0.07)'; // pointer rings
+  const RING_LINE = 'oklch(0.7 0.13 305 / 0.055)'; // the interference field
+  const STAMP = 'oklch(0.63 0.17 155 / 0.3)'; // laid-down geometry — deep emerald
+  const STAMP_SOLID = 'oklch(0.63 0.17 155)'; // trail ripples; alpha per-ring
+  const FLASH = 'oklch(0.975 0.008 152)'; // birth flash — white, reads on green
+  const RIPPLE = 'oklch(0.7 0.13 305)'; // flower inner petals stay purple
   const PULSE = 'oklch(0.76 0.19 155)';
   const TAU = Math.PI * 2;
   const GAP = 34; // interference ring spacing
-  const STAMP_R = 30; // Flower-of-Life circle radius = lattice spacing
-  const BRUSH = STAMP_R * 1.55; // stamp the whole neighbourhood — petals, not a line
+  const STAMP_R = 26; // Flower-of-Life circle radius = lattice spacing
+  const BRUSH = STAMP_R * 1.2; // neighbourhood size: petals without a dense rope
   const STAMP_CAP = 300; // beyond this the oldest start dissolving immediately
   const STAMP_LIFE = 12000; // ms of growth before a circle starts to dissolve
   const STAMP_FADE = 2500; // ms to dissolve
@@ -193,6 +203,7 @@ const email = 'mike@elliotec.com';
   let rafId = 0;
   let lastT = 0;
   let demoStart = -1;
+  let demoBurst = false;
 
   const pointer = { x: -1, y: -1, tx: -1, ty: -1, active: false };
 
@@ -285,11 +296,11 @@ const email = 'mike@elliotec.com';
       const fade = Math.min(1, (FLOWER_LIFE - age) / FLOWER_FADE);
       const rot = f.seed + age * 0.0001;
 
-      // outer layer: 8 acid petals
+      // outer layer: 8 purple petals
       const k1 = Math.min(age / 900, 1);
       const bloom1 = 1 - Math.pow(1 - k1, 4);
-      ctx.strokeStyle = PULSE;
-      ctx.globalAlpha = 0.55 * fade;
+      ctx.strokeStyle = RIPPLE;
+      ctx.globalAlpha = 0.6 * fade;
       ctx.lineWidth = 1.4;
       for (let p = 0; p < 8; p++) {
         const a = rot + (p * TAU) / 8;
@@ -312,7 +323,7 @@ const email = 'mike@elliotec.com';
       // shockwave ring rides ahead
       const kr = age / 900;
       if (kr < 1) {
-        ctx.strokeStyle = PULSE;
+        ctx.strokeStyle = RIPPLE;
         ctx.globalAlpha = 0.5 * (1 - kr);
         ctx.lineWidth = 1.8;
         ctx.beginPath();
@@ -342,18 +353,18 @@ const email = 'mike@elliotec.com';
       }
       const k = Math.min(age / 700, 1);
       const ease = 1 - Math.pow(1 - k, 4); // bloom: ease-out-quart
-      // every circle keeps growing after its bloom: 2px/s toward a 2.6× cap,
+      // every circle keeps growing after its bloom: 7px/s toward a 2.6× cap,
       // so painted regions thicken into mandala overlap
       const base =
-        STAMP_R * ease + Math.min(Math.max(age - 700, 0) * 0.002, STAMP_R * 1.6);
+        STAMP_R * ease + Math.min(Math.max(age - 700, 0) * 0.007, STAMP_R * 1.6);
       ctx.strokeStyle = STAMP;
       ctx.globalAlpha = (0.35 + 0.65 * ease) * fade;
       ctx.beginPath();
       ctx.arc(s.x, s.y, base, 0, TAU);
       ctx.stroke();
       if (age < 300) {
-        // acid flash at birth
-        ctx.strokeStyle = PULSE;
+        // flash at birth — white, so it reads on the green trail
+        ctx.strokeStyle = FLASH;
         ctx.globalAlpha = 0.4 * (1 - age / 300);
         ctx.beginPath();
         ctx.arc(s.x, s.y, base, 0, TAU);
@@ -363,7 +374,7 @@ const email = 'mike@elliotec.com';
       // ripples ride the growing edge, fading as they travel
       const span = RIPPLE_MAX - STAMP_R;
       const shift = (age * 0.014) % RIPPLE_GAP;
-      ctx.strokeStyle = RIPPLE;
+      ctx.strokeStyle = STAMP_SOLID;
       for (let r = base + shift; r < base + span; r += RIPPLE_GAP) {
         ctx.globalAlpha = 0.2 * (1 - (r - base) / span) * fade;
         ctx.beginPath();
@@ -423,6 +434,10 @@ const email = 'mike@elliotec.com';
       const dx = w * (0.32 + 0.46 * dk);
       const dy = h * (0.74 - 0.36 * dk + Math.sin(dk * Math.PI * 2) * 0.07);
       stampAt(dx, dy, t);
+    } else if (dk > 1 && !demoBurst) {
+      // the stroke ends the way a click begins: a flower
+      demoBurst = true;
+      burstAt(w * 0.78, h * 0.38, t);
     }
     drawStamps(t);
     drawFlowers(t);
