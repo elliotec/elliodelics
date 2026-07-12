@@ -4,7 +4,7 @@ const cases = [
     org: 'Mindscape Collective',
     url: 'https://mindscapecollective.org',
     role: 'founder & executive director',
-    body: 'An open library of the world’s psychedelic and consciousness research — 25,000+ peer-reviewed articles aggregated from a dozen sources, summarized in plain language, free to everyone. No paywall, no gatekeeping.',
+    body: 'An open library of the world’s psychedelic and consciousness research — a massive collection of peer-reviewed articles aggregated from a dozen sources, summarized in plain language, free to everyone. No paywall, no gatekeeping.',
     img: {
       src: '/mindscape-library.webp',
       width: 1600,
@@ -33,7 +33,8 @@ const cases = [
 ];
 ---
 
-<section class="work container" aria-labelledby="work-title">
+<section class="work" aria-labelledby="work-title">
+  <div class="container">
   <h2 class="display sec-title reveal" id="work-title">Field reports</h2>
   <p class="note mono reveal">no anonymized case studies — all of this is public record</p>
 
@@ -41,17 +42,20 @@ const cases = [
     {cases.map((c, i) => (
       <li class="report reveal" style={`--reveal-delay: ${i * 0.08}s`}>
         <span class="mark" aria-hidden="true">✺</span>
-        <h3 class="org">
-          {c.url ? (
-            <a href={c.url} target="_blank" rel="noopener">
-              {c.org}<span class="ext" aria-hidden="true">↗</span>
-              <span class="sr-only">(opens in new tab)</span>
-            </a>
-          ) : (
-            c.org
-          )}
-        </h3>
-        <p class="role mono">{c.role}</p>
+        <div class="org-line">
+          <h3 class="org">
+            {c.url ? (
+              <a href={c.url} target="_blank" rel="noopener">
+                {c.org}<span class="ext" aria-hidden="true">↗</span>
+                <span class="sr-only">(opens in new tab)</span>
+              </a>
+            ) : (
+              c.org
+            )}
+          </h3>
+          <span class="ledger" aria-hidden="true"></span>
+          <p class="role mono">{c.role}</p>
+        </div>
         <p class="body">{c.body}</p>
         {c.img && (
           <img
@@ -67,10 +71,12 @@ const cases = [
       </li>
     ))}
   </ul>
+  </div>
 </section>
 
 <style>
   .work {
+    background: var(--void-deep);
     padding-block: var(--space-section);
   }
 
@@ -114,10 +120,28 @@ const cases = [
   }
 
   .mark {
-    grid-row: span 4;
+    grid-row: span 4; /* org-line, body, optional img; extra rows collapse */
     color: var(--acid);
     font-size: 1.1rem;
     line-height: 1.6;
+  }
+
+  /* elliot.ec-style ledger line: org ······ role */
+  .org-line {
+    display: flex;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 0.4rem 1em;
+  }
+
+  .ledger {
+    flex: 1;
+    min-width: 3rem;
+    border-block-end: 1px dotted var(--ink-faint);
+    align-self: center;
+  }
+  @media (max-width: 40rem) {
+    .ledger { display: none; }
   }
 
   .org {
@@ -148,7 +172,7 @@ const cases = [
   }
 
   .role {
-    margin: 0.5rem 0 0;
+    margin: 0;
     color: var(--ink-dim);
   }
 

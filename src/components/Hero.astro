@@ -1,5 +1,5 @@
 ---
-const email = 'mike@mindscapecollective.org';
+const email = 'mike@elliotec.com';
 ---
 
 <section class="hero" aria-label="Introduction">
@@ -120,6 +120,9 @@ const email = 'mike@mindscapecollective.org';
   .hero-cue {
     color: var(--acid);
     text-decoration: none;
+    /* thumb-sized target without shifting the layout */
+    padding-block: 0.85em;
+    margin-block: -0.85em;
   }
   .hero-cue:hover { text-decoration: underline; }
 
@@ -176,7 +179,7 @@ const email = 'mike@mindscapecollective.org';
   const RING_LINE = 'oklch(0.78 0.095 305 / 0.05)'; // the interference field
   const STAMP = 'oklch(0.78 0.095 305 / 0.24)'; // laid-down geometry — brighter, it stays
   const RIPPLE = 'oklch(0.78 0.095 305)'; // solid; alpha applied per-ring
-  const PULSE = 'oklch(0.92 0.21 113)';
+  const PULSE = 'oklch(0.76 0.19 155)';
   const TAU = Math.PI * 2;
   const GAP = 34; // interference ring spacing
   const STAMP_R = 30; // Flower-of-Life circle radius = lattice spacing
@@ -189,6 +192,7 @@ const email = 'mike@mindscapecollective.org';
   let running = false;
   let rafId = 0;
   let lastT = 0;
+  let demoStart = -1;
 
   const pointer = { x: -1, y: -1, tx: -1, ty: -1, active: false };
 
@@ -242,12 +246,90 @@ const email = 'mike@mindscapecollective.org';
     }
   }
 
+  // click/tap: a flower explodes at the point — two layers of petals bloom,
+  // rotate slowly, and dissolve; a shockwave ring rides ahead of them
+  const flowers: { x: number; y: number; start: number; seed: number }[] = [];
+  const FLOWER_LIFE = 5200;
+  const FLOWER_FADE = 1600;
+
+  function burstAt(px: number, py: number, t: number) {
+    flowers.push({ x: px, y: py, start: t, seed: Math.random() * TAU });
+    if (flowers.length > 12) flowers.shift();
+  }
+
+  function drawPetal(
+    cx: number,
+    cy: number,
+    angle: number,
+    len: number,
+    width: number
+  ) {
+    const tx = cx + Math.cos(angle) * len;
+    const ty = cy + Math.sin(angle) * len;
+    const mx = cx + Math.cos(angle) * len * 0.5;
+    const my = cy + Math.sin(angle) * len * 0.5;
+    const px = -Math.sin(angle) * width;
+    const py = Math.cos(angle) * width;
+    ctx.beginPath();
+    ctx.moveTo(cx, cy);
+    ctx.quadraticCurveTo(mx + px, my + py, tx, ty);
+    ctx.quadraticCurveTo(mx - px, my - py, cx, cy);
+    ctx.stroke();
+  }
+
+  function drawFlowers(t: number) {
+    for (let i = flowers.length - 1; i >= 0; i--) {
+      const f = flowers[i];
+      const age = t - f.start;
+      if (age > FLOWER_LIFE) { flowers.splice(i, 1); continue; }
+      const fade = Math.min(1, (FLOWER_LIFE - age) / FLOWER_FADE);
+      const rot = f.seed + age * 0.0001;
+
+      // outer layer: 8 acid petals
+      const k1 = Math.min(age / 900, 1);
+      const bloom1 = 1 - Math.pow(1 - k1, 4);
+      ctx.strokeStyle = PULSE;
+      ctx.globalAlpha = 0.55 * fade;
+      ctx.lineWidth = 1.4;
+      for (let p = 0; p < 8; p++) {
+        const a = rot + (p * TAU) / 8;
+        drawPetal(f.x, f.y, a, 118 * bloom1, 26 * bloom1);
+      }
+
+      // inner layer: 6 lilac petals, offset and delayed
+      const k2 = Math.min(Math.max(age - 260, 0) / 900, 1);
+      const bloom2 = 1 - Math.pow(1 - k2, 4);
+      if (bloom2 > 0) {
+        ctx.strokeStyle = RIPPLE;
+        ctx.globalAlpha = 0.5 * fade;
+        ctx.lineWidth = 1.1;
+        for (let p = 0; p < 6; p++) {
+          const a = -rot * 1.6 + (p * TAU) / 6 + TAU / 16;
+          drawPetal(f.x, f.y, a, 66 * bloom2, 19 * bloom2);
+        }
+      }
+
+      // shockwave ring rides ahead
+      const kr = age / 900;
+      if (kr < 1) {
+        ctx.strokeStyle = PULSE;
+        ctx.globalAlpha = 0.5 * (1 - kr);
+        ctx.lineWidth = 1.8;
+        ctx.beginPath();
+        ctx.arc(f.x, f.y, 20 + (1 - Math.pow(1 - kr, 3)) * 300, 0, TAU);
+        ctx.stroke();
+      }
+    }
+    ctx.globalAlpha = 1;
+  }
+
   function drawStamps(t: number) {
     const RIPPLE_GAP = STAMP_R * 0.55;
     const RIPPLE_MAX = STAMP_R * 2.4; // ripples stay local to their circle
     ctx.lineWidth = 1;
     stamps.forEach((s, key) => {
       const age = t - s.born;
+      if (age < 0) return; // staggered burst births: not born yet
       // lifecycle: grow for STAMP_LIFE, then dissolve and free the slot
       if (!s.die && age > STAMP_LIFE) s.die = t;
       let fade = 1;
@@ -333,7 +415,17 @@ const email = 'mike@mindscapecollective.org';
       drawRings(cx, cy, t * 0.0045 + s.p * GAP);
       drawPulse(cx, cy, t * 0.021 + (i * maxR) / 3);
     });
+    // intro stroke: the field paints once by itself, then hands over the
+    // brush — otherwise the interaction stays a secret
+    if (demoStart < 0) demoStart = t + 1400;
+    const dk = (t - demoStart) / 2600;
+    if (dk >= 0 && dk <= 1) {
+      const dx = w * (0.32 + 0.46 * dk);
+      const dy = h * (0.74 - 0.36 * dk + Math.sin(dk * Math.PI * 2) * 0.07);
+      stampAt(dx, dy, t);
+    }
     drawStamps(t);
+    drawFlowers(t);
     if (pointer.active) {
       // time-based lerp: identical feel at any frame rate
       const k = 1 - Math.exp(-(Number.isFinite(dt) ? dt : 16) / 180);
@@ -372,6 +464,13 @@ const email = 'mike@mindscapecollective.org';
     document.addEventListener('visibilitychange', () => {
       if (document.hidden) setRunning(false);
       else setRunning(true);
+    });
+    // click/tap anywhere open in the hero: rosette burst (all pointer types —
+    // a tap is deliberate in a way scrolling isn't)
+    hero.addEventListener('click', (e) => {
+      if ((e.target as Element).closest('a, button')) return;
+      const rect = canvas.getBoundingClientRect();
+      burstAt(e.clientX, e.clientY - rect.top, performance.now());
     });
     window.addEventListener('pointermove', (e) => {
       if (e.pointerType !== 'mouse') return; // touch-scroll must not paint

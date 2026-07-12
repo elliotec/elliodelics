@@ -4,24 +4,37 @@
 <section class="founder" aria-labelledby="founder-title">
   <div class="container inner reveal">
     <h2 class="sr-only" id="founder-title">Who runs Elliodelics</h2>
-    <p class="lede">
-      Elliodelics is <strong>Mike Elliott</strong> — fifteen years building
-      products and leading engineering organizations, now studying
-      psychedelics and consciousness at the graduate level.
-    </p>
-    <p class="follow">
-      Former Director of Engineering at Dutchie and ezCater. Founder of
-      Mindscape Collective. MA candidate in Psychedelics &amp; Consciousness
-      Studies at the University of Ottawa. He’s the person your CTO wants in
-      the room, and the one your facilitators don’t mind having there.
-    </p>
-    <p class="aside mono">elliott ✺ delics — the name was sitting right there</p>
+    <div class="founder-grid">
+      <img
+        class="portrait"
+        src="/mike.webp"
+        width="400"
+        height="400"
+        alt="Mike Elliott, smiling, with a yellow flower in his hair"
+        loading="lazy"
+        decoding="async"
+      />
+      <div>
+        <p class="lede">
+          Elliodelics is <a class="mike" href="https://elliotec.com" target="_blank" rel="noopener">Mike Elliott<span class="ext" aria-hidden="true">↗</span><span class="sr-only"> (opens in new tab)</span></a> — fifteen years building
+          products and leading engineering organizations, now studying
+          psychedelics and consciousness at the graduate level.
+        </p>
+        <p class="follow">
+          Former Director of Engineering at Dutchie and ezCater. Founder of
+          Mindscape Collective. MA candidate in Psychedelics &amp; Consciousness
+          Studies at the University of Ottawa. He’s the person your CTO wants in
+          the room, and the one your facilitators don’t mind having there.
+        </p>
+        <p class="aside mono">elliott × delics — the name was sitting right there</p>
+      </div>
+    </div>
   </div>
 </section>
 
 <style>
   .founder {
-    background: var(--void-deep);
+    background: var(--void);
     padding-block: var(--space-section);
   }
 
@@ -29,18 +42,51 @@
     max-width: 58rem;
   }
 
+  .founder-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+  @media (min-width: 40rem) {
+    .founder-grid {
+      grid-template-columns: 9rem minmax(0, 1fr);
+      gap: 3rem;
+      align-items: start;
+    }
+  }
+
+  .portrait {
+    width: 7.5rem;
+    height: 7.5rem;
+    border-radius: 50%;
+    border: 1px solid var(--ink-faint);
+  }
+  @media (min-width: 40rem) {
+    .portrait { width: 9rem; height: 9rem; }
+  }
+
   .lede {
-    font-family: var(--font-display);
-    font-weight: 640;
+    font-family: var(--font-serif);
+    font-weight: 600;
     font-size: var(--text-h3);
-    line-height: 1.22;
-    letter-spacing: -0.015em;
+    line-height: 1.25;
+    letter-spacing: 0;
     margin: 0;
   }
 
-  .lede strong {
-    font-weight: 800;
+  .mike {
+    font-weight: 700;
     color: var(--acid);
+    text-decoration: none;
+  }
+  .mike:hover { text-decoration: underline; }
+
+  .ext {
+    font-family: var(--font-mono);
+    font-size: 0.45em;
+    font-weight: 400;
+    vertical-align: 0.9em;
+    margin-inline-start: 0.3em;
   }
 
   .follow {

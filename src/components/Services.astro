@@ -1,5 +1,5 @@
 ---
-const email = 'mike@mindscapecollective.org';
+const email = 'mike@elliotec.com';
 const services = [
   {
     title: 'Product engineering',
@@ -8,12 +8,12 @@ const services = [
   },
   {
     title: 'Privacy, security & compliance',
-    desc: 'Data protection as architecture, not paperwork: GDPR compliance, data minimization, encryption in transit and at rest, retention policies, and audit trails designed in from the first schema. Grounded in years of engineering inside regulated industries, cannabis included — and in a field where confidentiality is an ethic, not a checkbox.',
+    desc: 'Data protection as architecture, not paperwork: GDPR, data minimization, encryption, retention, and audit trails designed in from the first schema. Built on years inside regulated industries — for a field where confidentiality is an ethic, not a checkbox.',
     glyph: 'M13 15 V10 A7 7 0 0 1 27 10 V15 M9 15 H31 V27 H9 Z M20 19 V23',
   },
   {
     title: 'Research & data infrastructure',
-    desc: 'Aggregation pipelines, search, and plain-language access to messy scientific literature. The systems behind Mindscape Collective’s open library of 25,000+ studies.',
+    desc: 'Aggregation pipelines, search, and plain-language access to messy scientific literature. The systems behind Mindscape Collective’s massive open library.',
     glyph: 'M6 26 L6 6 M6 26 L34 26 M10 22 L14 14 L20 18 L28 8 M28 8 L34 8',
   },
   {
@@ -29,18 +29,17 @@ const services = [
     <h2 class="display sec-title reveal" id="services-title">What we build</h2>
     <ul class="index">
       {services.map((s, i) => (
-        <li class="reveal" style={`--reveal-delay: ${i * 0.07}s`}>
+        <li class="row reveal" style={`--reveal-delay: ${i * 0.07}s`}>
+          <svg class="glyph" viewBox="0 0 40 32" aria-hidden="true">
+            <path d={s.glyph} />
+          </svg>
+          <h3 class="row-title">{s.title}</h3>
+          <p class="row-desc">{s.desc}</p>
           <a
-            class="row"
+            class="row-cue mono"
             href={`mailto:${email}?subject=${encodeURIComponent(`${s.title} — enquiry`)}`}
-          >
-            <svg class="glyph" viewBox="0 0 40 32" aria-hidden="true">
-              <path d={s.glyph} />
-            </svg>
-            <h3 class="row-title">{s.title}</h3>
-            <p class="row-desc">{s.desc}</p>
-            <span class="row-cue mono">email about this →</span>
-          </a>
+            aria-label={`Email about ${s.title.toLowerCase()}`}
+          >email about this →</a>
         </li>
       ))}
     </ul>
@@ -49,7 +48,7 @@ const services = [
 
 <style>
   .services {
-    background: var(--void-deep);
+    background: var(--void);
     padding-block: var(--space-section);
   }
 
@@ -73,8 +72,6 @@ const services = [
     align-items: start;
     padding: clamp(1.6rem, 4vh, 2.6rem) clamp(0.5rem, 1.5vw, 1.25rem);
     border-block-end: 1px solid var(--ink-faint);
-    color: inherit;
-    text-decoration: none;
     transition: background 0.35s var(--ease-out), color 0.35s var(--ease-out);
   }
 
@@ -94,24 +91,29 @@ const services = [
 
   .row-cue {
     grid-area: cue;
-    margin-block-start: 0.9rem;
+    justify-self: start;
+    margin-block-start: 0.4rem;
+    /* generous hit area without moving the layout */
+    padding: 0.7em 0.9em 0.7em 0;
     color: var(--acid);
+    text-decoration: none;
     transition: color 0.35s var(--ease-out);
   }
+  .row-cue:hover { text-decoration: underline; }
   @media (hover: hover) {
-    .row:hover .row-cue { color: var(--void-abyss); }
+    .row:has(.row-cue:hover) .row-cue { color: var(--void-abyss); }
   }
-  .row:focus-visible .row-cue { color: var(--void-abyss); }
+  .row:has(.row-cue:focus-visible) .row-cue { color: var(--void-abyss); }
 
-  /* the acid flood: hover-capable pointers only (touch would stick), plus
-     keyboard focus, which never sticks */
+  /* the acid flood follows the actual link — the cue — not the whole row,
+     so hovering content never advertises a click that isn't there */
   @media (hover: hover) {
-    .row:hover {
+    .row:has(.row-cue:hover) {
       background: var(--acid);
       color: var(--void-abyss);
     }
   }
-  .row:focus-visible {
+  .row:has(.row-cue:focus-visible) {
     background: var(--acid);
     color: var(--void-abyss);
   }
@@ -134,9 +136,9 @@ const services = [
     transition: stroke 0.35s var(--ease-out);
   }
   @media (hover: hover) {
-    .row:hover .glyph path { stroke: var(--void-abyss); }
+    .row:has(.row-cue:hover) .glyph path { stroke: var(--void-abyss); }
   }
-  .row:focus-visible .glyph path { stroke: var(--void-abyss); }
+  .row:has(.row-cue:focus-visible) .glyph path { stroke: var(--void-abyss); }
 
   .row-title {
     grid-area: title;
@@ -164,7 +166,7 @@ const services = [
     .row-desc { margin-block-start: 0.35rem; }
   }
   @media (hover: hover) {
-    .row:hover .row-desc { color: var(--void-deep); }
+    .row:has(.row-cue:hover) .row-desc { color: var(--void-deep); }
   }
-  .row:focus-visible .row-desc { color: var(--void-deep); }
+  .row:has(.row-cue:focus-visible) .row-desc { color: var(--void-deep); }
 </style>

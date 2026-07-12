@@ -20,14 +20,14 @@ const pairs = [
         {pairs.map(([eng, field]) => (
           <span class="pair">
             <span class="eng">{eng}</span>
-            <span class="glyph">✺</span>
+            <span class="glyph">×</span>
             <span class="field">{field}</span>
           </span>
         ))}
       </span>
     ))}
   </div>
-  <button class="mono ticker-toggle" type="button" aria-pressed="false">pause</button>
+  <button class="mono ticker-toggle" type="button">pause</button>
   <p class="sr-only">
     The vocabulary we speak, paired — one engineering term, one field term:
     {pairs.map(([eng, field]) => `${eng} and ${field}`).join(', ')}.
@@ -113,23 +113,15 @@ const pairs = [
     .ticker-toggle { display: none; } /* nothing moves; nothing to pause */
   }
 
-  .sr-only {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    margin: -1px;
-    overflow: hidden;
-    clip-path: inset(50%);
-    white-space: nowrap;
-  }
 </style>
 
 <script>
   const ticker = document.querySelector('.ticker')!;
   const toggle = document.querySelector<HTMLButtonElement>('.ticker-toggle');
+  // one signal only: the label states the available action ("pause"/"play");
+  // aria-pressed on top of a swapping label would read as "play, pressed"
   toggle?.addEventListener('click', () => {
     const paused = ticker.classList.toggle('paused');
-    toggle.setAttribute('aria-pressed', String(paused));
     toggle.textContent = paused ? 'play' : 'pause';
   });
 </script>
