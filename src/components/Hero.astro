@@ -466,14 +466,19 @@ const email = 'mike@elliodelics.com';
     // brush — otherwise the interaction stays a secret
     if (demoStart < 0) demoStart = t + 1400;
     const dk = (t - demoStart) / 2600;
+    // on narrow viewports the sweep stays low, out from under the hero copy
+    const narrow = w < 640;
     if (dk >= 0 && dk <= 1) {
-      const dx = w * (0.32 + 0.46 * dk);
-      const dy = h * (0.74 - 0.36 * dk + Math.sin(dk * Math.PI * 2) * 0.07);
+      const dx = w * (narrow ? 0.25 + 0.62 * dk : 0.32 + 0.46 * dk);
+      const dy = narrow
+        ? h * (0.85 - 0.13 * dk + Math.sin(dk * Math.PI * 2) * 0.04)
+        : h * (0.74 - 0.36 * dk + Math.sin(dk * Math.PI * 2) * 0.07);
       stampAt(dx, dy, t);
     } else if (dk > 1 && !demoBurst) {
       // the stroke ends the way a click begins: a flower
       demoBurst = true;
-      burstAt(w * 0.78, h * 0.38, t);
+      if (narrow) burstAt(w * 0.87, h * 0.72, t);
+      else burstAt(w * 0.78, h * 0.38, t);
     }
     drawStamps(t);
     drawFlowers(t);
@@ -505,6 +510,13 @@ const email = 'mike@elliodelics.com';
 
   resize();
   window.addEventListener('resize', resize);
+
+  // the wordmark scrolls home instead of reloading the whole page and
+  // replaying the entrance
+  document.querySelector('.brand')?.addEventListener('click', (e) => {
+    e.preventDefault();
+    window.scrollTo({ top: 0, behavior: reduced.matches ? 'auto' : 'smooth' });
+  });
 
   if (!reduced.matches) {
     const hero = canvas.closest('.hero')!;

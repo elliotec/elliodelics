@@ -37,7 +37,8 @@ const services = [
           <p class="row-desc">{s.desc}</p>
           <a
             class="row-cue mono"
-            href={`mailto:${email}?subject=${encodeURIComponent(`${s.title} — inquiry`)}`}
+            href="#contact"
+            data-subject={`${s.title} — inquiry`}
             aria-label={`Email about ${s.title.toLowerCase()}`}
           >email about this →</a>
         </li>
@@ -170,4 +171,20 @@ const services = [
     .row:has(.row-cue:hover) .row-desc { color: var(--void-deep); }
   }
   .row:has(.row-cue:focus-visible) .row-desc { color: var(--void-deep); }
+
+  /* the acid focus ring would vanish into the acid flood */
+  .row-cue:focus-visible { outline-color: var(--void-abyss); }
 </style>
+
+<script>
+  // cues route to the contact section (which carries the copy fallback for
+  // machines with no mail handler) and hand their subject to the mail link
+  const mail = document.querySelector<HTMLAnchorElement>('.contact .mail');
+  document.querySelectorAll<HTMLAnchorElement>('.row-cue').forEach((cue) => {
+    cue.addEventListener('click', () => {
+      if (!mail || !cue.dataset.subject) return;
+      const base = mail.getAttribute('href')!.split('?')[0];
+      mail.setAttribute('href', `${base}?subject=${encodeURIComponent(cue.dataset.subject)}`);
+    });
+  });
+</script>

@@ -32,10 +32,12 @@ const pairs = [
       </span>
     ))}
   </div>
-  <p class="sr-only">
-    The vocabulary we speak, one engineering term paired with one field term.
-    {pairs.map(([eng, field]) => `${eng} and ${field}`).join(', ')}.
-  </p>
+  <div class="sr-only">
+    <p>The vocabulary we speak, one engineering term paired with one field term.</p>
+    <ul>
+      {pairs.map(([eng, field]) => <li>{eng} and {field}</li>)}
+    </ul>
+  </div>
 </div>
 
 <style>
