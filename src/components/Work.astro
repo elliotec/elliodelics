@@ -2,18 +2,22 @@
 const cases = [
   {
     org: 'Mindscape Collective',
+    logo: '/logos/mindscape.webp',
+    logoH: '4.6rem', /* tall narrow mark reads small at the shared height */
     url: 'https://mindscapecollective.org',
     role: 'founder & executive director',
     body: 'An open library of the world’s psychedelic and consciousness research, aggregating a massive collection of peer-reviewed articles from a dozen sources and summarizing them in plain language, free to everyone. No paywall, no gatekeeping.',
   },
   {
     org: 'Psymposia',
+    logo: '/logos/psymposia.svg',
     url: 'https://psymposia.com',
     role: 'infrastructure',
     body: 'Moving the psychedelic media nonprofit’s tech stack to open-source, encrypted infrastructure. Privacy engineering for independent journalism in a sensitive field.',
   },
   {
     org: 'Psychedelia-Stiftung',
+    logo: '/logos/stiftung.webp',
     url: 'https://psychedelia-stiftung.de',
     role: 'engineering partner',
     bodyPre: 'Websites, systems, and GDPR-compliant intake forms for the German foundation’s work on ethical, evidence-backed psychedelic retreats, including ',
@@ -23,6 +27,7 @@ const cases = [
   },
   {
     org: 'Dutchie',
+    logo: '/logos/dutchie.webp',
     url: 'https://business.dutchie.com',
     role: 'director of engineering',
     body: 'Grew the engineering department to 60 engineers across 10 teams through funding rounds and acquisitions, in cannabis dispensary software where security, data privacy, and compliance are the product.',
@@ -39,7 +44,15 @@ const cases = [
   <ul class="reports">
     {cases.map((c, i) => (
       <li class="report reveal" style={`--reveal-delay: ${i * 0.08}s`}>
-        <span class="mark" aria-hidden="true">✺</span>
+        <img
+          class="orglogo"
+          src={c.logo}
+          alt=""
+          height="54"
+          loading="lazy"
+          decoding="async"
+          style={c.logoH ? `height: ${c.logoH}` : undefined}
+        />
         <div class="org-line">
           <h3 class="org">
             {c.url ? (
@@ -51,8 +64,8 @@ const cases = [
             )}
           </h3>
           <span class="ledger" aria-hidden="true"></span>
-          <p class="role mono">{c.role}</p>
         </div>
+        <p class="role mono">{c.role}</p>
         <p class="body">
           {c.bodyPre ?? c.body}{c.linkHref && (
             <a
@@ -97,9 +110,6 @@ const cases = [
   }
 
   .report {
-    display: grid;
-    grid-template-columns: 2rem minmax(0, 1fr);
-    column-gap: 1.2rem;
     max-width: 46rem;
   }
 
@@ -117,11 +127,14 @@ const cases = [
   .body-link:hover,
   .body-link:focus-visible { color: var(--acid); }
 
-  .mark {
-    grid-row: span 4; /* org-line + body; extra rows collapse */
-    color: var(--acid);
-    font-size: 1.1rem;
-    line-height: 1.6;
+  /* each org's real mark, unified as white line-art on the void */
+  .orglogo {
+    display: block;
+    height: 3.4rem;
+    width: auto;
+    margin-block-end: 1.1rem;
+    filter: brightness(0) invert(1);
+    opacity: 0.92;
   }
 
   /* elliot.ec-style ledger line: org ······ role */
@@ -173,7 +186,7 @@ const cases = [
   }
 
   .role {
-    margin: 0;
+    margin: 0.45rem 0 0;
     color: var(--ink-dim);
   }
 
