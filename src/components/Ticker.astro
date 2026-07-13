@@ -32,7 +32,6 @@ const pairs = [
       </span>
     ))}
   </div>
-  <button class="mono ticker-toggle" type="button">pause</button>
   <p class="sr-only">
     The vocabulary we speak, one engineering term paired with one field term.
     {pairs.map(([eng, field]) => `${eng} and ${field}`).join(', ')}.
@@ -80,30 +79,17 @@ const pairs = [
     to { translate: -100% 0; }
   }
 
-  /* WCAG 2.2.2: moving content must be pausable. The button is the single
-     control — hover/focus auto-pause fought it (a focused "play" button kept
-     the track frozen via :focus-within, so play appeared broken) */
+  /* WCAG 2.2.2: moving content must be pausable — hover (real hover only:
+     touch taps leave sticky emulated hover that blocks resume) or keyboard
+     focus freezes it; on touch, a tap toggles .paused (see script) */
+  @media (hover: hover) {
+    .ticker:hover .ticker-run {
+      animation-play-state: paused;
+    }
+  }
+  .ticker:focus-within .ticker-run,
   .ticker.paused .ticker-run {
     animation-play-state: paused;
-  }
-
-  .ticker-toggle {
-    position: absolute;
-    top: 50%;
-    right: clamp(0.75rem, 2vw, 1.5rem);
-    translate: 0 -50%;
-    background: var(--void-deep);
-    /* solid halo masks the marquee text sliding underneath */
-    box-shadow: 0 0 0 10px var(--void-deep);
-    border: 1px solid var(--ink-faint);
-    border-radius: 99px;
-    color: var(--ink-dim);
-    padding: 0.4em 1em;
-    cursor: pointer;
-  }
-  .ticker-toggle:hover { color: var(--acid); border-color: var(--acid); }
-  @media (pointer: coarse) {
-    .ticker-toggle { padding: 1.05em 1.3em; } /* thumb-sized: ≥44px tall */
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -117,18 +103,20 @@ const pairs = [
       justify-content: center;
     }
     .ticker-run:last-child { display: none; }
-    .ticker-toggle { display: none; } /* nothing moves; nothing to pause */
   }
 
 </style>
-
 <script>
+  // touch has no hover: a tap toggles the marquee instead. click (not
+  // pointerdown) so scroll flicks across the strip never trigger it.
   const ticker = document.querySelector('.ticker')!;
-  const toggle = document.querySelector<HTMLButtonElement>('.ticker-toggle');
-  // one signal only: the label states the available action ("pause"/"play");
-  // aria-pressed on top of a swapping label would read as "play, pressed"
-  toggle?.addEventListener('click', () => {
-    const paused = ticker.classList.toggle('paused');
-    toggle.textContent = paused ? 'play' : 'pause';
+  let lastPointerType = '';
+  ticker.addEventListener(
+    'pointerdown',
+    (e) => { lastPointerType = (e as PointerEvent).pointerType; },
+    { passive: true }
+  );
+  ticker.addEventListener('click', () => {
+    if (lastPointerType === 'touch') ticker.classList.toggle('paused');
   });
 </script>
