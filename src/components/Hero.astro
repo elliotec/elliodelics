@@ -166,36 +166,39 @@ const email = 'mike@elliodelics.com';
   }
   .hero-cue:hover { text-decoration: underline; }
 
-  /* -- entrance choreography (JS-gated; page is fine without) -- */
+  /* -- entrance choreography (JS-gated; page is fine without) --
+     The hidden states live in the keyframes (fill: backwards covers the
+     delay), so the elements' static state is the finished layout: a
+     renderer that never runs animations shows the hero, not a blank. */
   html.js .line-inner {
-    translate: 0 110%;
-    animation: rise 1s var(--ease-expo) forwards;
+    animation: rise 1s var(--ease-expo) backwards;
   }
-  html.js .line:nth-child(1) .line-inner { animation-delay: 0.10s; }
-  html.js .line:nth-child(2) .line-inner { animation-delay: 0.19s; }
-  html.js .line:nth-child(3) .line-inner { animation-delay: 0.28s; }
-  html.js .line:nth-child(4) .line-inner { animation-delay: 0.37s; }
+  html.js .line:nth-child(1) .line-inner { animation-delay: 0.05s; }
+  html.js .line:nth-child(2) .line-inner { animation-delay: 0.13s; }
+  html.js .line:nth-child(3) .line-inner { animation-delay: 0.21s; }
+  html.js .line:nth-child(4) .line-inner { animation-delay: 0.29s; }
 
   html.js .hero-sub,
   html.js .hero-cues,
   html.js .hero-top {
-    opacity: 0;
-    animation: appear 1.1s var(--ease-out) 0.75s forwards;
+    animation: appear 1.1s var(--ease-out) 0.6s backwards;
   }
-  html.js .hero-top { animation-delay: 0.55s; }
+  html.js .hero-top { animation-delay: 0.45s; }
 
   @keyframes rise {
+    from { translate: 0 110%; }
     to { translate: 0 0; }
   }
   @keyframes appear {
+    from { opacity: 0; }
     to { opacity: 1; }
   }
 
   @media (prefers-reduced-motion: reduce) {
-    html.js .line-inner { translate: 0 0; animation: none; }
+    html.js .line-inner,
     html.js .hero-sub,
     html.js .hero-cues,
-    html.js .hero-top { opacity: 1; animation: none; }
+    html.js .hero-top { animation: none; }
   }
 </style>
 
@@ -514,6 +517,9 @@ const email = 'mike@elliodelics.com';
   // the wordmark scrolls home instead of reloading the whole page and
   // replaying the entrance
   document.querySelector('.brand')?.addEventListener('click', (e) => {
+    const m = e as MouseEvent;
+    // modified clicks keep their browser meaning (open home in a new tab)
+    if (m.metaKey || m.ctrlKey || m.shiftKey || m.altKey || m.button !== 0) return;
     e.preventDefault();
     window.scrollTo({ top: 0, behavior: reduced.matches ? 'auto' : 'smooth' });
   });
@@ -546,8 +552,15 @@ const email = 'mike@elliodelics.com';
         }
         pointer.tx = e.clientX;
         pointer.ty = e.clientY - rect.top;
+      } else {
+        // below the band: the halo leaves with the mouse instead of
+        // haunting its last position
+        pointer.active = false;
       }
     }, { passive: true });
+    // same when the mouse leaves the document entirely
+    document.addEventListener('pointerleave', () => { pointer.active = false; });
+    window.addEventListener('blur', () => { pointer.active = false; });
   } else {
     draw(4200, Infinity); // one static frame; the geometry stays, the motion goes
   }

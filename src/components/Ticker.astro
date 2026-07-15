@@ -18,7 +18,18 @@ const pairs = [
 ];
 ---
 
-<div class="ticker">
+{/* the whole strip is the pause control: click, tap, or focus+Enter/Space
+    toggles it (WCAG 2.2.2). Descendants of role=button are presentational,
+    so the sr-only vocabulary list lives outside as a sibling. Under reduced
+    motion the script strips the button semantics — nothing moves, nothing
+    to pause. */}
+<div
+  class="ticker"
+  role="button"
+  tabindex="0"
+  aria-pressed="false"
+  aria-label="pause the vocabulary ticker"
+>
   <div class="ticker-track" aria-hidden="true">
     {[0, 1].map(() => (
       <span class="ticker-run">
@@ -32,12 +43,12 @@ const pairs = [
       </span>
     ))}
   </div>
-  <div class="sr-only">
-    <p>The vocabulary we speak, one engineering term paired with one field term.</p>
-    <ul>
-      {pairs.map(([eng, field]) => <li>{eng} and {field}</li>)}
-    </ul>
-  </div>
+</div>
+<div class="sr-only">
+  <p>The vocabulary we speak, one engineering term paired with one field term.</p>
+  <ul>
+    {pairs.map(([eng, field]) => <li>{eng} and {field}</li>)}
+  </ul>
 </div>
 
 <style>
@@ -48,6 +59,12 @@ const pairs = [
     overflow: hidden; /* not clip: clipped marquee content must not feed doc scrollWidth */
     padding-block: 0.9rem;
   }
+
+  .ticker[role='button'] { cursor: pointer; }
+
+  /* the ring sits inside the strip — at the edges it would clip against
+     the neighbouring bands */
+  .ticker:focus-visible { outline-offset: -3px; }
 
   .ticker-track {
     display: flex;
@@ -83,7 +100,7 @@ const pairs = [
 
   /* WCAG 2.2.2: moving content must be pausable — hover (real hover only:
      touch taps leave sticky emulated hover that blocks resume) or keyboard
-     focus freezes it; on touch, a tap toggles .paused (see script) */
+     focus freezes it; a click, tap, or Enter/Space toggles .paused (script) */
   @media (hover: hover) {
     .ticker:hover .ticker-run {
       animation-play-state: paused;
@@ -95,6 +112,7 @@ const pairs = [
   }
 
   @media (prefers-reduced-motion: reduce) {
+    .ticker { cursor: default; }
     .ticker-track { width: 100%; }
     .ticker-run {
       animation: none;
@@ -105,20 +123,39 @@ const pairs = [
       justify-content: center;
     }
     .ticker-run:last-child { display: none; }
+    /* long pairs must break between terms, not clip against the strip edge */
+    .pair {
+      flex-wrap: wrap;
+      justify-content: center;
+      row-gap: 0.15rem;
+    }
   }
 
 </style>
 <script>
-  // touch has no hover: a tap toggles the marquee instead. click (not
-  // pointerdown) so scroll flicks across the strip never trigger it.
-  const ticker = document.querySelector('.ticker')!;
-  let lastPointerType = '';
-  ticker.addEventListener(
-    'pointerdown',
-    (e) => { lastPointerType = (e as PointerEvent).pointerType; },
-    { passive: true }
-  );
-  ticker.addEventListener('click', () => {
-    if (lastPointerType === 'touch') ticker.classList.toggle('paused');
-  });
+  // the strip itself is the toggle: click/tap/Enter/Space pause and resume.
+  // under reduced motion nothing moves, so the button semantics come off.
+  const ticker = document.querySelector<HTMLElement>('.ticker')!;
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    ticker.removeAttribute('role');
+    ticker.removeAttribute('tabindex');
+    ticker.removeAttribute('aria-pressed');
+    ticker.removeAttribute('aria-label');
+  } else {
+    const toggle = () => {
+      const paused = ticker.classList.toggle('paused');
+      ticker.setAttribute('aria-pressed', String(paused));
+      ticker.setAttribute(
+        'aria-label',
+        paused ? 'resume the vocabulary ticker' : 'pause the vocabulary ticker'
+      );
+    };
+    ticker.addEventListener('click', toggle);
+    ticker.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault(); // Space must not scroll the page
+        toggle();
+      }
+    });
+  }
 </script>

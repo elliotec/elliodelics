@@ -55,7 +55,7 @@ rounded:
   pill: "99px"
   full: "50%"
 spacing:
-  section: "clamp(7rem, 14vh + 3rem, 13rem)"
+  section: "clamp(3.5rem, 6vh + 1.5rem, 6.5rem)"
   gutter: "clamp(1.25rem, 4vw, 4rem)"
   measure: "34em"
 components:
@@ -91,7 +91,7 @@ components:
 
 The surface IS the color. This is a drenched system: one deep forest, near-black green (`void`) floods every screen edge to edge, and everything else — near-white green-tinted serif prose, a single spring-green accent, hairline rules — lives inside it. The page reads like a schematic drawn on a dark field: thin strokes, mono annotations, generative interference geometry. It is the visual argument for the brand itself: engineering precision applied to psychedelic territory, "strange with a straight face." The strangeness is in the concept (a wordmark braced by mushrooms, psilocybin annotated like a code review, a canvas that paints the Flower of Life); the execution is ruler-straight.
 
-Layout is one long single-column page in seven full-bleed bands, each a slightly different luminance of the same green — hero (`void`), ticker (`void-deep`), manifesto (the one violet room), services (`void`), work (`void-deep`), founder (`void`), contact (`void-abyss`). Depth comes entirely from this banding, never from shadows or cards. Sections breathe with `spacing.section` vertical padding; text columns hold a tight reading measure (34em body, 44–52ch descriptions); big display headings occasionally swing right-aligned (Field reports) or cap at a character count (`max-width: 12ch`) to keep tension in the column.
+Layout is one long single-column page in seven full-bleed bands, each a slightly different luminance of the same green — hero (`void`), ticker (`void-deep`), manifesto (the one violet room), services (`void`), work (`void-deep`), founder (`void`), contact (`void-abyss`). Depth comes entirely from this banding, never from shadows or cards. Sections breathe with `spacing.section` vertical padding, kept deliberately compact so the page reads tight rather than sprawling; text columns hold a tight reading measure (34em body, 44–52ch descriptions); big display headings occasionally swing right-aligned (Field reports) or cap at a character count (`max-width: 12ch`) to keep tension in the column.
 
 The system explicitly rejects its anti-references: no Corporate SaaS template (no gradient hero, no three feature cards, no logo wall, no pricing table, no "Book a demo"), no clinical medical-white minimalism, and no trippy clichés — no tie-dye, no fractals, no melting rainbows. Psychedelic fluency here looks like sacred geometry drawn as a lab schematic, not a costume.
 
@@ -137,7 +137,7 @@ The hero canvas carries three additional one-off stroke colors that live only in
 
 **The Faint Ink Rule.** `ink-faint` (28% alpha) is for hairlines — 1px borders, dotted ledgers, dashed leaders. It is forbidden as a text color; it fails contrast by design.
 
-Measured contrast on these pairings runs from 6.8:1 (acid on void) to 15.9:1 (ink on void-abyss) — everything interactive or textual clears WCAG AA with room to spare.
+Measured contrast on these pairings runs from 6.2:1 (acid on void) to 17.7:1 (ink on void-abyss) — everything interactive or textual clears WCAG AA with room to spare.
 
 ## 3. Typography
 
@@ -179,7 +179,7 @@ The component vocabulary is small and stroke-drawn: links, one pill button, hair
 
 ### Buttons
 - **Shape:** the single true button (copy address) is a pill (`border-radius: 99px`); everything else that looks actionable is a link.
-- **Copy button:** transparent background, 1px `ink-faint` border, `ink-dim` mono text, `0.7em 1.3em` padding (grows to `1em 1.5em` on coarse pointers for a ≥44px target). Hover shifts border and text to acid. Success floods the pill with acid (`copied ✺`, void-abyss text); failure floods with `void-lift` (`copy failed`) — both states also announced via a `role="status"` live region.
+- **Copy button:** transparent background, 1px border at ink 42% alpha (`oklch(0.975 0.008 152 / 0.42)`, 3.6:1 on abyss — a control boundary must clear WCAG 1.4.11 where a decorative hairline needn't), `ink-dim` mono text, `0.7em 1.3em` padding (grows to `1em 1.5em` on coarse pointers for a ≥44px target). Hover shifts border and text to acid. Success floods the pill with acid (`copied ✺`, void-abyss text); failure floods with `void-lift` (`copy failed`) — both states also announced via a `role="status"` live region.
 - **Mail CTA:** acid JetBrains Mono at `clamp(1.1rem, 0.6rem + 2.4vw, 2.1rem)` with a 2px acid underline that sweeps in from the left on hover/focus (`scale: 0 1` → `1 1`, 0.5s `--ease-expo`), plus a magnetic pointer pull (0.22 strength, skipped under reduced motion).
 
 ### Links
@@ -188,7 +188,7 @@ The component vocabulary is small and stroke-drawn: links, one pill button, hair
 - **Focus:** every control gets `outline: 2px solid var(--acid)` at 3px offset via `:focus-visible`.
 
 ### Cards / Containers
-- **There are no cards.** List items sit directly on the band, separated by 1px `ink-faint` hairlines (service index) or open whitespace (field reports, which alternate left/right via `nth-child(even) { margin-inline-start: auto }` for rhythm).
+- **There are no cards.** List items sit directly on the band, separated by 1px `ink-faint` hairlines (service index) or open whitespace (field reports, a tight `clamp(2rem, 4.5vh, 3rem)` vertical gap, which alternate left/right via `nth-child(even) { margin-inline-start: auto }` for rhythm).
 - **Service rows** are a responsive grid (glyph / title / desc / cue) whose hover state is the system's loudest move: when the row's cue link is hovered or focused, the entire row floods acid with `void-abyss` text and glyph strokes. The flood is scoped with `:has(.row-cue:hover)` and gated behind `@media (hover: hover)` so touch never gets sticky hover — and it follows the actual link, not the whole row, so hovering plain text never advertises a click that isn't there.
 - **Field reports** open with an acid `✺` mark and an elliot.ec-style ledger line — org name, a dotted `ink-faint` leader, mono role — that hides below 40rem.
 
@@ -198,8 +198,11 @@ The component vocabulary is small and stroke-drawn: links, one pill button, hair
 ### Navigation
 - A single top bar inside the hero: the wordmark left, mono email right (hidden below 40rem — the contact section carries the address). No menu, no hamburger. In-page cue links do the wayfinding.
 
+### Footer
+- Three mono lines (`elliodelics © year`, the tagline, `no cookies, no trackers`) on the abyss band. The `<footer>` lives outside `<main>` and every section so it maps to the `contentinfo` landmark; the contact section carves out its height (`min-height: calc(88svh - 8rem)`) so contact plus footer still read as one viewport.
+
 ### The Wordmark (signature)
-`{ elliodelics }` — the brand name in lowercase MuseoModerno 700, braced by two stroke-drawn mushrooms that read as code braces (fill: none, stroke-width 2.2, round caps and joins, 1.55em tall so they overshoot the caps height like real braces). The left/opening mushroom strokes acid; the right/closing mushroom is the same path mirrored (`scale: -1 1`) and strokes bloom. Green opens, purple closes. The favicon is the opening mushroom alone, acid on a void field (rendered as sRGB hex `#00d379` on `#003712` — the same values behind `theme-color`).
+`{ elliodelics }` — the brand name in lowercase MuseoModerno 700, braced by two stroke-drawn mushrooms that read as code braces (fill: none, stroke-width 2.2, round caps and joins, 1.55em tall so they overshoot the caps height like real braces). The left/opening mushroom strokes acid; the right/closing mushroom is the same path mirrored (`scale: -1 1`) and strokes bloom. Green opens, purple closes. The favicon is the brace pair without the name — opening mushroom in acid, mirrored closing mushroom in bloom, on a void field (rendered as sRGB hex `#00d379` and `#b188df` on `#003712`; the background matches `theme-color`).
 
 ### The Hero Canvas (signature)
 A full-bleed generative field behind the hero: closed-eye geometry drawn like a schematic.
@@ -209,10 +212,16 @@ A full-bleed generative field behind the hero: closed-eye geometry drawn like a 
 - **Pointer painting:** a mouse (never touch — touch-scroll must not paint) lays deep-emerald circles onto a fixed triangular lattice with spacing = radius (`STAMP_R = 26`, row height `26·√3/2`), so every circle passes through its neighbours' centers — the classic Flower of Life construction. Circles bloom in with an ease-out-quart, flash white at birth, keep growing ~7px/s toward a 2.6× cap so painted regions thicken into mandala overlap, ride local ripples on their edge, then dissolve after 12s of life (2.5s fade; a 300-circle cap starts dissolving the oldest early).
 - **Click bursts:** a click or tap on open hero ground blooms a purple flower — 8 outer petals (118px) and 6 delayed inner petals, slowly counter-rotating, with a shockwave ring riding ahead — then dissolves over ~5.2s.
 - **Self-drawing intro:** 1.4s after load the field paints one diagonal stroke by itself over 2.6s and ends it the way a click begins — with a flower burst — otherwise the interaction stays a secret.
-- **Discipline:** DPR capped at 1.75; the loop stops when the hero leaves the viewport or the tab hides; under `prefers-reduced-motion` the canvas draws exactly one static frame — the geometry stays, the motion goes.
+- **Discipline:** DPR capped at 1.75; the loop stops when the hero leaves the viewport or the tab hides; the pointer halo releases when the mouse leaves the hero band, the document, or the window (no geometry haunting an abandoned position); under `prefers-reduced-motion` the canvas draws exactly one static frame — the geometry stays, the motion goes.
+
+### The Annotated Molecule (signature)
+The Manifesto figure draws psilocybin's skeletal structure as an ink stroke schematic with dotted `ink-faint` leader lines out to acid mono code-review comments. Below 40rem the in-svg comments would render around 6px, so a JS-gated handoff takes over: the leaders and comments hide, the `viewBox` crops from the annotated schematic (`30 -34 640 254`) to the molecule alone (`48 0 280 182`), and the same three comments appear as an HTML annotation list under the figure (`ink-dim` referent, acid `//` comment). Without JS the wide schematic stays exactly as it was.
 
 ### Motion conventions (apply to every component)
-Two easings only: `--ease-out` `cubic-bezier(0.22, 1, 0.36, 1)` for state transitions and reveals, `--ease-expo` `cubic-bezier(0.16, 1, 0.3, 1)` for entrances and sweeps. Scroll reveals (`.reveal` → `.in`, 0.9s rise from 2.5rem, staggered via `--reveal-delay`) are gated on an `html.io` class set by the observer script itself, so a stalled bundle can never strand content invisible; hero entrance choreography is gated on `html.js` the same way. The ticker is a 88s linear marquee, duplicated for the loop, pausable by real hover (`@media (hover: hover)`), keyboard focus, or a tap toggle on touch — and under reduced motion it stops animating and wraps into a static centered grid. Every animation in the system has a reduced-motion alternative; this is non-negotiable.
+Two easings only: `--ease-out` `cubic-bezier(0.22, 1, 0.36, 1)` for state transitions and reveals, `--ease-expo` `cubic-bezier(0.16, 1, 0.3, 1)` for entrances and sweeps. Scroll reveals (`.reveal` → `.in`, 0.9s rise from 2.5rem, staggered via `--reveal-delay`) are gated on an `html.io` class set by the observer script itself, so a stalled bundle can never strand content invisible; hero entrance choreography is gated on `html.js` the same way, with its hidden states living inside the keyframes (`animation-fill-mode: backwards`) so the elements' static state is the finished layout — a renderer that never runs animations shows the hero, never a blank. The ticker is a 88s linear marquee, duplicated for the loop, and the strip is its own pause control (`role="button"`, `aria-pressed`): real hover (`@media (hover: hover)`) or keyboard focus freezes it, and a click, tap, or Enter/Space toggles it — under reduced motion the button semantics come off and it wraps into a static centered grid (pairs allowed to break between terms so nothing clips). Every animation in the system has a reduced-motion alternative; this is non-negotiable.
+
+### Named Rules
+**The Visible-Default Rule.** Every reveal and entrance enhances a state that is already the finished layout. Hidden states live in the keyframes (`from { opacity: 0 }` with `animation-fill-mode: backwards`) or behind a script-set class (`html.io`, `html.js`), never as the element's own resting style. A renderer that never runs animations — print, a crawler, a headless snapshot, a stalled bundle — must show the complete page, never a blank band.
 
 ## 6. Do's and Don'ts
 
@@ -224,9 +233,10 @@ Two easings only: `--ease-out` `cubic-bezier(0.22, 1, 0.36, 1)` for state transi
 - **Do** keep hit targets thumb-sized (≥44px on coarse pointers) using padding plus negative margin so the layout never shifts, and grow the copy button's padding under `@media (pointer: coarse)`.
 - **Do** gate every hover flood behind `@media (hover: hover)` and scope it to the actual link with `:has()`; mirror each hover state with a `:focus-visible` equivalent.
 - **Do** ship a real reduced-motion alternative for every animation: static canvas frame, wrapped ticker grid, instant reveals, no magnetic pull.
+- **Do** keep every reveal's hidden state in the keyframes (`animation-fill-mode: backwards`) or behind a script-set class (`html.io` / `html.js`), never as an element's resting style, so a non-animating renderer shows the finished layout (the Visible-Default Rule).
 - **Do** keep prose in the house voice: direct, a little wry, no em dashes, no semicolons, no colons in body copy; the middot `·` separates mono labels (`fig. 01 · psilocybin`, `goes straight to Mike · no funnel, no sales team`).
 - **Do** draw illustration as stroke-only SVG in ink or acid on the band — schematics, glyphs, annotated molecules — with round caps and 1–2.2px strokes.
-- **Do** maintain WCAG 2.1 AA: 6.8:1 minimum on interactive color pairs, sr-only text for decorative marquees and icons, `aria-describedby` new-tab notes on external links, `role="status"` announcements for async feedback.
+- **Do** maintain WCAG 2.1 AA: 6.2:1 minimum on interactive color pairs, sr-only text for decorative marquees and icons, `aria-describedby` new-tab notes on external links, `role="status"` announcements for async feedback.
 
 ### Don't:
 - **Don't** build the Corporate SaaS template — no gradient hero, no three feature cards, no logo wall, no pricing table, no "Book a demo." The generic startup landing template is disqualifying here.

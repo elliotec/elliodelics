@@ -1,0 +1,29 @@
+---
+---
+
+{/* outside <main> and any section so it maps to the contentinfo landmark;
+    visually it stays part of the abyss band */}
+<footer class="footer">
+  <div class="container inner">
+    <p class="mono">elliodelics © {new Date().getFullYear()}</p>
+    <p class="mono dim">software engineering for the psychedelic industry</p>
+    <p class="mono dim">no cookies, no trackers</p>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    background: var(--void-abyss);
+  }
+
+  .inner {
+    padding-block: clamp(3rem, 8vh, 5rem) 1.8rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem 2.5rem;
+    justify-content: space-between;
+  }
+
+  .inner p { margin: 0; }
+  .dim { color: var(--ink-dim); }
+</style>

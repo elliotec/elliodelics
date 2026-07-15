@@ -29,7 +29,7 @@
   --text-mono:  0.8125rem;
 
   /* -- space ------------------------------------------------ */
-  --space-section: clamp(4.5rem, 8vh + 2rem, 8rem);
+  --space-section: clamp(3.5rem, 6vh + 1.5rem, 6.5rem);
   --gutter: clamp(1.25rem, 4vw, 4rem);
   --measure: 34em;
 

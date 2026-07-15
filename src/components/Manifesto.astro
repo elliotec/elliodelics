@@ -71,6 +71,14 @@
             <text x="374" y="154">// base class shared with serotonin</text>
           </g>
         </svg>
+        {/* on phones the in-svg comments are illegibly small: they move out
+            here and the script crops the viewBox to the molecule. aria-hidden
+            because the svg's aria-label already carries the same content. */}
+        <ul class="annotations mono" aria-hidden="true">
+          <li><span class="ref">phosphate group</span> <span class="c">// removed at runtime</span></li>
+          <li><span class="ref">dimethyl side chain</span> <span class="c">// the business logic</span></li>
+          <li><span class="ref">indole core</span> <span class="c">// base class shared with serotonin</span></li>
+        </ul>
         <figcaption class="mono">fig. 01 · psilocybin, annotated like a code review</figcaption>
       </figure>
     </div>
@@ -161,4 +169,36 @@
     margin-block-start: 1.4rem;
     color: var(--ink-dim);
   }
+
+  /* -- phone-sized annotation handoff (JS-gated: without the viewBox swap
+     the svg comments stay, tiny but present, and the list stays hidden) -- */
+  .annotations { display: none; }
+
+  @media (max-width: 40rem) {
+    html.js .leader,
+    html.js .comment { display: none; }
+    html.js .annotations {
+      display: block;
+      list-style: none;
+      margin: 1.2rem 0 0;
+      padding: 0;
+    }
+  }
+
+  .annotations li + li { margin-block-start: 0.4rem; }
+  .annotations .ref { color: var(--ink-dim); }
+  .annotations .c { color: var(--acid); }
 </style>
+
+<script>
+  // on phones the code-review comments leave the svg (annotation list above)
+  // and the viewBox crops from the annotated schematic to just the molecule,
+  // so it fills the column and the atom labels grow legible
+  const svg = document.querySelector<SVGSVGElement>('.diagram svg')!;
+  const WIDE = svg.getAttribute('viewBox')!;
+  const NARROW = '48 0 280 182'; // the molecule's own bounds, plus breathing room
+  const mq = window.matchMedia('(max-width: 40rem)');
+  const apply = () => svg.setAttribute('viewBox', mq.matches ? NARROW : WIDE);
+  apply();
+  mq.addEventListener('change', apply);
+</script>

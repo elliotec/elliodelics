@@ -24,12 +24,6 @@ const email = 'mike@elliodelics.com';
       a few engagements a year · replies typically within a few days
     </p>
   </div>
-
-  <footer class="footer container">
-    <p class="mono">elliodelics © {new Date().getFullYear()}</p>
-    <p class="mono dim">software engineering for the psychedelic industry</p>
-    <p class="mono dim">no cookies, no trackers</p>
-  </footer>
 </section>
 
 <style>
@@ -46,7 +40,9 @@ const email = 'mike@elliodelics.com';
     padding-block-start: var(--space-section);
     display: flex;
     flex-direction: column;
-    min-height: 88svh;
+    /* the footer landmark now sits outside the section; its height is
+       carved out here so contact + footer still read as one viewport */
+    min-height: calc(88svh - 8rem);
   }
 
   .big {
@@ -93,7 +89,9 @@ const email = 'mike@elliodelics.com';
   .copy {
     position: relative;
     background: none;
-    border: 1px solid var(--ink-faint);
+    /* control boundary, not a hairline: 3.6:1 on abyss (WCAG 1.4.11),
+       where ink-faint's 2.2:1 is reserved for decorative rules */
+    border: 1px solid oklch(0.975 0.008 152 / 0.42);
     color: var(--ink-dim);
     padding: 0.7em 1.3em;
     border-radius: 99px;
@@ -138,16 +136,6 @@ const email = 'mike@elliodelics.com';
     border-color: var(--ink-faint);
   }
 
-  .footer {
-    margin-block-start: auto;
-    padding-block: clamp(3rem, 8vh, 5rem) 1.8rem;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.4rem 2.5rem;
-    justify-content: space-between;
-  }
-  .footer p { margin: 0; }
-  .dim { color: var(--ink-dim); }
 </style>
 
 <script>
