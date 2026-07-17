@@ -6,13 +6,14 @@
 :root {
   /* -- color ------------------------------------------------ */
   --void:        oklch(0.29 0.09 152);    /* the drench — deep forest, near-black green */
+  --void-dusk:   oklch(0.265 0.082 152);  /* the hero's own ground, a shade under void */
   --void-deep:   oklch(0.245 0.075 152);  /* darker band               */
   --void-abyss:  oklch(0.19 0.058 152);   /* footer / lowest band      */
   --void-lift:   oklch(0.34 0.105 152);   /* hover lift on void        */
   --ink:         oklch(0.975 0.008 152);  /* green-tinted white        */
   --ink-dim:     oklch(0.975 0.008 152 / 0.8);
   --ink-faint:   oklch(0.975 0.008 152 / 0.28); /* rules & hairlines only */
-  --acid:        oklch(0.76 0.19 155);    /* spring green — the elliot.ec accent */
+  --acid:        oklch(0.775 0.19 155);   /* spring green — the elliot.ec accent; L floor 0.775 keeps ≥7:1 (AAA) on void */
   --bloom:       oklch(0.7 0.13 305);     /* the canvas purple, now also brand */
 
   /* -- type ------------------------------------------------- */
@@ -174,4 +175,14 @@ html.io .reveal.in {
     opacity: 1;
     transform: none;
   }
+}
+
+/* -- forced colors (Windows High Contrast) --------------------
+   Text color is force-adjusted by the browser, but SVG strokes and fills
+   set from tokens are not — ink-on-forced-white would vanish. The
+   schematics adopt the system palette instead. !important outranks the
+   scoped component styles, which is the point. */
+@media (forced-colors: active) {
+  svg path { stroke: CanvasText !important; }
+  svg text { fill: CanvasText !important; }
 }

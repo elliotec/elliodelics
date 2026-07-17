@@ -177,9 +177,9 @@ const cases = [
     color: inherit;
     text-decoration: none;
     transition: color 0.25s var(--ease-out);
-    /* thumb-sized hit area; padding on inline links extends the hit box
-       without pushing lines apart */
-    padding-block: 0.35em;
+    /* ≥44px hit area on all pointers (AAA 2.5.5); padding on inline links
+       extends the hit box without pushing lines apart */
+    padding-block: 0.45em;
   }
   .org a:hover,
   .org a:focus-visible { color: var(--acid); }

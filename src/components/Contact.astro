@@ -73,6 +73,15 @@ const email = 'mike@elliodelics.com';
     overflow-wrap: anywhere;
   }
 
+  /* AAA target size (2.5.5): ≥44px on fine pointers too — an invisible
+     extender grows the hit box without touching the layout */
+  .mail::before {
+    content: '';
+    position: absolute;
+    inset-block: -4px;
+    inset-inline: 0;
+  }
+
   .sweep {
     position: absolute;
     inset-inline: 0;
@@ -98,6 +107,15 @@ const email = 'mike@elliodelics.com';
     cursor: pointer;
     transition: border-color 0.3s var(--ease-out), color 0.3s var(--ease-out);
   }
+  /* AAA target size on fine pointers: the pill stays its size, the
+     clickable area doesn't */
+  .copy::before {
+    content: '';
+    position: absolute;
+    inset: -5px;
+    border-radius: 99px;
+  }
+
   @media (pointer: coarse) {
     .copy { padding: 1em 1.5em; } /* ≥44px tall on touch */
     .mail { padding-block: 0.75em; }

@@ -47,6 +47,9 @@ const email = 'mike@elliodelics.com';
     display: flex;
     flex-direction: column;
     overflow: clip;
+    /* the hero opens a shade under void; the canvas ground reads the same
+       token so the painted field can never diverge from the band */
+    background: var(--void-dusk);
   }
 
   .hero-field {
@@ -55,6 +58,11 @@ const email = 'mike@elliodelics.com';
     width: 100%;
     height: 100%;
     z-index: var(--z-canvas);
+  }
+
+  @media (forced-colors: active) {
+    /* the painted field can't adopt the forced palette; the geometry yields */
+    .hero-field { display: none; }
   }
 
   .hero-top {
@@ -218,17 +226,19 @@ const email = 'mike@elliodelics.com';
   // divided by fade alpha. Tune the pair together, not separately.
   // Ground color comes from the token, so a palette change can't desync it.
   const VOID =
-    getComputedStyle(document.documentElement).getPropertyValue('--void').trim() ||
-    'oklch(0.29 0.09 152)';
+    getComputedStyle(document.documentElement).getPropertyValue('--void-dusk').trim() ||
+    'oklch(0.265 0.082 152)';
   const BG = VOID;
   const FADE = VOID.replace(')', ' / 0.35)');
-  const LINE = 'oklch(0.7 0.13 305 / 0.07)'; // pointer rings
-  const RING_LINE = 'oklch(0.7 0.13 305 / 0.055)'; // the interference field
-  const STAMP = 'oklch(0.63 0.17 155 / 0.3)'; // laid-down geometry — deep emerald
-  const STAMP_SOLID = 'oklch(0.63 0.17 155)'; // trail ripples; alpha per-ring
+  // stroke voices sit a step darker than their brand tokens — the field is
+  // dusk-lit, quieter than the wordmark's daylight bloom and acid
+  const LINE = 'oklch(0.64 0.12 305 / 0.062)'; // pointer rings
+  const RING_LINE = 'oklch(0.64 0.12 305 / 0.05)'; // the interference field
+  const STAMP = 'oklch(0.57 0.16 155 / 0.3)'; // laid-down geometry — deep emerald
+  const STAMP_SOLID = 'oklch(0.57 0.16 155)'; // trail ripples; alpha per-ring
   const FLASH = 'oklch(0.975 0.008 152)'; // birth flash — white, reads on green
-  const RIPPLE = 'oklch(0.7 0.13 305)'; // flower inner petals stay purple
-  const PULSE = 'oklch(0.76 0.19 155)';
+  const RIPPLE = 'oklch(0.64 0.12 305)'; // flower petals — dusk-dimmed bloom
+  const PULSE = 'oklch(0.775 0.19 155)'; // tracks --acid
   const TAU = Math.PI * 2;
   const GAP = 34; // interference ring spacing
   const STAMP_R = 26; // Flower-of-Life circle radius = lattice spacing
@@ -404,7 +414,7 @@ const email = 'mike@elliodelics.com';
       if (age < 300) {
         // flash at birth — white, so it reads on the green trail
         ctx.strokeStyle = FLASH;
-        ctx.globalAlpha = 0.4 * (1 - age / 300);
+        ctx.globalAlpha = 0.32 * (1 - age / 300);
         ctx.beginPath();
         ctx.arc(s.x, s.y, base, 0, TAU);
         ctx.stroke();
@@ -444,7 +454,7 @@ const email = 'mike@elliodelics.com';
     const maxR = maxRadius();
     const r = ((dist % maxR) + maxR) % maxR;
     // sine envelope: born quiet, brightest mid-flight, gone at the edge
-    const a = Math.sin((r / maxR) * Math.PI) * 0.16;
+    const a = Math.sin((r / maxR) * Math.PI) * 0.13;
     if (a < 0.01 || r < 1) return;
     ctx.strokeStyle = PULSE;
     ctx.globalAlpha = a;
@@ -524,44 +534,53 @@ const email = 'mike@elliodelics.com';
     window.scrollTo({ top: 0, behavior: reduced.matches ? 'auto' : 'smooth' });
   });
 
-  if (!reduced.matches) {
-    const hero = canvas.closest('.hero')!;
-    const vis = new IntersectionObserver(([entry]) => {
-      setRunning(entry.isIntersecting && !document.hidden);
-    });
-    vis.observe(hero);
-    document.addEventListener('visibilitychange', () => {
-      if (document.hidden) setRunning(false);
-      else setRunning(true);
-    });
-    // click/tap anywhere open in the hero: rosette burst (all pointer types —
-    // a tap is deliberate in a way scrolling isn't)
-    hero.addEventListener('click', (e) => {
-      if ((e.target as Element).closest('a, button')) return;
-      const rect = canvas.getBoundingClientRect();
-      burstAt(e.clientX, e.clientY - rect.top, performance.now());
-    });
-    window.addEventListener('pointermove', (e) => {
-      if (e.pointerType !== 'mouse') return; // touch-scroll must not paint
-      const rect = canvas.getBoundingClientRect();
-      if (e.clientY < rect.bottom && e.clientY > rect.top) {
-        if (!pointer.active) {
-          pointer.x = e.clientX;
-          pointer.y = e.clientY - rect.top;
-          pointer.active = true;
-        }
-        pointer.tx = e.clientX;
-        pointer.ty = e.clientY - rect.top;
-      } else {
-        // below the band: the halo leaves with the mouse instead of
-        // haunting its last position
-        pointer.active = false;
+  const hero = canvas.closest('.hero')!;
+  let heroVisible = false;
+  // one gate for every signal: reduced motion, hero visibility, tab visibility
+  const update = () => {
+    setRunning(!reduced.matches && heroVisible && !document.hidden);
+  };
+  const vis = new IntersectionObserver(([entry]) => {
+    heroVisible = entry.isIntersecting;
+    update();
+  });
+  vis.observe(hero);
+  document.addEventListener('visibilitychange', update);
+  // a mid-session toggle is honored live: stop and settle to the static
+  // frame, or pick the loop back up — no reload required either way
+  reduced.addEventListener('change', () => {
+    if (reduced.matches) pointer.active = false;
+    update();
+    if (reduced.matches) draw(4200, Infinity);
+  });
+  // click/tap anywhere open in the hero: rosette burst (all pointer types —
+  // a tap is deliberate in a way scrolling isn't)
+  hero.addEventListener('click', (e) => {
+    if (reduced.matches) return; // the field is a still image under reduced motion
+    if ((e.target as Element).closest('a, button')) return;
+    const rect = canvas.getBoundingClientRect();
+    burstAt(e.clientX, e.clientY - rect.top, performance.now());
+  });
+  window.addEventListener('pointermove', (e) => {
+    if (reduced.matches) return;
+    if (e.pointerType !== 'mouse') return; // touch-scroll must not paint
+    const rect = canvas.getBoundingClientRect();
+    if (e.clientY < rect.bottom && e.clientY > rect.top) {
+      if (!pointer.active) {
+        pointer.x = e.clientX;
+        pointer.y = e.clientY - rect.top;
+        pointer.active = true;
       }
-    }, { passive: true });
-    // same when the mouse leaves the document entirely
-    document.addEventListener('pointerleave', () => { pointer.active = false; });
-    window.addEventListener('blur', () => { pointer.active = false; });
-  } else {
-    draw(4200, Infinity); // one static frame; the geometry stays, the motion goes
-  }
+      pointer.tx = e.clientX;
+      pointer.ty = e.clientY - rect.top;
+    } else {
+      // below the band: the halo leaves with the mouse instead of
+      // haunting its last position
+      pointer.active = false;
+    }
+  }, { passive: true });
+  // same when the mouse leaves the document entirely
+  document.addEventListener('pointerleave', () => { pointer.active = false; });
+  window.addEventListener('blur', () => { pointer.active = false; });
+  if (reduced.matches) draw(4200, Infinity); // one static frame; the geometry stays, the motion goes
 </script>

@@ -3,13 +3,14 @@ name: elliodelics
 description: One drenched green page proving engineering rigor and psychedelic fluency at once
 colors:
   void: "oklch(0.29 0.09 152)"
+  void-dusk: "oklch(0.265 0.082 152)"
   void-deep: "oklch(0.245 0.075 152)"
   void-abyss: "oklch(0.19 0.058 152)"
   void-lift: "oklch(0.34 0.105 152)"
   ink: "oklch(0.975 0.008 152)"
   ink-dim: "oklch(0.975 0.008 152 / 0.8)"
   ink-faint: "oklch(0.975 0.008 152 / 0.28)"
-  acid: "oklch(0.76 0.19 155)"
+  acid: "oklch(0.775 0.19 155)"
   bloom: "oklch(0.7 0.13 305)"
   violet-room: "oklch(0.235 0.075 300)"
 typography:
@@ -91,7 +92,7 @@ components:
 
 The surface IS the color. This is a drenched system: one deep forest, near-black green (`void`) floods every screen edge to edge, and everything else — near-white green-tinted serif prose, a single spring-green accent, hairline rules — lives inside it. The page reads like a schematic drawn on a dark field: thin strokes, mono annotations, generative interference geometry. It is the visual argument for the brand itself: engineering precision applied to psychedelic territory, "strange with a straight face." The strangeness is in the concept (a wordmark braced by mushrooms, psilocybin annotated like a code review, a canvas that paints the Flower of Life); the execution is ruler-straight.
 
-Layout is one long single-column page in seven full-bleed bands, each a slightly different luminance of the same green — hero (`void`), ticker (`void-deep`), manifesto (the one violet room), services (`void`), work (`void-deep`), founder (`void`), contact (`void-abyss`). Depth comes entirely from this banding, never from shadows or cards. Sections breathe with `spacing.section` vertical padding, kept deliberately compact so the page reads tight rather than sprawling; text columns hold a tight reading measure (34em body, 44–52ch descriptions); big display headings occasionally swing right-aligned (Field reports) or cap at a character count (`max-width: 12ch`) to keep tension in the column.
+Layout is one long single-column page in seven full-bleed bands, each a slightly different luminance of the same green — hero (`void-dusk`, a shade under void so the opening field reads deeper), ticker (`void-deep`), manifesto (the one violet room), services (`void`), work (`void-deep`), founder (`void`), contact (`void-abyss`). Depth comes entirely from this banding, never from shadows or cards. Sections breathe with `spacing.section` vertical padding, kept deliberately compact so the page reads tight rather than sprawling; text columns hold a tight reading measure (34em body, 44–52ch descriptions); big display headings occasionally swing right-aligned (Field reports) or cap at a character count (`max-width: 12ch`) to keep tension in the column.
 
 The system explicitly rejects its anti-references: no Corporate SaaS template (no gradient hero, no three feature cards, no logo wall, no pricing table, no "Book a demo"), no clinical medical-white minimalism, and no trippy clichés — no tie-dye, no fractals, no melting rainbows. Psychedelic fluency here looks like sacred geometry drawn as a lab schematic, not a costume.
 
@@ -109,7 +110,7 @@ The system explicitly rejects its anti-references: no Corporate SaaS template (n
 A single green hue (OKLCH hue 152) stretched across four surface depths and one ink, with two chromatic voices on top; every value in this system is authored in OKLCH, and the canvas reads `--void` from the token at runtime via `getComputedStyle` so the artwork can never desync from the palette.
 
 ### Primary
-- **Acid** (`oklch(0.76 0.19 155)`, `--acid`): the spring green of elliot.ec. Strictly the interactive voice — links, cues, arrows, the sentence-ending dot on display headings, focus outlines, `::selection` background, glyph strokes, the mono aside in Founder, and the full-row hover flood in Services. If it's acid, you can click it (or it's a deliberate annotation mark like `✺` or the schematic comments).
+- **Acid** (`oklch(0.775 0.19 155)`, `--acid`): the spring green of elliot.ec, lightness-floored at 0.775 so it clears 7:1 (AAA) on `void`. Strictly the interactive voice — links, cues, arrows, the sentence-ending dot on display headings, focus outlines, `::selection` background, glyph strokes, the mono aside in Founder, and the full-row hover flood in Services. If it's acid, you can click it (or it's a deliberate annotation mark like `✺` or the schematic comments).
 
 ### Secondary
 - **Bloom** (`oklch(0.7 0.13 305)`, `--bloom`): the canvas purple, now also brand. The psychedelic voice: the closing mushroom brace of the wordmark, the hero's interference rings and pointer rings, and the flower-burst petals. Bloom decorates and signifies the field; it is never an interactive color.
@@ -118,7 +119,8 @@ A single green hue (OKLCH hue 152) stretched across four surface depths and one 
 - **Violet Room** (`oklch(0.235 0.075 300)`): a one-off surface used only on the Manifesto section — the one violet room in the green house, where the altered-state argument gets the altered surface. Same luminance band as `void-deep`, hue shifted to 300. Not a token in `global.css`; it must never spread to a second section.
 
 ### Neutral
-- **Void** (`oklch(0.29 0.09 152)`, `--void`): the drench. Default page and section background; also the canvas ground and phosphor-fade wash.
+- **Void** (`oklch(0.29 0.09 152)`, `--void`): the drench. Default page and section background.
+- **Void Dusk** (`oklch(0.265 0.082 152)`, `--void-dusk`): the hero's own ground, a shade under void — also the canvas ground and phosphor-fade wash, read from the token at runtime. It belongs to the hero band alone.
 - **Void Deep** (`oklch(0.245 0.075 152)`, `--void-deep`): the darker band (ticker, work); also the `::selection` text color.
 - **Void Abyss** (`oklch(0.19 0.058 152)`, `--void-abyss`): the lowest band — contact and footer; also the text color on acid floods.
 - **Void Lift** (`oklch(0.34 0.105 152)`, `--void-lift`): hover lift on void surfaces (the copy button's failure state background).
@@ -126,7 +128,7 @@ A single green hue (OKLCH hue 152) stretched across four surface depths and one 
 - **Ink Dim** (ink at 80% alpha, `--ink-dim`): secondary prose, descriptions, subheads, mono metadata.
 - **Ink Faint** (ink at 28% alpha, `--ink-faint`): rules and hairlines only — borders, ledger dots, leader lines, the portrait ring. Never body text.
 
-The hero canvas carries three additional one-off stroke colors that live only in that script: deep emerald stamps (`oklch(0.63 0.17 155)` at 0.3 alpha), a white birth flash (`oklch(0.975 0.008 152)`), and the acid pulse (`oklch(0.76 0.19 155)`).
+The hero canvas carries additional one-off stroke colors that live only in that script, each a step darker than its brand token so the field reads dusk-lit: deep emerald stamps (`oklch(0.57 0.16 155)` at 0.3 alpha), dusk-dimmed bloom rings and petals (`oklch(0.64 0.12 305)`), a white birth flash (`oklch(0.975 0.008 152)`), and the acid pulse (`oklch(0.775 0.19 155)`, tracking `--acid`).
 
 ### Named Rules
 **The Drench Rule.** The surface IS the green. No white backgrounds, no light mode, no cards floating on a different color. Every band is a luminance of hue 152 — except the one violet room.
@@ -137,7 +139,7 @@ The hero canvas carries three additional one-off stroke colors that live only in
 
 **The Faint Ink Rule.** `ink-faint` (28% alpha) is for hairlines — 1px borders, dotted ledgers, dashed leaders. It is forbidden as a text color; it fails contrast by design.
 
-Measured contrast on these pairings runs from 6.2:1 (acid on void) to 17.7:1 (ink on void-abyss) — everything interactive or textual clears WCAG AA with room to spare.
+Measured contrast on these pairings runs from 7.1:1 (acid on void) to 17:1 (ink on void-abyss) — every text pair, interactive or not, clears the WCAG AAA 7:1 threshold.
 
 ## 3. Typography
 
@@ -202,13 +204,13 @@ The component vocabulary is small and stroke-drawn: links, one pill button, hair
 - Three mono lines (`elliodelics © year`, the tagline, `no cookies, no trackers`) on the abyss band. The `<footer>` lives outside `<main>` and every section so it maps to the `contentinfo` landmark; the contact section carves out its height (`min-height: calc(88svh - 8rem)`) so contact plus footer still read as one viewport.
 
 ### The Wordmark (signature)
-`{ elliodelics }` — the brand name in lowercase MuseoModerno 700, braced by two stroke-drawn mushrooms that read as code braces (fill: none, stroke-width 2.2, round caps and joins, 1.55em tall so they overshoot the caps height like real braces). The left/opening mushroom strokes acid; the right/closing mushroom is the same path mirrored (`scale: -1 1`) and strokes bloom. Green opens, purple closes. The favicon is the brace pair without the name — opening mushroom in acid, mirrored closing mushroom in bloom, on a void field (rendered as sRGB hex `#00d379` and `#b188df` on `#003712`; the background matches `theme-color`).
+`{ elliodelics }` — the brand name in lowercase MuseoModerno 700, braced by two stroke-drawn mushrooms that read as code braces (fill: none, stroke-width 2.2, round caps and joins, 1.55em tall so they overshoot the caps height like real braces). The left/opening mushroom strokes acid; the right/closing mushroom is the same path mirrored (`scale: -1 1`) and strokes bloom. Green opens, purple closes. The favicon is the brace pair without the name — opening mushroom in acid, mirrored closing mushroom in bloom, on a void field (rendered as sRGB hex `#0cd87e` and `#b188df` on `#00300f`; the background matches `theme-color`, which matches the hero's `void-dusk` ground).
 
 ### The Hero Canvas (signature)
 A full-bleed generative field behind the hero: closed-eye geometry drawn like a schematic.
 
-- **Interference field:** three slowly drifting ring emitters draw concentric circles at 34px spacing in faint bloom (`oklch(0.7 0.13 305 / 0.055)`), creating a slow moiré. Each emitter also carries a continuous expanding acid pulse with a sine brightness envelope — never an indexed ring that would pop on phase wrap.
-- **Phosphor rendering:** no hard clears. Each frame washes the canvas with the page green at 0.35 alpha, so strokes decay like phosphor persistence. Steady-state stroke brightness ≈ stroke alpha ÷ fade alpha; tune the pair together, never separately. The ground color is read from `--void` at runtime so a palette change can't desync it.
+- **Interference field:** three slowly drifting ring emitters draw concentric circles at 34px spacing in faint dusk-dimmed bloom (`oklch(0.64 0.12 305 / 0.05)`), creating a slow moiré. Each emitter also carries a continuous expanding acid pulse with a sine brightness envelope — never an indexed ring that would pop on phase wrap.
+- **Phosphor rendering:** no hard clears. Each frame washes the canvas with the page green at 0.35 alpha, so strokes decay like phosphor persistence. Steady-state stroke brightness ≈ stroke alpha ÷ fade alpha; tune the pair together, never separately. The ground color is read from `--void-dusk` at runtime so a palette change can't desync it.
 - **Pointer painting:** a mouse (never touch — touch-scroll must not paint) lays deep-emerald circles onto a fixed triangular lattice with spacing = radius (`STAMP_R = 26`, row height `26·√3/2`), so every circle passes through its neighbours' centers — the classic Flower of Life construction. Circles bloom in with an ease-out-quart, flash white at birth, keep growing ~7px/s toward a 2.6× cap so painted regions thicken into mandala overlap, ride local ripples on their edge, then dissolve after 12s of life (2.5s fade; a 300-circle cap starts dissolving the oldest early).
 - **Click bursts:** a click or tap on open hero ground blooms a purple flower — 8 outer petals (118px) and 6 delayed inner petals, slowly counter-rotating, with a shockwave ring riding ahead — then dissolves over ~5.2s.
 - **Self-drawing intro:** 1.4s after load the field paints one diagonal stroke by itself over 2.6s and ends it the way a click begins — with a flower burst — otherwise the interaction stays a secret.
@@ -227,16 +229,16 @@ Two easings only: `--ease-out` `cubic-bezier(0.22, 1, 0.36, 1)` for state transi
 
 ### Do:
 - **Do** keep every surface a luminance of green hue 152 — `void`, `void-deep`, or `void-abyss` — and reserve `oklch(0.235 0.075 300)` for the Manifesto alone.
-- **Do** use acid (`oklch(0.76 0.19 155)`) exclusively for interactive elements, annotation marks, and the display-heading dot. Bloom purple decorates; acid acts.
+- **Do** use acid (`oklch(0.775 0.19 155)`) exclusively for interactive elements, annotation marks, and the display-heading dot. Bloom purple decorates; acid acts.
 - **Do** set all display type in Bricolage Grotesque 800, uppercase, negative tracking, with fluid `clamp()` sizes from the token scale.
 - **Do** write "elliodelics" in lowercase, always and everywhere.
-- **Do** keep hit targets thumb-sized (≥44px on coarse pointers) using padding plus negative margin so the layout never shifts, and grow the copy button's padding under `@media (pointer: coarse)`.
+- **Do** keep hit targets ≥44px on every pointer type (AAA 2.5.5) using padding plus negative margin or invisible pseudo-element extenders so the layout never shifts; the copy button additionally grows its real padding under `@media (pointer: coarse)`.
 - **Do** gate every hover flood behind `@media (hover: hover)` and scope it to the actual link with `:has()`; mirror each hover state with a `:focus-visible` equivalent.
 - **Do** ship a real reduced-motion alternative for every animation: static canvas frame, wrapped ticker grid, instant reveals, no magnetic pull.
 - **Do** keep every reveal's hidden state in the keyframes (`animation-fill-mode: backwards`) or behind a script-set class (`html.io` / `html.js`), never as an element's resting style, so a non-animating renderer shows the finished layout (the Visible-Default Rule).
 - **Do** keep prose in the house voice: direct, a little wry, no em dashes, no semicolons, no colons in body copy; the middot `·` separates mono labels (`fig. 01 · psilocybin`, `goes straight to Mike · no funnel, no sales team`).
 - **Do** draw illustration as stroke-only SVG in ink or acid on the band — schematics, glyphs, annotated molecules — with round caps and 1–2.2px strokes.
-- **Do** maintain WCAG 2.1 AA: 6.2:1 minimum on interactive color pairs, sr-only text for decorative marquees and icons, `aria-describedby` new-tab notes on external links, `role="status"` announcements for async feedback.
+- **Do** maintain WCAG 2.1 AA (and the 2.2 AA additions): 7:1 minimum on all text pairs (exceeds AAA), sr-only text for decorative marquees and icons, `aria-describedby` new-tab notes on external links, `role="status"` announcements for async feedback. The hero canvas is a documented decorative exception for keyboard access — it conveys nothing and is `aria-hidden`.
 
 ### Don't:
 - **Don't** build the Corporate SaaS template — no gradient hero, no three feature cards, no logo wall, no pricing table, no "Book a demo." The generic startup landing template is disqualifying here.
