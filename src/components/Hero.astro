@@ -27,11 +27,18 @@ const email = 'mike@elliodelics.com';
       <span class="line"><span class="line-inner">psychedelic</span></span>
       <span class="line"><span class="line-inner">industry<span class="dot">.</span></span></span>
     </h1>
-    <p class="hero-sub">
-      elliodelics is a software engineering studio for clinics, retreats,
-      researchers, and the companies building around them. Somebody has
-      to stay grounded.
-    </p>
+    <div class="hero-sub">
+      <p>
+        A funding round closes or a big deal lands, and suddenly someone
+        wants forty pages of answers about your data. You’ll have answers
+        either way.
+      </p>
+      <p>
+        elliodelics makes sure they’re the right ones, for clinics,
+        retreats, researchers, and the companies developing the medicines.
+        Somebody has to stay grounded.
+      </p>
+    </div>
   </div>
 
   <div class="hero-cues">
@@ -150,11 +157,13 @@ const email = 'mike@elliodelics.com';
 
   .hero-sub {
     max-width: var(--measure);
-    margin-block: 2.2rem 0;
+    margin-block: clamp(1.3rem, 3vh, 2.2rem) 0; /* short windows get less air */
     font-size: var(--text-lg);
     line-height: 1.5; /* AAA 1.4.8: ≥1.5 within paragraphs */
     color: var(--ink-dim);
   }
+  .hero-sub p { margin: 0; }
+  .hero-sub p + p { margin-block-start: 0.9em; }
 
   .hero-cues {
     position: relative;

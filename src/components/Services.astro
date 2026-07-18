@@ -1,32 +1,41 @@
 ---
 const email = 'mike@elliodelics.com';
+// five offerings, framed around the buyer's situation and outcome — the
+// engineering categories live inside the descriptions, not the titles.
+// Five breaks the four-chunk rhythm deliberately: fractional serves a
+// different buyer and earns its own row.
 const services = [
   {
-    title: 'Product engineering',
-    desc: 'From prototype to production. Platforms, APIs, and the unglamorous plumbing that keeps them standing. Fifteen years of building, most of them leading engineering organizations.',
-    glyph: 'M4 16 L12 16 M16 16 L24 16 M28 16 L36 16 M14 16 A2 2 0 1 0 14 15.99 M26 16 A2 2 0 1 0 26 15.99 M36 10 L36 22',
+    title: 'Survive the questionnaire',
+    desc: 'An investor’s security review, a partner’s RFP, an insurer’s checklist. We map the data you hold, close the gaps, and write the answers down early.',
+    glyph: 'M11 4 H29 V28 H11 Z M15 10 H25 M15 15 H25 M15 20 H20',
   },
   {
-    title: 'Privacy, security & compliance',
-    desc: 'Data protection as architecture, not paperwork. GDPR, data minimization, encryption, retention, and audit trails, all built in from the start. Years inside regulated industries, for a field where confidentiality is an ethic and not a checkbox.',
+    title: 'Protect the data',
+    desc: 'Data protection as architecture, not paperwork. Minimization, encryption, retention, and GDPR built in from the start.',
     glyph: 'M13 15 V10 A7 7 0 0 1 27 10 V15 M9 15 H31 V27 H9 Z M20 19 V23',
   },
   {
-    title: 'Research & data infrastructure',
-    desc: 'Aggregation pipelines, search, and plain-language access to messy scientific literature. The systems behind Mindscape Collective’s massive open library.',
-    glyph: 'M6 26 L6 6 M6 26 L34 26 M10 22 L14 14 L20 18 L28 8 M28 8 L34 8',
+    title: 'Govern the AI',
+    desc: 'The notetakers and chatbots already touching sensitive data. We inventory them, read the terms nobody read, and fence what they reach.',
+    glyph: 'M14 11 H26 V23 H14 Z M18 11 V7 M22 11 V7 M18 23 V27 M22 23 V27 M14 14 H10 M14 20 H10 M26 14 H30 M26 20 H30 M18 15 H22 V19 H18 Z',
+  },
+  {
+    title: 'Ship the product',
+    desc: 'From prototype to production. Platforms, APIs, and the unglamorous plumbing that keeps them standing.',
+    glyph: 'M4 16 L12 16 M16 16 L24 16 M28 16 L36 16 M14 16 A2 2 0 1 0 14 15.99 M26 16 A2 2 0 1 0 26 15.99 M36 10 L36 22',
   },
   {
     title: 'Fractional engineering leadership',
-    desc: 'A director of engineering when you need one, without the full-time hire. Hiring, architecture, process, and technical roadmaps that tell you the truth.',
+    desc: 'A director of engineering without the full-time hire. Hiring, architecture, and roadmaps that tell you the truth.',
     glyph: 'M20 7 A2.5 2.5 0 1 0 20 6.99 M10 25 A2.5 2.5 0 1 0 10 24.99 M30 25 A2.5 2.5 0 1 0 30 24.99 M20 10 L20 14 M20 14 L11 22 M20 14 L29 22',
   },
 ];
 ---
 
-<section class="services" aria-labelledby="services-title">
+<section class="services" id="services" aria-labelledby="services-title" tabindex="-1">
   <div class="container">
-    <h2 class="display sec-title" id="services-title">What we build</h2>
+    <h2 class="display sec-title" id="services-title">What we handle<span class="dot">.</span></h2>
     <ul class="index">
       {services.map((s, i) => (
         <li class="row draw" style={`--draw-delay: ${i * 0.08}s`}>
@@ -58,10 +67,15 @@ const services = [
     padding-block: var(--space-section);
   }
 
+  /* scroll target only — the ring belongs on controls, not sections */
+  .services:focus-visible { outline: none; }
+
   .sec-title {
     font-size: var(--text-h2);
     margin: 0 0 clamp(3rem, 7vh, 5rem);
   }
+
+  .dot { color: var(--acid); }
 
   .index {
     list-style: none;
@@ -167,7 +181,7 @@ const services = [
     margin: 0;
   }
   @media (max-width: 25rem) {
-    /* INFRASTRUCTURE is unbreakable; give it room on the smallest phones */
+    /* QUESTIONNAIRE is unbreakable; give it room on the smallest phones */
     .row-title { font-size: 7vw; }
   }
 
@@ -198,14 +212,29 @@ const services = [
   const echo = document.querySelector<HTMLElement>('.contact [data-subject-echo]');
   const echoText = echo?.querySelector<HTMLElement>('[data-echo-text]');
   document.querySelectorAll<HTMLAnchorElement>('.row-cue').forEach((cue) => {
-    cue.addEventListener('click', () => {
+    cue.addEventListener('click', (e) => {
+      // modified clicks keep their browser meaning and must not mutate
+      // this page's mail link as a side effect
+      const m = e as MouseEvent;
+      if (m.metaKey || m.ctrlKey || m.shiftKey || m.altKey || m.button !== 0) return;
       if (!mail || !cue.dataset.subject) return;
       const base = mail.getAttribute('href')!.split('?')[0];
       mail.setAttribute('href', `${base}?subject=${encodeURIComponent(cue.dataset.subject)}`);
       if (echo && echoText) {
         echoText.textContent = `subject · ${cue.dataset.subject.split(' · ')[0].toLowerCase()} `;
         echo.hidden = false;
+        // the handoff is announced, not just shown — same live region the
+        // copy button uses
+        const status = document.querySelector<HTMLElement>('.contact [role="status"]');
+        if (status) status.textContent = `Email subject set to ${cue.dataset.subject}.`;
       }
+      // a cue to contact is a jump, not a journey — same instant-scroll
+      // rule the hero's skip cue follows
+      e.preventDefault();
+      const target = document.querySelector<HTMLElement>('#contact');
+      target?.scrollIntoView({ behavior: 'instant', block: 'start' });
+      target?.focus({ preventScroll: true });
+      history.pushState(null, '', '#contact');
     });
   });
 </script>

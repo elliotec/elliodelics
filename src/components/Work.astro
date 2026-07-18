@@ -10,18 +10,15 @@ const cases = [
     url: 'https://psychedelia-stiftung.de',
     rel: 'client',
     role: 'engineering partner',
-    bodyPre: 'Websites, systems, and GDPR-compliant intake forms for the German foundation’s work on ethical, evidence-backed psychedelic retreats, including ',
-    linkText: 'Psychedelia Retreats',
-    linkHref: 'https://psychedelia-retreats.com',
-    bodyPost: '.',
+    body: 'Websites, systems, and GDPR-compliant intake forms for the German foundation’s ethical psychedelic retreats.',
   },
   {
     org: 'Dutchie',
     logo: '/logos/dutchie.webp',
     url: 'https://business.dutchie.com',
-    rel: 'employment',
-    role: 'director of engineering',
-    body: 'Grew the engineering department to 60 engineers across 10 teams through funding rounds and acquisitions, in cannabis dispensary software where security, data privacy, and compliance are the product.',
+    rel: 'engineering leadership',
+    role: '60 engineers, 10 teams',
+    body: 'Cannabis dispensary software, where security, data privacy, and compliance are the product.',
   },
   {
     org: 'Psymposia',
@@ -29,7 +26,7 @@ const cases = [
     url: 'https://psymposia.com',
     rel: 'pro bono',
     role: 'infrastructure & migrations',
-    body: 'Migrating the psychedelic media nonprofit’s publishing platform, hosting, and video pipeline to open-source, encrypted infrastructure. Privacy engineering for independent journalism in a sensitive field.',
+    body: 'Open-source, encrypted infrastructure for the psychedelic media nonprofit.',
   },
   // {
   //   org: 'Josie Kins',
@@ -47,7 +44,7 @@ const cases = [
     url: 'https://mindscapecollective.org',
     rel: 'founder',
     role: 'executive director',
-    body: 'An open library of the world’s psychedelic and consciousness research. Tens of thousands of peer-reviewed articles from ten sources, summarized in plain language, plus daily clinical-trial tracking and a tool for asking the literature a question. Free to everyone. No paywall, no gatekeeping.',
+    body: 'An open library of tens of thousands of research articles, summarized in plain language, free to everyone.',
   },
 ];
 ---
@@ -55,7 +52,7 @@ const cases = [
 <section class="work" aria-labelledby="work-title">
   <span class="sr-only" id="new-tab-note">opens in new tab</span>
   <div class="container">
-  <h2 class="display sec-title" id="work-title">Field reports</h2>
+  <h2 class="display sec-title" id="work-title">Field reports<span class="dot">.</span></h2>
   <p class="note mono">no anonymized case studies · all of this is public record</p>
 
   <ul class="reports">
@@ -83,17 +80,7 @@ const cases = [
           <span class="ledger" aria-hidden="true"></span>
         </div>
         <p class="role mono">{c.rel} · {c.role}</p>
-        <p class="body">
-          {c.bodyPre ?? c.body}{c.linkHref && (
-            <a
-              class="body-link"
-              href={c.linkHref}
-              target="_blank"
-              rel="noopener"
-              aria-describedby="new-tab-note"
-            >{c.linkText}<span class="ext" aria-hidden="true">↗</span></a>
-          )}{c.bodyPost}
-        </p>
+        <p class="body">{c.body}</p>
       </li>
     ))}
   </ul>
@@ -112,6 +99,8 @@ const cases = [
     text-align: right;
   }
 
+  .dot { color: var(--acid); }
+
   .note {
     text-align: right;
     color: var(--ink-dim);
@@ -123,7 +112,7 @@ const cases = [
     margin: 0;
     padding: 0;
     display: grid;
-    gap: clamp(2rem, 4.5vh, 3rem);
+    gap: clamp(1.4rem, 3vh, 2rem);
   }
 
   .report {
@@ -132,17 +121,6 @@ const cases = [
 
   /* alternate: pull even reports right for rhythm */
   .report:nth-child(even) { margin-inline-start: auto; }
-
-  .body-link {
-    color: inherit;
-    text-decoration: underline;
-    text-decoration-color: var(--ink-faint);
-    text-underline-offset: 0.18em;
-    transition: color 0.25s var(--ease-out);
-    padding-block: 0.35em; /* inline: extends hit box, not line height */
-  }
-  .body-link:hover,
-  .body-link:focus-visible { color: var(--acid); }
 
   /* each org's real mark, unified as white line-art on the void */
   .orglogo {
@@ -225,7 +203,7 @@ const cases = [
   }
 
   .body {
-    margin: 0.9rem 0 0;
+    margin: 0.5rem 0 0;
     font-size: var(--text-body);
     line-height: 1.55;
     color: var(--ink-dim);

@@ -1,0 +1,95 @@
+---
+// the receipt: the hard questions a data review asks, answered for
+// elliodelics itself, on the record. Deliberately small and deliberately
+// footer-only — a client's version covers their systems, their
+// regulations, and a far bigger surface, and nothing here may imply this
+// little document is the deliverable. Every answer must stay true and
+// verifiable against the repo, the DNS, or the other proof pages.
+import SubPage from '../layouts/SubPage.astro';
+
+const qa = [
+  {
+    q: 'What data do you collect from visitors?',
+    a: 'None. No cookies, no trackers, no analytics, no forms. The privacy notice covers the two exceptions, which are email you choose to send and the host’s own server logs.',
+  },
+  {
+    q: 'Where does business data live?',
+    a: 'Correspondence lives in Proton Mail, on servers in Switzerland. Code lives in GitHub. Client data lives in the client’s own systems, which is where it belongs.',
+  },
+  {
+    q: 'Who has access?',
+    a: 'Mike. Collaborators get access scoped to their specific project, and it ends when the work does.',
+  },
+  {
+    q: 'Is data encrypted?',
+    a: 'Yes. Everything between your browser and this site travels encrypted, mail sits encrypted on Proton’s servers where even Proton can’t read it, and public records limit who is allowed to issue this domain’s security certificates at all.',
+  },
+  {
+    q: 'Who are your subprocessors?',
+    a: 'Two. GitHub serves this site and Proton carries the mail. Both are named in the privacy notice, and nothing else touches the data.',
+  },
+  {
+    q: 'What is your incident response plan?',
+    a: 'A small surface gets a small plan. security.txt says where to report, reports go straight to Mike, and fixes ship in public like everything else here.',
+  },
+  {
+    q: 'How would we verify any of this?',
+    a: 'View source. The colophon explains how the site is built, the accessibility statement shows the audit trail, the DNS records are public, and the deploy pipeline is pinned to exact commits anyone can read.',
+  },
+];
+---
+
+<SubPage
+  title="elliodelics · the hard questions, answered"
+  description="The hard questions a data review asks, answered for elliodelics itself, on the record. Just the receipt. Yours would cover more ground."
+  heading="The hard questions, answered"
+>
+  <p class="intro">
+    When the hard questions about your data arrive, the answers should
+    already be written down. These are ours, for this studio and this
+    site, on the record.
+  </p>
+  <p class="intro-second">
+    Yours would cover more ground, your systems, your regulations, a
+    real surface area. This one is just the receipt.
+  </p>
+
+  <dl class="qa">
+    {qa.map(({ q, a }) => (
+      <div class="entry">
+        <dt class="mono">{q}</dt>
+        <dd>{a}</dd>
+      </div>
+    ))}
+  </dl>
+
+  <p class="mono reviewed">last reviewed · july 2026</p>
+</SubPage>
+
+<style>
+  /* second intro beat: same voice as .intro, pulled up against it */
+  .intro-second {
+    color: var(--ink-dim);
+    margin: -1.4rem 0 0;
+  }
+
+  .qa {
+    margin: clamp(2.2rem, 5vh, 3.2rem) 0 0;
+  }
+
+  .entry + .entry {
+    margin-block-start: 1.8rem;
+    padding-block-start: 1.8rem;
+    border-block-start: 1px solid var(--ink-faint);
+  }
+
+  /* the question is the label, the answer is the substance — and acid
+     stays reserved for interactive things, which these are not */
+  .entry dt {
+    color: var(--ink-dim);
+  }
+
+  .entry dd {
+    margin: 0.5rem 0 0;
+  }
+</style>

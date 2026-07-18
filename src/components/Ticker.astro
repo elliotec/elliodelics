@@ -10,7 +10,7 @@ const pairs = [
   ['role-based access', 'set & setting'],
   ['documentation', 'trip reports'],
   ['3rd-party integrations', 'integration circles'],
-  ['SOC 2 security', 'trip sitting'],
+  ['SOC 2', 'trip sitting'],
   ['incident response', 'challenging experiences'],
   ['compliance', 'ceremony'],
   ['zero-downtime deploys', 'non-ordinary states'],
@@ -61,28 +61,55 @@ const pairs = [
      the neighbouring bands */
   .ticker:focus-visible { outline-offset: -3px; }
 
+  /* -- static by default, marquee only when JS runs -----------------
+     The pause control is script-applied, so a page without JS must not
+     move (WCAG 2.2.2 would have no pause). Base state: a centered wrapped
+     grid of the first six pairs. html.js upgrades to the full marquee. */
+
   .ticker-track {
     display: flex;
-    width: max-content;
+    width: 100%;
   }
 
   .ticker-run {
     display: flex;
-    flex-shrink: 0;
-    /* duration tracks pair count: the animation covers the run's full width,
-       so more pairs at a fixed duration = faster scroll */
-    animation: slide 88s linear infinite;
+    flex: 1 1 auto;
+    min-width: 0;
+    flex-wrap: wrap;
+    row-gap: 0.5rem;
+    justify-content: center;
   }
+  .ticker-run:last-child { display: none; }
+  /* the static grid shows a taste, not the wall — six pairs */
+  .ticker-run .pair:nth-child(n + 7) { display: none; }
 
   .pair {
     display: inline-flex;
     align-items: baseline;
     gap: 0.7em;
     padding-inline: 1.4em;
-    white-space: nowrap;
     font-family: var(--font-mono);
     font-size: var(--text-mono);
     letter-spacing: 0.02em;
+    /* long pairs break between terms, not against the strip edge */
+    flex-wrap: wrap;
+    justify-content: center;
+    row-gap: 0.15rem;
+  }
+
+  html.js .ticker-track { width: max-content; }
+  html.js .ticker-run {
+    flex: 0 0 auto;
+    flex-wrap: nowrap;
+    /* duration tracks pair count: the animation covers the run's full width,
+       so more pairs at a fixed duration = faster scroll */
+    animation: slide 88s linear infinite;
+  }
+  html.js .ticker-run:last-child { display: flex; }
+  html.js .ticker-run .pair:nth-child(n + 7) { display: inline-flex; }
+  html.js .pair {
+    white-space: nowrap;
+    flex-wrap: nowrap;
   }
 
   .eng { color: var(--ink-dim); }
@@ -97,32 +124,30 @@ const pairs = [
      touch taps leave sticky emulated hover that blocks resume) or keyboard
      focus freezes it; a click, tap, or Enter/Space toggles .paused (script) */
   @media (hover: hover) {
-    .ticker:hover .ticker-run {
+    html.js .ticker:hover .ticker-run {
       animation-play-state: paused;
     }
   }
-  .ticker:focus-within .ticker-run,
-  .ticker.paused .ticker-run {
+  html.js .ticker:focus-within .ticker-run,
+  html.js .ticker.paused .ticker-run {
     animation-play-state: paused;
   }
 
+  /* reduced motion returns to the base static grid even with JS */
   @media (prefers-reduced-motion: reduce) {
     .ticker { cursor: default; }
-    .ticker-track { width: 100%; }
-    .ticker-run {
+    html.js .ticker-track { width: 100%; }
+    html.js .ticker-run {
       animation: none;
-      flex: 1 1 auto;   /* release flex-shrink:0 so wrapping can engage */
+      flex: 1 1 auto;
       min-width: 0;
       flex-wrap: wrap;
-      row-gap: 0.5rem;
-      justify-content: center;
     }
-    .ticker-run:last-child { display: none; }
-    /* long pairs must break between terms, not clip against the strip edge */
-    .pair {
+    html.js .ticker-run:last-child { display: none; }
+    html.js .ticker-run .pair:nth-child(n + 7) { display: none; }
+    html.js .pair {
+      white-space: normal;
       flex-wrap: wrap;
-      justify-content: center;
-      row-gap: 0.15rem;
     }
   }
 

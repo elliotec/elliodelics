@@ -7,81 +7,31 @@
       Set, setting, and&nbsp;schema<span class="dot">.</span>
     </h2>
 
-    <div class="duo">
-      <div class="body">
-        <p>
-          Most software shops won’t touch this industry because the
-          compliance surface scares them off, and the ones that will tend
-          not to understand it. They’ll ship you a beautiful booking flow
-          that violates your own protocol in three places. An AI will ship
-          it even faster and understand even less.
-        </p>
-        <p>
-          Getting this right takes years in both worlds, the engineering
-          and the field. You shouldn’t have to explain your protocols to
-          the person building the software that runs them. The stakes are
-          different here
-          too. A leaked customer list means a bad week for a SaaS company,
-          but for a clinic or a retreat it means people’s medical and legal
-          exposure. That’s why privacy gets built in from the start, not
-          bolted on at the end.
-        </p>
-      </div>
+    {/* the buyer's moment, in second person — most people who need this
+        work don't know it until someone names their situation */}
+    <ul class="moments">
+      <li>The biggest contract you’ve ever chased just landed, and nobody knows what the security policy should look like.</li>
+      <li>You’re hiring clinicians but nobody is in charge of the data.</li>
+      <li>An insurer just asked for your incident response plan. You don’t have one.</li>
+      <li>Someone bolted an AI notetaker onto session notes and nobody read its terms.</li>
+    </ul>
 
-      <figure class="diagram draw">
-        <svg
-          viewBox="30 -34 640 254"
-          role="img"
-          aria-label="The skeletal structure of psilocybin, annotated with code-review comments: the phosphate group is marked 'removed at runtime', the indole core 'base class shared with serotonin', and the dimethyl side chain 'the business logic'"
-        >
-          <g class="stroke">
-            <!-- indole: benzene ring -->
-            <path d="M60 92 L100 69 L140 92 L140 138 L100 161 L60 138 Z" pathLength="1" />
-            <!-- aromatic inner bonds -->
-            <path d="M104 78 L133 95" pathLength="1" />
-            <path d="M133 135 L104 152" pathLength="1" />
-            <path d="M67 132 L67 98" pathLength="1" />
-            <!-- fused pyrrole -->
-            <path d="M140 92 L183 79 L210 115 L183 151 L140 138" pathLength="1" />
-            <!-- C2=C3 double bond -->
-            <path d="M186 88 L206 114" pathLength="1" />
-            <!-- side chain: C3 → CH2 → CH2 → N -->
-            <path d="M183 79 L212 52 L246 66 L272 46" pathLength="1" />
-            <!-- N-methyls -->
-            <path d="M287 40 L316 50" pathLength="1" />
-            <path d="M282 32 L288 12" pathLength="1" />
-            <!-- 4-phosphoryloxy bond -->
-            <path d="M100 69 L100 44" pathLength="1" />
-          </g>
-          <g class="label">
-            <text x="183" y="168">NH</text>
-            <text x="279" y="47">N</text>
-            <text x="100" y="34">OPO₃H₂</text>
-          </g>
-
-          <!-- code-review annotations -->
-          <g class="leader">
-            <path d="M132 24 L182 -10" />
-            <path d="M322 51 L368 68" />
-            <path d="M212 128 L368 150" />
-          </g>
-          <g class="comment">
-            <text x="188" y="-6">// removed at runtime</text>
-            <text x="374" y="72">// the business logic</text>
-            <text x="374" y="154">// base class shared with serotonin</text>
-          </g>
-        </svg>
-        {/* on phones the in-svg comments are illegibly small: they move out
-            here and the script crops the viewBox to the molecule. aria-hidden
-            because the svg's aria-label already carries the same content. */}
-        <ul class="annotations mono" aria-hidden="true">
-          <li><span class="ref">phosphate group</span> <span class="c">// removed at runtime</span></li>
-          <li><span class="ref">dimethyl side chain</span> <span class="c">// the business logic</span></li>
-          <li><span class="ref">indole core</span> <span class="c">// base class shared with serotonin</span></li>
-        </ul>
-        <figcaption class="mono">fig. 01 · psilocybin, annotated like a code review</figcaption>
-      </figure>
+    <div class="body">
+      <p>
+        Regulators are treating psychedelics as medicine, so companies
+        hire the clinical people years before they learn the data needs
+        protocols too: security, retention, what to do when something
+        leaks. Sooner or later, somebody checks. The work here begins
+        with the data instead of the paperwork, so when the
+        questionnaire arrives, the right answers already exist.
+      </p>
     </div>
+
+    {/* the release valve — the ledger's obvious next question, answered
+        with a door instead of two more sections of scrolling */}
+    <p class="valve">
+      <a class="valve-cue mono" href="#services">sound familiar? don’t want it to? → what we handle ↘</a>
+    </p>
   </div>
 </section>
 
@@ -113,113 +63,36 @@
     .statement.draw.in .dot { animation: none; }
   }
 
-  .duo {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr);
-    gap: clamp(3rem, 7vh, 4.5rem);
-    margin-block-start: clamp(3rem, 7vh, 5rem);
-    align-items: center;
+  .moments {
+    list-style: none;
+    margin: clamp(2.4rem, 5vh, 3.6rem) 0 0;
+    padding: 0;
+    max-width: 44rem;
+    border-block-start: 1px solid var(--ink-faint);
   }
 
-  @media (min-width: 60rem) {
-    .duo {
-      grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
-      column-gap: clamp(3rem, 6vw, 6rem);
-    }
-    /* diagram left, argument right — no orphaned corners */
-    .diagram { order: -1; }
+  .moments li {
+    padding-block: clamp(0.8rem, 1.8vh, 1.2rem);
+    border-block-end: 1px solid var(--ink-faint);
+    font-size: var(--text-lg);
+    line-height: 1.5;
   }
 
-  .body { max-width: 34em; }
+  .body {
+    max-width: 34em;
+    margin-block-start: clamp(2.2rem, 5vh, 3.2rem);
+  }
   .body p { margin: 0; }
-  .body p + p { margin-block-start: 1.2em; }
 
-  .diagram {
-    margin: 0;
-  }
+  .valve { margin: 1.8rem 0 0; }
 
-  .diagram svg {
-    display: block;
-    width: 100%;
-    max-width: 36rem;
-    height: auto;
+  .valve-cue {
+    color: var(--acid);
+    text-decoration: none;
+    display: inline-block;
+    /* ≥44px target without moving the line */
+    padding-block: 1em;
+    margin-block: -1em;
   }
-
-  .stroke path {
-    fill: none;
-    stroke: var(--ink);
-    stroke-width: 1.5;
-    stroke-linecap: round;
-    stroke-linejoin: round;
-    /* normalized by pathLength=1: solid at rest, drawable by keyframe */
-    stroke-dasharray: 1;
-  }
-  .diagram.draw.in .stroke path {
-    animation: stroke-draw 2s var(--ease-out) backwards;
-  }
-  /* the schematic draws in reading order: ring, bonds, chain, phosphate */
-  .diagram.draw.in .stroke path:nth-child(n + 5) { animation-delay: 0.5s; }
-  .diagram.draw.in .stroke path:nth-child(n + 7) { animation-delay: 1s; }
-  .diagram.draw.in .stroke path:nth-child(10) { animation-delay: 1.5s; }
-  @media (prefers-reduced-motion: reduce) {
-    .diagram.draw.in .stroke path { animation: none; }
-  }
-
-  .label text {
-    font-family: var(--font-mono);
-    font-size: 13px;
-    fill: var(--ink);
-    text-anchor: middle;
-  }
-
-  .leader path {
-    fill: none;
-    stroke: var(--ink-faint);
-    stroke-width: 1;
-    stroke-dasharray: 1 5;
-    stroke-linecap: round;
-  }
-
-  .comment text {
-    font-family: var(--font-mono);
-    font-size: 12.5px;
-    fill: var(--acid);
-  }
-
-  figcaption {
-    margin-block-start: 1.4rem;
-    color: var(--ink-dim);
-  }
-
-  /* -- phone-sized annotation handoff (JS-gated: without the viewBox swap
-     the svg comments stay, tiny but present, and the list stays hidden) -- */
-  .annotations { display: none; }
-
-  @media (max-width: 40rem) {
-    html.js .leader,
-    html.js .comment { display: none; }
-    html.js .annotations {
-      display: block;
-      list-style: none;
-      margin: 1.2rem 0 0;
-      padding: 0;
-    }
-  }
-
-  .annotations li + li { margin-block-start: 0.4rem; }
-  .annotations .ref { color: var(--ink-dim); }
-  .annotations .c { color: var(--acid); }
+  .valve-cue:hover { text-decoration: underline; }
 </style>
-
-<script>
-  // on phones the code-review comments leave the svg (annotation list above)
-  // and the viewBox crops from the annotated schematic to just the molecule,
-  // so it fills the column and the atom labels grow legible
-  const svg = document.querySelector<SVGSVGElement>('.diagram svg')!;
-  const WIDE = svg.getAttribute('viewBox')!;
-  const NARROW = '48 0 280 182'; // the molecule's own bounds, plus breathing room
-  const mq = window.matchMedia('(max-width: 40rem)');
-  const apply = () => svg.setAttribute('viewBox', mq.matches ? NARROW : WIDE);
-  apply();
-  mq.addEventListener('change', apply);
-</script>

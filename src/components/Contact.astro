@@ -27,8 +27,10 @@ const email = 'mike@elliodelics.com';
       <span class="sr-only" role="status"></span>
     </div>
     <div class="mono next">
+      <p>two or three sentences about your situation is plenty</p>
       <p>goes straight to Mike · no funnel, no sales team</p>
       <p>the first call is free · replies usually within a few days</p>
+      <p lang="de">Sie können auch auf Deutsch schreiben</p>
     </div>
   </div>
 </section>
@@ -222,6 +224,7 @@ const email = 'mike@elliodelics.com';
     echoWrap.hidden = true;
     const m = document.querySelector<HTMLAnchorElement>('.contact .mail');
     m?.setAttribute('href', m.getAttribute('href')!.split('?')[0]);
+    if (status) status.textContent = 'Subject cleared. Plain email address restored.';
   });
 
   // magnetic pull on the email link — skipped for reduced motion

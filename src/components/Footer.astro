@@ -16,6 +16,7 @@
     <ul>
       <li><a href="/accessibility">accessibility</a><span class="dim"> · built to WCAG 2.2 AAA, with the evidence</span></li>
       <li><a href="/privacy">privacy</a><span class="dim"> · what happens with your data, which is almost nothing</span></li>
+      <li><a href="/answers">answers</a><span class="dim"> · the hard questions, answered for ourselves</span></li>
       <li><a href="/vocabulary">vocabulary</a><span class="dim"> · every term from the ticker, defined</span></li>
       <li><a href="/plain">plain words</a><span class="dim"> · the whole site in simple language</span></li>
       <li><a href="/colophon">colophon</a><span class="dim"> · how this page is built</span></li>
@@ -55,7 +56,8 @@
     margin: 0;
     padding: 0;
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(19rem, 1fr));
+    /* min(100%, …) so a 320px viewport can't force an overflowing track */
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 19rem), 1fr));
     gap: 0.7rem 2.5rem;
   }
 

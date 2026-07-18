@@ -12,6 +12,8 @@ Founders, CTOs, and operations leads at psychedelic-industry companies — clini
 
 Elliodelics is a software engineering consultancy specialized in the psychedelic industry. The site exists to win qualified inbound: one striking landing page that proves two things at once — deep technical competence and genuine fluency in the psychedelic space. Success looks like a visitor thinking "these people actually get both worlds" and reaching out.
 
+The page sells the buyer's *moment* before the studio's identity. Most buyers can't self-diagnose until a hospital system, insurer, or regulator starts asking hard questions about their data — so the hero's subhead leads with the buyer's moment and the due-diligence promise, the manifesto names the buyer's situation in second person, and the offerings are framed as outcomes (survive the questionnaire, protect the data, govern the AI) rather than engineering categories. Jargon is kept out of the persuasion path. The insider register (ticker, molecule, wit) stays — it's the moat — but it serves the moment now, not the other way around.
+
 ## Brand Personality
 
 Bold & unconventional. The intersection of rigor and the frontier: engineering precision applied to a field most software shops won't touch or don't understand. Confident enough to be strange; competent enough that the strangeness reads as taste, not gimmick. Voice is direct, a little wry, never salesy.

@@ -31,12 +31,64 @@
           collaborators for design, compliance, or research when the work
           calls for them. No bench, no handoffs.
         </p>
-        {/* acid means interactive, so the aside earns its color: it links
-            to the vocabulary, where both fluencies are actually defined */}
-        <p class="aside-line"><a class="aside mono" href="/vocabulary">fluent in changelogs and trip reports →</a></p>
-        {/* the reader who just finished the page's best argument gets a
-            door, right here, instead of a scroll hunt */}
-        <p class="go-line"><a class="go mono" href="#contact">sounds like your project → contact ↘</a></p>
+        {/* the molecule — the flex serves credibility, and it sits BEFORE
+            the section's exit cues so door-takers still walk past it */}
+        <figure class="diagram draw">
+      <svg
+        viewBox="30 -34 640 254"
+        role="img"
+        aria-label="The skeletal structure of psilocybin, annotated with code-review comments: the phosphate group is marked 'removed at runtime', the indole core 'base class shared with serotonin', and the dimethyl side chain 'the business logic'"
+      >
+        <g class="stroke">
+          <!-- indole: benzene ring -->
+          <path d="M60 92 L100 69 L140 92 L140 138 L100 161 L60 138 Z" pathLength="1" />
+          <!-- aromatic inner bonds -->
+          <path d="M104 78 L133 95" pathLength="1" />
+          <path d="M133 135 L104 152" pathLength="1" />
+          <path d="M67 132 L67 98" pathLength="1" />
+          <!-- fused pyrrole -->
+          <path d="M140 92 L183 79 L210 115 L183 151 L140 138" pathLength="1" />
+          <!-- C2=C3 double bond -->
+          <path d="M186 88 L206 114" pathLength="1" />
+          <!-- side chain: C3 → CH2 → CH2 → N -->
+          <path d="M183 79 L212 52 L246 66 L272 46" pathLength="1" />
+          <!-- N-methyls -->
+          <path d="M287 40 L316 50" pathLength="1" />
+          <path d="M282 32 L288 12" pathLength="1" />
+          <!-- 4-phosphoryloxy bond -->
+          <path d="M100 69 L100 44" pathLength="1" />
+        </g>
+        <g class="label">
+          <text x="183" y="168">NH</text>
+          <text x="279" y="47">N</text>
+          <text x="100" y="34">OPO₃H₂</text>
+        </g>
+
+        <!-- code-review annotations -->
+        <g class="leader">
+          <path d="M132 24 L182 -10" />
+          <path d="M322 51 L368 68" />
+          <path d="M212 128 L368 150" />
+        </g>
+        <g class="comment">
+          <text x="188" y="-6">// removed at runtime</text>
+          <text x="374" y="72">// the business logic</text>
+          <text x="374" y="154">// base class shared with serotonin</text>
+        </g>
+      </svg>
+      {/* on phones the in-svg comments are illegibly small: they move out
+          here and the script crops the viewBox to the molecule. aria-hidden
+          because the svg's aria-label already carries the same content. */}
+      <ul class="annotations mono" aria-hidden="true">
+        <li><span class="ref">phosphate group</span> <span class="c">// removed at runtime</span></li>
+        <li><span class="ref">dimethyl side chain</span> <span class="c">// the business logic</span></li>
+        <li><span class="ref">indole core</span> <span class="c">// base class shared with serotonin</span></li>
+      </ul>
+      <figcaption class="mono">fig. 01 · psilocybin, annotated like a code review · <a class="aside" href="/vocabulary">fluent in changelogs and trip reports →</a></figcaption>
+        </figure>
+        {/* one door, last thing in the section — the vocabulary link now
+            lives in the figcaption so the exit has no competition */}
+        <p class="go-line"><a class="go mono" href="#contact">sounds like your project? take it to contact ↘</a></p>
       </div>
     </div>
   </div>
@@ -114,8 +166,6 @@
     color: var(--ink-dim);
   }
 
-  .aside-line { margin: 2.2rem 0 0; }
-
   .aside {
     color: var(--acid);
     text-decoration: none;
@@ -137,4 +187,95 @@
     margin-block: -1em;
   }
   .go:hover { text-decoration: underline; }
+
+  /* -- the annotated molecule ------------------------------------ */
+
+  .diagram {
+    margin: clamp(2rem, 4.5vh, 3rem) 0 0;
+  }
+
+  .diagram svg {
+    display: block;
+    width: 100%;
+    max-width: 36rem;
+    height: auto;
+  }
+
+  .stroke path {
+    fill: none;
+    stroke: var(--ink);
+    stroke-width: 1.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    /* normalized by pathLength=1: solid at rest, drawable by keyframe */
+    stroke-dasharray: 1;
+  }
+  .diagram.draw.in .stroke path {
+    animation: stroke-draw 2s var(--ease-out) backwards;
+  }
+  /* the schematic draws in reading order: ring, bonds, chain, phosphate */
+  .diagram.draw.in .stroke path:nth-child(n + 5) { animation-delay: 0.5s; }
+  .diagram.draw.in .stroke path:nth-child(n + 7) { animation-delay: 1s; }
+  .diagram.draw.in .stroke path:nth-child(10) { animation-delay: 1.5s; }
+  @media (prefers-reduced-motion: reduce) {
+    .diagram.draw.in .stroke path { animation: none; }
+  }
+
+  .label text {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    fill: var(--ink);
+    text-anchor: middle;
+  }
+
+  .leader path {
+    fill: none;
+    stroke: var(--ink-faint);
+    stroke-width: 1;
+    stroke-dasharray: 1 5;
+    stroke-linecap: round;
+  }
+
+  .comment text {
+    font-family: var(--font-mono);
+    font-size: 12.5px;
+    fill: var(--acid);
+  }
+
+  figcaption {
+    margin-block-start: 1.4rem;
+    color: var(--ink-dim);
+  }
+
+  /* -- phone-sized annotation handoff (JS-gated: without the viewBox swap
+     the svg comments stay, tiny but present, and the list stays hidden) -- */
+  .annotations { display: none; }
+
+  @media (max-width: 40rem) {
+    html.js .leader,
+    html.js .comment { display: none; }
+    html.js .annotations {
+      display: block;
+      list-style: none;
+      margin: 1.2rem 0 0;
+      padding: 0;
+    }
+  }
+
+  .annotations li + li { margin-block-start: 0.4rem; }
+  .annotations .ref { color: var(--ink-dim); }
+  .annotations .c { color: var(--acid); }
 </style>
+
+<script>
+  // on phones the code-review comments leave the svg (annotation list above)
+  // and the viewBox crops from the annotated schematic to just the molecule,
+  // so it fills the column and the atom labels grow legible
+  const svg = document.querySelector<SVGSVGElement>('.diagram svg')!;
+  const WIDE = svg.getAttribute('viewBox')!;
+  const NARROW = '48 0 280 182'; // the molecule's own bounds, plus breathing room
+  const mq = window.matchMedia('(max-width: 40rem)');
+  const apply = () => svg.setAttribute('viewBox', mq.matches ? NARROW : WIDE);
+  apply();
+  mq.addEventListener('change', apply);
+</script>
