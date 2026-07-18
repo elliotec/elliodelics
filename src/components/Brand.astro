@@ -1,0 +1,48 @@
+---
+// the wordmark for subpages — same braces as the hero's, standalone scope
+---
+
+<a class="wordmark brand" href="/">
+  <svg class="shroom shroom-l" viewBox="0 0 20 40" aria-hidden="true">
+    <path d="M2.5 10 A7.5 8 0 0 1 17.5 10 Z" />
+    <path d="M11.5 10.5 C7 12.8 7.6 15.5 7.6 18.5 C7.6 21.8 4.4 22.7 3.2 23.5 C4.4 24.3 7.6 25.2 7.6 28.5 C7.6 31.5 7 34.6 11.5 36.6" />
+  </svg>
+  <span class="brand-name">elliodelics</span>
+  <svg class="shroom shroom-r" viewBox="0 0 20 40" aria-hidden="true">
+    <path d="M2.5 10 A7.5 8 0 0 1 17.5 10 Z" />
+    <path d="M11.5 10.5 C7 12.8 7.6 15.5 7.6 18.5 C7.6 21.8 4.4 22.7 3.2 23.5 C4.4 24.3 7.6 25.2 7.6 28.5 C7.6 31.5 7 34.6 11.5 36.6" />
+  </svg>
+</a>
+
+<style>
+  .brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.18em;
+    font-size: 1.3rem;
+    text-decoration: none;
+    padding-block: 0.45em;
+    margin-block: -0.45em;
+  }
+
+  .brand-name {
+    font-family: 'MuseoModerno', var(--font-display);
+    font-weight: 700;
+    text-transform: lowercase;
+  }
+
+  .shroom {
+    height: 1.55em;
+    width: auto;
+    flex-shrink: 0;
+  }
+  .shroom path {
+    fill: none;
+    stroke-width: 2.2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .shroom-l path { stroke: var(--acid); }
+  .shroom-r { scale: -1 1; }
+  .shroom-r path { stroke: var(--bloom); }
+</style>

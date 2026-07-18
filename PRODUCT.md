@@ -32,4 +32,4 @@ Bold & unconventional. The intersection of rigor and the frontier: engineering p
 
 ## Accessibility & Inclusion
 
-WCAG 2.1 AA baseline: ≥4.5:1 contrast for body text, ≥3:1 for large text, full keyboard operability, semantic HTML. All motion honors `prefers-reduced-motion` with crossfade or instant alternatives — non-negotiable given the audience may include people sensitive to intense visual stimulation.
+WCAG 2.2 AAA target — the site is part of the compliance-expertise pitch, so it holds itself to the strictest tier: ≥7:1 contrast on all text, ≥44px targets on every pointer type, full keyboard operability, semantic HTML, forced-colors support, a plain-language version (`/plain`), a glossary page for field terms and abbreviations (`/vocabulary`), and a public accessibility statement (`/accessibility`). All motion honors `prefers-reduced-motion` with static or instant alternatives, live mid-session — non-negotiable given the audience may include people sensitive to intense visual stimulation. One documented exception: the decorative hero canvas painting is pointer-only.

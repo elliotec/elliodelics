@@ -1,0 +1,119 @@
+---
+// the shared frame for every page that isn't the landing page: wordmark
+// header, display h1 with the acid dot, prose vocabulary, back cue, footer.
+// `wide` drops the prose measure for full-container content (vocabulary).
+import Base from './Base.astro';
+import Brand from '../components/Brand.astro';
+import Footer from '../components/Footer.astro';
+
+interface Props {
+  title: string;
+  description: string;
+  heading: string;
+  wide?: boolean;
+}
+
+const { title, description, heading, wide = false } = Astro.props;
+---
+
+<Base title={title} description={description}>
+  <header class="top container">
+    <Brand />
+  </header>
+  <main class:list={['container', 'subpage', { prose: !wide }]}>
+    <h1 class="display page-title">{heading}<span class="dot">.</span></h1>
+    {/* the wrapper keeps the slotted-content globals below off this
+        layout's own elements — .cue and .back must not inherit prose
+        link padding or paragraph margins */}
+    <div class="content"><slot /></div>
+    <p class="back"><a class="mono cue" href="/">back to the full page →</a></p>
+  </main>
+  <Footer />
+</Base>
+
+<style>
+  .top {
+    padding-block: 1.6rem;
+  }
+
+  .subpage {
+    padding-block: clamp(2rem, 5vh, 4rem) var(--space-section);
+  }
+
+  .subpage.prose {
+    max-width: calc(var(--measure) + 2 * var(--gutter));
+  }
+
+  .page-title {
+    font-size: var(--text-h2);
+    margin: 0;
+  }
+
+  .dot { color: var(--acid); }
+
+  .back { margin-block-start: 3rem; }
+
+  .cue {
+    color: var(--acid);
+    text-decoration: none;
+    /* ≥44px target without moving the line */
+    padding-block: 1em;
+    margin-block: -1em;
+    display: inline-block;
+  }
+  .cue:hover { text-decoration: underline; }
+</style>
+
+<style is:global>
+  /* slotted-content vocabulary — scoped styles can't reach slot children,
+     so these live globally, fenced inside .subpage .content so they can
+     never touch the layout's own elements */
+  .subpage .content .intro {
+    color: var(--ink-dim);
+    margin: 1.6rem 0 2.4rem;
+  }
+
+  .subpage .content .note {
+    color: var(--ink-dim);
+    margin: 0.8rem 0 clamp(2.5rem, 6vh, 4rem);
+  }
+
+  .subpage.prose .content h2 {
+    font-family: var(--font-display);
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: -0.02em;
+    font-size: 1.35rem;
+    margin: 2.4rem 0 0.7rem;
+  }
+
+  .subpage.prose .content p { margin: 0; }
+  .subpage.prose .content p + p { margin-block-start: 1.2em; }
+
+  .subpage.prose .content ul {
+    margin: 0.8em 0 0;
+    padding-inline-start: 1.2em;
+  }
+  .subpage.prose .content li + li { margin-block-start: 0.5em; }
+
+  .subpage.prose .content a {
+    color: var(--acid);
+    /* inline links: padding extends the hit box, not the line height */
+    padding-block: 0.35em;
+  }
+
+  .subpage .content .ext {
+    font-family: var(--font-mono);
+    /* larger ratios than the heading .ext in Work/Founder (0.45em/0.9em):
+       at body size those would render around 8px */
+    font-size: 0.55em;
+    font-weight: 400;
+    vertical-align: 0.7em;
+    margin-inline-start: 0.3em;
+  }
+
+  .subpage .content .reviewed {
+    color: var(--ink-dim);
+    margin-block-start: 2.4rem;
+  }
+</style>

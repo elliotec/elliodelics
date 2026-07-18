@@ -8,6 +8,12 @@
     <p class="mono">elliodelics © {new Date().getFullYear()}</p>
     <p class="mono dim">software engineering for the psychedelic industry</p>
     <p class="mono dim">no cookies, no trackers</p>
+    <nav class="mono links" aria-label="also on this site">
+      <a href="/plain">plain words</a>
+      <a href="/accessibility">accessibility</a>
+      <a href="/vocabulary">vocabulary</a>
+      <a href="/privacy">privacy</a>
+    </nav>
   </div>
 </footer>
 
@@ -26,4 +32,18 @@
 
   .inner p { margin: 0; }
   .dim { color: var(--ink-dim); }
+
+  .links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem 2rem;
+  }
+  .links a {
+    color: var(--acid);
+    text-decoration: none;
+    /* ≥44px target without moving the footer's lines */
+    padding-block: 1em;
+    margin-block: -1em;
+  }
+  .links a:hover { text-decoration: underline; }
 </style>

@@ -1,0 +1,112 @@
+---
+// AAA 3.1.3 (unusual words) and 3.1.4 (abbreviations): every ticker term,
+// every abbreviation on the site, defined in one place. The mechanism is a
+// glossary page (WCAG technique G62), linked from the footer of every page.
+import SubPage from '../layouts/SubPage.astro';
+
+const groups = [
+  {
+    title: 'the engineering side',
+    terms: [
+      ['code review', 'engineers reading each other’s changes before they ship'],
+      ['data privacy', 'keeping personal information away from anyone who shouldn’t see it'],
+      ['audit trails', 'records of who did what in a system, and when'],
+      ['observability', 'instruments that show what software is doing from the outside'],
+      ['GDPR', 'the General Data Protection Regulation, Europe’s data privacy law'],
+      ['feature flags', 'switches that turn parts of software on or off without redeploying'],
+      ['role-based access', 'people see only what their role permits'],
+      ['documentation', 'written explanations of how a system works and why'],
+      ['3rd-party integrations', 'connections between your software and someone else’s'],
+      ['SOC 2', 'Service Organization Control 2, an audit standard for how companies handle data'],
+      ['incident response', 'the practiced way a team handles things breaking'],
+      ['compliance', 'meeting the rules a regulator or a standard sets'],
+      ['zero-downtime deploys', 'shipping new software while the old keeps running'],
+      ['data pipelines', 'automated paths that move and reshape data between systems'],
+      ['API', 'application programming interface, the way one program talks to another'],
+      ['fractional', 'part-time by design, a share of a senior role without the full-time hire'],
+      ['CTO', 'chief technology officer'],
+      ['MA', 'master of arts, a graduate degree'],
+    ],
+  },
+  {
+    title: 'the field side',
+    terms: [
+      ['peer review', 'scientists checking each other’s work before publication'],
+      ['harm reduction', 'meeting people where they are and lowering risk, not demanding abstinence'],
+      ['altered states', 'consciousness doing something other than its default'],
+      ['introspection', 'looking inward and reporting what you find'],
+      ['informed consent', 'agreeing to something after actually understanding it'],
+      ['titration', 'starting small and adjusting the dose gradually'],
+      ['set & setting', 'mindset and environment, the two big variables of any psychedelic experience'],
+      ['trip reports', 'firsthand written accounts of psychedelic experiences'],
+      ['integration circles', 'group conversations for making sense of an experience afterward'],
+      ['trip sitting', 'staying sober and present while someone else journeys'],
+      ['challenging experiences', 'the field’s honest name for difficult trips'],
+      ['ceremony', 'a held, intentional container for an experience'],
+      ['non-ordinary states', 'the research term for consciousness off its usual path'],
+      ['dosing protocols', 'the schedule and amounts a study or a clinic follows'],
+      ['psilocybin', 'the active compound in psychedelic mushrooms'],
+    ],
+  },
+];
+---
+
+<SubPage
+  title="elliodelics · the vocabulary, defined"
+  description="Every term from the elliodelics ticker, plus the abbreviations, defined. One engineering term, one field term, per pair."
+  heading="The vocabulary, defined"
+  wide
+>
+  <p class="note mono">appendix · every term from the ticker, plus the abbreviations</p>
+
+  {groups.map((g) => (
+    <div class="group">
+      <h2 class="group-title mono">{g.title}</h2>
+      <dl class="entries">
+        {g.terms.map(([term, def]) => (
+          <div class="entry">
+            <dt class="mono">{term}</dt>
+            <dd>{def}</dd>
+          </div>
+        ))}
+      </dl>
+    </div>
+  ))}
+</SubPage>
+
+<style>
+  .group + .group {
+    margin-block-start: clamp(2.2rem, 5vh, 3.2rem);
+  }
+
+  .group-title {
+    color: var(--ink-dim);
+    font-weight: 400;
+    margin: 0 0 1.1rem;
+    padding-block-end: 0.7rem;
+    border-block-end: 1px solid var(--ink-faint);
+  }
+
+  .entries {
+    margin: 0;
+    columns: 18rem 3;
+    column-gap: clamp(2rem, 4vw, 3.5rem);
+  }
+
+  .entry {
+    break-inside: avoid;
+    margin-block-end: 1.1rem;
+  }
+
+  .entry dt {
+    color: var(--ink);
+  }
+
+  .entry dd {
+    margin: 0.15rem 0 0;
+    font-size: 0.9375rem;
+    line-height: 1.55;
+    color: var(--ink-dim);
+    max-width: 38ch;
+  }
+</style>

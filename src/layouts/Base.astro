@@ -19,19 +19,28 @@ const { title, description } = Astro.props;
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    {/* GitHub Pages can't set response headers, so CSP rides in a meta tag.
+        'unsafe-inline' is required by Astro's inlined scripts/styles; the
+        policy still pins every fetchable resource to this origin. Note
+        frame-ancestors can't be declared via meta — header-only. */}
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self'; font-src 'self'; object-src 'none'; base-uri 'self'; form-action 'none'"
+    />
+    <meta name="referrer" content="strict-origin-when-cross-origin" />
     <title>{title}</title>
     <meta name="description" content={description} />
     <meta name="theme-color" content="#00300f" />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
-    <meta property="og:url" content={Astro.site} />
+    <meta property="og:url" content={new URL(Astro.url.pathname, Astro.site)} />
     <meta property="og:image" content={new URL('/og.png', Astro.site)} />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
     <meta property="og:image:alt" content="elliodelics, software engineering for the psychedelic industry, on a deep green field of interference rings" />
     <meta name="twitter:card" content="summary_large_image" />
-    <link rel="canonical" href={Astro.site} />
+    <link rel="canonical" href={new URL(Astro.url.pathname, Astro.site)} />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="preload" href={museoWoff} as="font" type="font/woff2" crossorigin />
     {/* the logo face must be ready at first paint, or the wordmark flashes

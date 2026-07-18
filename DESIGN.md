@@ -41,7 +41,7 @@ typography:
     fontFamily: "Source Serif 4 Variable, SS4 Fallback, Georgia, serif"
     fontSize: "clamp(1.375rem, 1.15rem + 1vw, 1.75rem)"
     fontWeight: 400
-    lineHeight: 1.4
+    lineHeight: 1.5
   label:
     fontFamily: "JetBrains Mono, Lucida Console, ui-monospace, monospace"
     fontSize: "0.8125rem"
@@ -155,8 +155,8 @@ All fonts are self-hosted via Fontsource packages (`@fontsource/bricolage-grotes
 ### Hierarchy
 - **Display** (800, `clamp(2.1rem, 0.5rem + 7.2vw, 6rem)`, 0.98): the `.display` class — uppercase, `-0.028em` tracking. Hero H1 and the contact headline. The clamp floor is sized so PSYCHEDELIC fits at 320px viewports.
 - **Headline** (800, `clamp(2rem, 1.2rem + 4vw, 4.25rem)`, 0.98): section H2s (Set setting and schema, What we build, Field reports), same `.display` treatment.
-- **Title** (800, `clamp(1.75rem, 1.3rem + 2vw, 2.6rem)`, ~1.02): service row titles and case-study org names — uppercase Bricolage, `-0.02em`. The Founder lede is the serif exception at this size: Source Serif 600, line-height 1.25, sentence case.
-- **Body** (400, `clamp(1.0625rem, 1rem + 0.3vw, 1.1875rem)`, 1.62): Source Serif prose at a 34em max measure. A larger body step (`clamp(1.375rem, 1.15rem + 1vw, 1.75rem)`, line-height 1.4) carries the hero subhead and Founder follow-up in `ink-dim`.
+- **Title** (800, `clamp(1.75rem, 1.3rem + 2vw, 2.6rem)`, ~1.02): service row titles and case-study org names — uppercase Bricolage, `-0.02em`. The Founder lede is the serif exception at this size: Source Serif 600, line-height 1.5 (it reads as a heading but it's a paragraph, so AAA 1.4.8 applies), sentence case.
+- **Body** (400, `clamp(1.0625rem, 1rem + 0.3vw, 1.1875rem)`, 1.62): Source Serif prose at a 34em max measure. A larger body step (`clamp(1.375rem, 1.15rem + 1vw, 1.75rem)`, line-height 1.5 — the AAA 1.4.8 floor for paragraphs) carries the hero subhead and Founder follow-up in `ink-dim`.
 - **Label** (400, `0.8125rem`, `0.02em`, lowercase): the `.mono` class — JetBrains Mono for captions (`fig. 01 · psilocybin, annotated like a code review`), the ticker, cue links, roles, and the footer.
 
 The fluid scale follows a ~1.33 modular ratio with viewport-fluid `clamp()` on top. Display headings end in an acid-colored period (`<span class="dot">.</span>`); that dot is part of the type system.
@@ -201,7 +201,11 @@ The component vocabulary is small and stroke-drawn: links, one pill button, hair
 - A single top bar inside the hero: the wordmark left, mono email right (hidden below 40rem — the contact section carries the address). No menu, no hamburger. In-page cue links do the wayfinding.
 
 ### Footer
-- Three mono lines (`elliodelics © year`, the tagline, `no cookies, no trackers`) on the abyss band. The `<footer>` lives outside `<main>` and every section so it maps to the `contentinfo` landmark; the contact section carves out its height (`min-height: calc(88svh - 8rem)`) so contact plus footer still read as one viewport.
+- Three mono lines (`elliodelics © year`, the tagline, `no cookies, no trackers`) plus a small acid nav (`plain words · accessibility · vocabulary`) on the abyss band. The `<footer>` lives outside `<main>` and every section so it maps to the `contentinfo` landmark; the contact section carves out its height (`min-height: calc(88svh - 8rem)`) so contact plus footer still read as one viewport. The footer is shared across all pages.
+
+### Subpages
+- `/vocabulary` — every ticker term plus every abbreviation, defined in a two-group `<dl>` (engineering side, field side) set in multi-column layout — mono `dt`, small serif `dd`. It satisfies WCAG 3.1.3/3.1.4 (technique G62, reached from the footer of every page) while doubling as brand content: the dual-fluency vocabulary, actually defined. Its own page rather than a section, so the landing page keeps one job.
+- `/plain` — the whole site at lower-secondary reading level (WCAG 3.1.5). `/accessibility` — the public accessibility statement: the AAA target, the evidence, the one documented exception (pointer-only decorative canvas), and the feedback address. `/privacy` — the privacy notice backing the "no cookies, no trackers" footer line: email processing (Proton-hosted, GDPR rights) and GitHub Pages hosting logs, nothing else, controller Elliotec Software LLC DBA elliodelics. All subpages render through the shared `SubPage.astro` layout (wordmark header, display h1 with the acid dot, prose vocabulary as `.subpage`-scoped global styles since scoped CSS can't reach slotted content, back cue, footer) — `wide` drops the prose measure for full-container content like the vocabulary columns. Page files carry only their content and any page-unique styles.
 
 ### The Wordmark (signature)
 `{ elliodelics }` — the brand name in lowercase MuseoModerno 700, braced by two stroke-drawn mushrooms that read as code braces (fill: none, stroke-width 2.2, round caps and joins, 1.55em tall so they overshoot the caps height like real braces). The left/opening mushroom strokes acid; the right/closing mushroom is the same path mirrored (`scale: -1 1`) and strokes bloom. Green opens, purple closes. The favicon is the brace pair without the name — opening mushroom in acid, mirrored closing mushroom in bloom, on a void field (rendered as sRGB hex `#0cd87e` and `#b188df` on `#00300f`; the background matches `theme-color`, which matches the hero's `void-dusk` ground).

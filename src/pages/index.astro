@@ -1,5 +1,26 @@
 ---
 import Base from '../layouts/Base.astro';
+
+// structured data: what search engines show for "psychedelic industry
+// software" queries. legalName is public record (Utah DBA, 2026-07-17).
+const orgSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  name: 'elliodelics',
+  legalName: 'Elliotec Software LLC',
+  url: 'https://elliodelics.com',
+  logo: 'https://elliodelics.com/favicon.svg',
+  image: 'https://elliodelics.com/og.png',
+  email: 'mike@elliodelics.com',
+  description:
+    'Software engineering studio for the psychedelic industry. Product engineering, data privacy and security, research infrastructure, and fractional engineering leadership.',
+  founder: {
+    '@type': 'Person',
+    name: 'Mike Elliott',
+    jobTitle: 'Founder & Principal Engineer',
+    url: 'https://elliotec.com',
+  },
+};
 import Hero from '../components/Hero.astro';
 import Ticker from '../components/Ticker.astro';
 import Manifesto from '../components/Manifesto.astro';
@@ -14,6 +35,7 @@ import Footer from '../components/Footer.astro';
   title="elliodelics · software engineering for the psychedelic industry"
   description="elliodelics is a software engineering studio for the psychedelic ecosystem, run by Mike Elliott. Product engineering, data privacy and security, research infrastructure, and fractional engineering leadership."
 >
+  <script type="application/ld+json" set:html={JSON.stringify(orgSchema)} is:inline />
   <main>
     <Hero />
     <Ticker />

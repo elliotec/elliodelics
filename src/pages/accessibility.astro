@@ -1,0 +1,48 @@
+---
+// the accessibility statement — where the conformance target, the evidence,
+// and the one documented exception live on the record
+import SubPage from '../layouts/SubPage.astro';
+---
+
+<SubPage
+  title="elliodelics · accessibility"
+  description="The accessibility statement for elliodelics. Built to WCAG 2.2 level AAA, with the evidence and the one documented exception."
+  heading="Accessibility"
+>
+  <p class="intro">
+    This site is built to meet the Web Content Accessibility Guidelines
+    (WCAG) 2.2 at level AAA, the strictest tier. For a field where
+    confidentiality and access are ethics rather than checkboxes, the
+    studio site should hold itself to the same standard.
+  </p>
+
+  <h2>What that means here</h2>
+  <ul>
+    <li>Every text color measures at least 7 to 1 contrast against its background.</li>
+    <li>Every control works with a keyboard and shows a visible focus ring.</li>
+    <li>Click and tap targets are at least 44 pixels on every kind of device, except links inside sentences, which the standard exempts.</li>
+    <li>All motion honors your reduced motion setting. The page works fully with animation off.</li>
+    <li>The site respects Windows High Contrast and other forced color modes.</li>
+    <li>A <a href="/plain">plain words version</a> of the site is available for easier reading.</li>
+    <li>A <a href="/vocabulary">vocabulary appendix</a> defines the field terms and abbreviations used on the site.</li>
+    <li>No cookies, no trackers, no forms. Nothing to consent to, nothing to get stuck in.</li>
+  </ul>
+
+  <h2>One known exception</h2>
+  <p>
+    The artwork behind the hero heading can be painted with a mouse or a
+    finger. It is decoration. It holds no information and does nothing.
+    Keyboard users see the same artwork paint itself when the page loads.
+  </p>
+
+  <h2>How we check</h2>
+  <p>
+    Contrast is measured computationally against the WCAG formula, and the
+    page is re-audited in code whenever the design changes. If something
+    here doesn't work for you, that's a bug. Email
+    <a href="mailto:mike@elliodelics.com">mike@elliodelics.com</a> and it
+    gets fixed.
+  </p>
+
+  <p class="mono reviewed">last reviewed · july 2026</p>
+</SubPage>
