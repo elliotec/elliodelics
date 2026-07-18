@@ -3,12 +3,12 @@
 
 <section class="manifesto" id="manifesto" tabindex="-1">
   <div class="container">
-    <h2 class="display statement reveal">
+    <h2 class="display statement draw">
       Set, setting, and&nbsp;schema<span class="dot">.</span>
     </h2>
 
     <div class="duo">
-      <div class="body reveal" style="--reveal-delay: 0.1s">
+      <div class="body">
         <p>
           Most software shops won’t touch this industry because the
           compliance surface scares them off, and the ones that will tend
@@ -28,7 +28,7 @@
         </p>
       </div>
 
-      <figure class="diagram reveal" style="--reveal-delay: 0.15s">
+      <figure class="diagram draw">
         <svg
           viewBox="30 -34 640 254"
           role="img"
@@ -36,22 +36,22 @@
         >
           <g class="stroke">
             <!-- indole: benzene ring -->
-            <path d="M60 92 L100 69 L140 92 L140 138 L100 161 L60 138 Z" />
+            <path d="M60 92 L100 69 L140 92 L140 138 L100 161 L60 138 Z" pathLength="1" />
             <!-- aromatic inner bonds -->
-            <path d="M104 78 L133 95" />
-            <path d="M133 135 L104 152" />
-            <path d="M67 132 L67 98" />
+            <path d="M104 78 L133 95" pathLength="1" />
+            <path d="M133 135 L104 152" pathLength="1" />
+            <path d="M67 132 L67 98" pathLength="1" />
             <!-- fused pyrrole -->
-            <path d="M140 92 L183 79 L210 115 L183 151 L140 138" />
+            <path d="M140 92 L183 79 L210 115 L183 151 L140 138" pathLength="1" />
             <!-- C2=C3 double bond -->
-            <path d="M186 88 L206 114" />
+            <path d="M186 88 L206 114" pathLength="1" />
             <!-- side chain: C3 → CH2 → CH2 → N -->
-            <path d="M183 79 L212 52 L246 66 L272 46" />
+            <path d="M183 79 L212 52 L246 66 L272 46" pathLength="1" />
             <!-- N-methyls -->
-            <path d="M287 40 L316 50" />
-            <path d="M282 32 L288 12" />
+            <path d="M287 40 L316 50" pathLength="1" />
+            <path d="M282 32 L288 12" pathLength="1" />
             <!-- 4-phosphoryloxy bond -->
-            <path d="M100 69 L100 44" />
+            <path d="M100 69 L100 44" pathLength="1" />
           </g>
           <g class="label">
             <text x="183" y="168">NH</text>
@@ -102,7 +102,16 @@
     margin: 0;
   }
 
-  .dot { color: var(--acid); }
+  .dot {
+    color: var(--acid);
+    display: inline-block; /* scale needs a box */
+  }
+  .statement.draw.in .dot {
+    animation: dot-pop 1.2s var(--ease-expo) 0.6s backwards;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .statement.draw.in .dot { animation: none; }
+  }
 
   .duo {
     display: grid;
@@ -142,6 +151,18 @@
     stroke-width: 1.5;
     stroke-linecap: round;
     stroke-linejoin: round;
+    /* normalized by pathLength=1: solid at rest, drawable by keyframe */
+    stroke-dasharray: 1;
+  }
+  .diagram.draw.in .stroke path {
+    animation: stroke-draw 2s var(--ease-out) backwards;
+  }
+  /* the schematic draws in reading order: ring, bonds, chain, phosphate */
+  .diagram.draw.in .stroke path:nth-child(n + 5) { animation-delay: 0.5s; }
+  .diagram.draw.in .stroke path:nth-child(n + 7) { animation-delay: 1s; }
+  .diagram.draw.in .stroke path:nth-child(10) { animation-delay: 1.5s; }
+  @media (prefers-reduced-motion: reduce) {
+    .diagram.draw.in .stroke path { animation: none; }
   }
 
   .label text {

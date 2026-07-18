@@ -1,0 +1,91 @@
+---
+// the colophon — bookbinding's page about how the book was made, applied
+// to this site. The craft argument, made visible for people who don't
+// read source. Every claim here is verifiable in the repo or the page.
+import SubPage from '../layouts/SubPage.astro';
+---
+
+<SubPage
+  title="elliodelics · colophon"
+  description="How this site is built. The type, the color, the motion, the canvas, and the checking, on the record."
+  heading="Colophon"
+>
+  <p class="intro">
+    Bookbinders used to end a book with a page about how it was made. The
+    type, the paper, the press. This is that page. The site is the first
+    thing elliodelics ever shows a client, so it is built the way we build
+    everything, and here is what that means.
+  </p>
+
+  <h2>The shape</h2>
+  <p>
+    Static files, built with Astro, served from a CDN. No server, no
+    database, no framework runtime shipped to your browser. The whole
+    page, fonts included, weighs under a quarter of a megabyte, which is
+    smaller than most sites' hero photo. Nothing loads from a third
+    party. Not a font, not a script, not a pixel.
+  </p>
+
+  <h2>The type</h2>
+  <p>
+    Bricolage Grotesque at a single loud weight for display. Source Serif
+    4 for prose, because reading on a dark ground should feel like a book
+    and not a terminal. JetBrains Mono for the lab-notebook voice. One
+    word of MuseoModerno, for the wordmark alone. All self-hosted. The
+    serif's fallback is Georgia, metric-adjusted so the swap never moves
+    a single line while the real font loads.
+  </p>
+
+  <h2>The color</h2>
+  <p>
+    One green, stretched. Every surface is a luminance of the same OKLCH
+    hue, banded like descending floors, with one violet room where the
+    argument changes. Every text color measures at least 7 to 1 against
+    its background, the strictest contrast tier WCAG defines, verified
+    computationally against the formula rather than by eye.
+  </p>
+
+  <h2>The motion</h2>
+  <p>
+    Nothing on the page hides and waits. Every word is present from the
+    first frame, for every crawler, screenshot bot, printer, and screen
+    reader. What animates is the drawing itself. Dotted ledgers sweep
+    in, the service glyphs and the psilocybin schematic draw their own
+    strokes as you reach them, the acid periods pop into place. If your
+    system asks for reduced motion, everything arrives already drawn,
+    and the field behind the hero holds one still frame.
+  </p>
+
+  <h2>The field</h2>
+  <p>
+    The hero's artwork is a canvas drawing interference rings from three
+    drifting sources, decaying like phosphor instead of clearing. Move a
+    mouse through it and it lays circles on a fixed triangular lattice
+    with spacing equal to radius, which is the classical construction of
+    the Flower of Life. Click and it blooms. It stops drawing the moment
+    it leaves your screen, because hidden tabs don't deserve your
+    battery.
+  </p>
+
+  <h2>The checking</h2>
+  <p>
+    Every page is scanned with axe-core against the full WCAG rule set,
+    walked end to end with a keyboard, and read through the accessibility
+    tree a screen reader receives, with forced colors and reduced motion
+    emulated in a real browser. The details live in the
+    <a href="/accessibility">accessibility statement</a>. Security gets
+    the same treatment. A content security policy pins every resource to
+    this origin, the deploy pipeline is pinned to exact commit hashes,
+    and <a href="/.well-known/security.txt">security.txt</a> says where
+    to report anything we missed.
+  </p>
+
+  <p class="kicker mono">the page is the portfolio · view source is the proof</p>
+</SubPage>
+
+<style>
+  .kicker {
+    margin-block-start: 3rem;
+    color: var(--acid);
+  }
+</style>

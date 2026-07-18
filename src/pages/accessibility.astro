@@ -22,6 +22,7 @@ import SubPage from '../layouts/SubPage.astro';
     <li>Every control works with a keyboard and shows a visible focus ring.</li>
     <li>Click and tap targets are at least 44 pixels on every kind of device, except links inside sentences, which the standard exempts.</li>
     <li>All motion honors your reduced motion setting. The page works fully with animation off.</li>
+    <li>Content never hides behind animation. Every word is on the page from the first frame, and scroll motion draws only the decorations.</li>
     <li>The site respects Windows High Contrast and other forced color modes.</li>
     <li>A <a href="/plain">plain words version</a> of the site is available for easier reading.</li>
     <li>A <a href="/vocabulary">vocabulary appendix</a> defines the field terms and abbreviations used on the site.</li>
@@ -37,8 +38,11 @@ import SubPage from '../layouts/SubPage.astro';
 
   <h2>How we check</h2>
   <p>
-    Contrast is measured computationally against the WCAG formula, and the
-    page is re-audited in code whenever the design changes. If something
+    Contrast is measured computationally against the WCAG formula. Every
+    page is scanned with axe-core, walked end to end with a keyboard, and
+    reviewed through the accessibility tree a screen reader receives, with
+    forced colors and reduced motion emulated in a real browser. This
+    happens whenever the design changes, not once a year. If something
     here doesn't work for you, that's a bug. Email
     <a href="mailto:mike@elliodelics.com">mike@elliodelics.com</a> and it
     gets fixed.

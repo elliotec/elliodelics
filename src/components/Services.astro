@@ -26,12 +26,17 @@ const services = [
 
 <section class="services" aria-labelledby="services-title">
   <div class="container">
-    <h2 class="display sec-title reveal" id="services-title">What we build</h2>
+    <h2 class="display sec-title" id="services-title">What we build</h2>
     <ul class="index">
       {services.map((s, i) => (
-        <li class="row reveal" style={`--reveal-delay: ${i * 0.07}s`}>
+        <li class="row draw" style={`--draw-delay: ${i * 0.08}s`}>
           <svg class="glyph" viewBox="0 0 40 32" aria-hidden="true">
-            <path d={s.glyph} />
+            {/* one path per subpath, each with its own normalized length:
+                they draw simultaneously, so the icon sketches in as one
+                gesture instead of a sequential dash sprint */}
+            {s.glyph.split(/(?=M)/).filter(Boolean).map((seg) => (
+              <path d={seg} pathLength="1" />
+            ))}
           </svg>
           <h3 class="row-title">{s.title}</h3>
           <p class="row-desc">{s.desc}</p>
@@ -39,8 +44,8 @@ const services = [
             class="row-cue mono"
             href="#contact"
             data-subject={`${s.title} · inquiry`}
-            aria-label={`email about this · ${s.title.toLowerCase()}`}
-          >email about this →</a>
+            aria-label={`take this to contact · ${s.title.toLowerCase()}`}
+          >take this to contact ↘</a>
         </li>
       ))}
     </ul>
@@ -136,6 +141,15 @@ const services = [
     stroke-linecap: round;
     stroke-linejoin: round;
     transition: stroke 0.35s var(--ease-out);
+    /* normalized by pathLength=1: a full-length dash reads as a solid
+       stroke at rest, and the keyframe draws it in from offset 1 */
+    stroke-dasharray: 1;
+  }
+  .row.draw.in .glyph path {
+    animation: stroke-draw 2.4s var(--ease-out) calc(var(--draw-delay, 0s) + 0.15s) backwards;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .row.draw.in .glyph path { animation: none; }
   }
   @media (hover: hover) {
     .row:has(.row-cue:hover) .glyph path { stroke: var(--void-abyss); }
@@ -178,13 +192,20 @@ const services = [
 
 <script>
   // cues route to the contact section (which carries the copy fallback for
-  // machines with no mail handler) and hand their subject to the mail link
+  // machines with no mail handler), hand their subject to the mail link,
+  // and say so out loud — the subject echo keeps the handoff honest
   const mail = document.querySelector<HTMLAnchorElement>('.contact .mail');
+  const echo = document.querySelector<HTMLElement>('.contact [data-subject-echo]');
+  const echoText = echo?.querySelector<HTMLElement>('[data-echo-text]');
   document.querySelectorAll<HTMLAnchorElement>('.row-cue').forEach((cue) => {
     cue.addEventListener('click', () => {
       if (!mail || !cue.dataset.subject) return;
       const base = mail.getAttribute('href')!.split('?')[0];
       mail.setAttribute('href', `${base}?subject=${encodeURIComponent(cue.dataset.subject)}`);
+      if (echo && echoText) {
+        echoText.textContent = `subject · ${cue.dataset.subject.split(' · ')[0].toLowerCase()} `;
+        echo.hidden = false;
+      }
     });
   });
 </script>

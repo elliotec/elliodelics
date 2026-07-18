@@ -8,13 +8,19 @@
     <p class="mono">elliodelics © {new Date().getFullYear()}</p>
     <p class="mono dim">software engineering for the psychedelic industry</p>
     <p class="mono dim">no cookies, no trackers</p>
-    <nav class="mono links" aria-label="also on this site">
-      <a href="/plain">plain words</a>
-      <a href="/accessibility">accessibility</a>
-      <a href="/vocabulary">vocabulary</a>
-      <a href="/privacy">privacy</a>
-    </nav>
   </div>
+  {/* the proof pages, promoted from shy footer links to a labeled index —
+      the receipts a compliance-minded visitor came to check */}
+  <nav class="container records mono" aria-label="on the record">
+    <p class="records-title dim">on the record</p>
+    <ul>
+      <li><a href="/accessibility">accessibility</a><span class="dim"> · built to WCAG 2.2 AAA, with the evidence</span></li>
+      <li><a href="/privacy">privacy</a><span class="dim"> · what happens with your data, which is almost nothing</span></li>
+      <li><a href="/vocabulary">vocabulary</a><span class="dim"> · every term from the ticker, defined</span></li>
+      <li><a href="/plain">plain words</a><span class="dim"> · the whole site in simple language</span></li>
+      <li><a href="/colophon">colophon</a><span class="dim"> · how this page is built</span></li>
+    </ul>
+  </nav>
 </footer>
 
 <style>
@@ -23,7 +29,7 @@
   }
 
   .inner {
-    padding-block: clamp(3rem, 8vh, 5rem) 1.8rem;
+    padding-block: clamp(3rem, 8vh, 5rem) 0;
     display: flex;
     flex-wrap: wrap;
     gap: 0.4rem 2.5rem;
@@ -33,17 +39,33 @@
   .inner p { margin: 0; }
   .dim { color: var(--ink-dim); }
 
-  .links {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.4rem 2rem;
+  .records {
+    padding-block: 1.6rem 2rem;
+    margin-block-start: 2.2rem;
   }
-  .links a {
+
+  .records-title {
+    margin: 0 0 1rem;
+    padding-block-start: 1.2rem;
+    border-block-start: 1px solid var(--ink-faint);
+  }
+
+  .records ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(19rem, 1fr));
+    gap: 0.7rem 2.5rem;
+  }
+
+  .records a {
     color: var(--acid);
     text-decoration: none;
-    /* ≥44px target without moving the footer's lines */
+    /* ≥44px target without moving the lines */
     padding-block: 1em;
     margin-block: -1em;
+    display: inline-block;
   }
-  .links a:hover { text-decoration: underline; }
+  .records a:hover { text-decoration: underline; }
 </style>

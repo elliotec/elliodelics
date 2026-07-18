@@ -524,6 +524,19 @@ const email = 'mike@elliodelics.com';
   resize();
   window.addEventListener('resize', resize);
 
+  // a skip is a jump, not a journey: instant scroll for the skip cue,
+  // bypassing the global smooth behavior's full-page flight
+  document.querySelector<HTMLAnchorElement>('.hero-cue[href="#contact"]')?.addEventListener('click', (e) => {
+    const m = e as MouseEvent;
+    if (m.metaKey || m.ctrlKey || m.shiftKey || m.altKey || m.button !== 0) return;
+    e.preventDefault();
+    const target = document.querySelector<HTMLElement>('#contact');
+    if (!target) return;
+    target.scrollIntoView({ behavior: 'instant', block: 'start' });
+    target.focus({ preventScroll: true });
+    history.pushState(null, '', '#contact');
+  });
+
   // the wordmark scrolls home instead of reloading the whole page and
   // replaying the entrance
   document.querySelector('.brand')?.addEventListener('click', (e) => {
@@ -554,10 +567,14 @@ const email = 'mike@elliodelics.com';
     if (reduced.matches) draw(4200, Infinity);
   });
   // click/tap anywhere open in the hero: rosette burst (all pointer types —
-  // a tap is deliberate in a way scrolling isn't)
-  hero.addEventListener('click', (e) => {
+  // a tap is deliberate in a way scrolling isn't). Delegated to the
+  // document so no non-interactive element carries a click handler —
+  // accessibility inspectors rightly flag clickable-but-unfocusable
+  // elements, and this decorative easter egg is ambient, not a control.
+  document.addEventListener('click', (e) => {
     if (reduced.matches) return; // the field is a still image under reduced motion
-    if ((e.target as Element).closest('a, button')) return;
+    const t = e.target as Element;
+    if (!hero.contains(t) || t.closest('a, button')) return;
     const rect = canvas.getBoundingClientRect();
     burstAt(e.clientX, e.clientY - rect.top, performance.now());
   });

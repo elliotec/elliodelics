@@ -2,7 +2,7 @@
 ---
 
 <section class="founder" aria-labelledby="founder-title">
-  <div class="container inner reveal">
+  <div class="container inner">
     <h2 class="sr-only" id="founder-title">Who runs elliodelics</h2>
     <div class="founder-grid">
       <img
@@ -26,7 +26,17 @@
           Studies at the University of Ottawa. He’s the person your CTO wants in
           the room, and the one your facilitators don’t mind having there.
         </p>
-        <p class="aside mono">fluent in changelogs and trip reports</p>
+        <p class="shape">
+          elliodelics is deliberately small. It’s always Mike, plus trusted
+          collaborators for design, compliance, or research when the work
+          calls for them. No bench, no handoffs.
+        </p>
+        {/* acid means interactive, so the aside earns its color: it links
+            to the vocabulary, where both fluencies are actually defined */}
+        <p class="aside-line"><a class="aside mono" href="/vocabulary">fluent in changelogs and trip reports →</a></p>
+        {/* the reader who just finished the page's best argument gets a
+            door, right here, instead of a scroll hunt */}
+        <p class="go-line"><a class="go mono" href="#contact">sounds like your project → contact ↘</a></p>
       </div>
     </div>
   </div>
@@ -98,8 +108,33 @@
     line-height: 1.5; /* AAA 1.4.8 */
   }
 
-  .aside {
-    margin: 2.2rem 0 0;
-    color: var(--acid);
+  .shape {
+    max-width: var(--measure);
+    margin: 1.4rem 0 0;
+    color: var(--ink-dim);
   }
+
+  .aside-line { margin: 2.2rem 0 0; }
+
+  .aside {
+    color: var(--acid);
+    text-decoration: none;
+    display: inline-block;
+    /* ≥44px target without moving the line */
+    padding-block: 1em;
+    margin-block: -1em;
+  }
+  .aside:hover { text-decoration: underline; }
+
+  .go-line { margin: 1.1rem 0 0; }
+
+  .go {
+    color: var(--acid);
+    text-decoration: none;
+    display: inline-block;
+    /* ≥44px target without moving the line */
+    padding-block: 1em;
+    margin-block: -1em;
+  }
+  .go:hover { text-decoration: underline; }
 </style>

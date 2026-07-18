@@ -1,5 +1,6 @@
 ---
-// AAA 3.1.3 (unusual words) and 3.1.4 (abbreviations): every ticker term,
+// WCAG 2.2 success criteria 3.1.3 Unusual Words and 3.1.4 Abbreviations
+// (both AAA — SC numbers inside WCAG 2.2, not a WCAG version): every ticker term,
 // every abbreviation on the site, defined in one place. The mechanism is a
 // glossary page (WCAG technique G62), linked from the footer of every page.
 import SubPage from '../layouts/SubPage.astro';
@@ -26,6 +27,8 @@ const groups = [
       ['fractional', 'part-time by design, a share of a senior role without the full-time hire'],
       ['CTO', 'chief technology officer'],
       ['MA', 'master of arts, a graduate degree'],
+      ['pro bono', 'unpaid, on purpose, for work that matters'],
+      ['colophon', 'the bookbinder’s page about how the book was made, ours is about this site'],
     ],
   },
   {
@@ -53,11 +56,11 @@ const groups = [
 
 <SubPage
   title="elliodelics · the vocabulary, defined"
-  description="Every term from the elliodelics ticker, plus the abbreviations, defined. One engineering term, one field term, per pair."
+  description="Every term from the elliodelics ticker, plus the abbreviations and a few strays, defined. One engineering term, one field term, per pair."
   heading="The vocabulary, defined"
   wide
 >
-  <p class="note mono">appendix · every term from the ticker, plus the abbreviations</p>
+  <p class="note mono">appendix · every term from the ticker, plus the abbreviations and a few strays</p>
 
   {groups.map((g) => (
     <div class="group">

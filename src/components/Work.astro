@@ -1,44 +1,53 @@
 ---
+// ordered by relevance to a buying clinic: vertical client work first,
+// scale proof second, the nonprofits after. `rel` is the honest
+// relationship tag — the "public record" claim invites the audit, so the
+// answer is printed before anyone has to dig for it.
 const cases = [
-  {
-    org: 'Mindscape Collective',
-    logo: '/logos/mindscape.webp',
-    logoH: '4.6rem', /* tall narrow mark reads small at the shared height */
-    url: 'https://mindscapecollective.org',
-    role: 'founder & executive director',
-    body: 'An open library of the world’s psychedelic and consciousness research, aggregating a massive collection of peer-reviewed articles from a dozen sources and summarizing them in plain language, free to everyone. No paywall, no gatekeeping.',
-  },
-  {
-    org: 'Psymposia',
-    logo: '/logos/psymposia.svg',
-    url: 'https://psymposia.com',
-    role: 'infrastructure & migrations',
-    body: 'Migrating the psychedelic media nonprofit’s publishing platform, hosting, and video pipeline to open-source, encrypted infrastructure. Privacy engineering for independent journalism in a sensitive field.',
-  },
   {
     org: 'Psychedelia-Stiftung',
     logo: '/logos/stiftung.webp',
     url: 'https://psychedelia-stiftung.de',
+    rel: 'client',
     role: 'engineering partner',
     bodyPre: 'Websites, systems, and GDPR-compliant intake forms for the German foundation’s work on ethical, evidence-backed psychedelic retreats, including ',
     linkText: 'Psychedelia Retreats',
     linkHref: 'https://psychedelia-retreats.com',
     bodyPost: '.',
   },
+  {
+    org: 'Dutchie',
+    logo: '/logos/dutchie.webp',
+    url: 'https://business.dutchie.com',
+    rel: 'employment',
+    role: 'director of engineering',
+    body: 'Grew the engineering department to 60 engineers across 10 teams through funding rounds and acquisitions, in cannabis dispensary software where security, data privacy, and compliance are the product.',
+  },
+  {
+    org: 'Psymposia',
+    logo: '/logos/psymposia.svg',
+    url: 'https://psymposia.com',
+    rel: 'pro bono',
+    role: 'infrastructure & migrations',
+    body: 'Migrating the psychedelic media nonprofit’s publishing platform, hosting, and video pipeline to open-source, encrypted infrastructure. Privacy engineering for independent journalism in a sensitive field.',
+  },
   // {
   //   org: 'Josie Kins',
   //   logo: '/logos/josie.webp',
   //   logoH: '1.7rem', /* slim wordmark */
   //   url: 'https://josiekins.xyz',
+  //   rel: 'collaborator',
   //   role: 'collaborator',
   //   body: 'Collaborating on setting up her community Matrix server and on data projects.',
   // },
   {
-    org: 'Dutchie',
-    logo: '/logos/dutchie.webp',
-    url: 'https://business.dutchie.com',
-    role: 'director of engineering',
-    body: 'Grew the engineering department to 60 engineers across 10 teams through funding rounds and acquisitions, in cannabis dispensary software where security, data privacy, and compliance are the product.',
+    org: 'Mindscape Collective',
+    logo: '/logos/mindscape.webp',
+    logoH: '4.6rem', /* tall narrow mark reads small at the shared height */
+    url: 'https://mindscapecollective.org',
+    rel: 'founder',
+    role: 'executive director',
+    body: 'An open library of the world’s psychedelic and consciousness research. Tens of thousands of peer-reviewed articles from ten sources, summarized in plain language, plus daily clinical-trial tracking and a tool for asking the literature a question. Free to everyone. No paywall, no gatekeeping.',
   },
 ];
 ---
@@ -46,12 +55,12 @@ const cases = [
 <section class="work" aria-labelledby="work-title">
   <span class="sr-only" id="new-tab-note">opens in new tab</span>
   <div class="container">
-  <h2 class="display sec-title reveal" id="work-title">Field reports</h2>
-  <p class="note mono reveal">no anonymized case studies · all of this is public record</p>
+  <h2 class="display sec-title" id="work-title">Field reports</h2>
+  <p class="note mono">no anonymized case studies · all of this is public record</p>
 
   <ul class="reports">
     {cases.map((c, i) => (
-      <li class="report reveal" style={`--reveal-delay: ${i * 0.08}s`}>
+      <li class="report draw" style={`--draw-delay: ${i * 0.08}s`}>
         <img
           class="orglogo"
           src={c.logo}
@@ -73,7 +82,7 @@ const cases = [
           </h3>
           <span class="ledger" aria-hidden="true"></span>
         </div>
-        <p class="role mono">{c.role}</p>
+        <p class="role mono">{c.rel} · {c.role}</p>
         <p class="body">
           {c.bodyPre ?? c.body}{c.linkHref && (
             <a
@@ -145,6 +154,12 @@ const cases = [
     opacity: 0.92;
   }
 
+  @media (forced-colors: active) {
+    /* white-forced logos vanish on forced-white backgrounds; the originals
+       carry their own contrast */
+    .orglogo { filter: none; opacity: 1; }
+  }
+
   /* elliot.ec-style ledger line: org ······ role */
   .org-line {
     display: flex;
@@ -156,8 +171,19 @@ const cases = [
   .ledger {
     flex: 1;
     min-width: 3rem;
-    border-block-end: 1px dotted var(--ink-faint);
+    /* 2px, not the 1px hairline norm: a moving line needs enough ink
+       to be watched, not just noticed */
+    border-block-end: 2px dotted var(--ink-faint);
     align-self: center;
+    /* explicit resting inset: clip-path can't interpolate from inset()
+       to none, so without this the sweep degrades to a discrete blink */
+    clip-path: inset(0 0 0 0);
+  }
+  .report.draw.in .ledger {
+    animation: sweep-in 3s var(--ease-out) calc(var(--draw-delay, 0s) + 0.2s) backwards;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .report.draw.in .ledger { animation: none; }
   }
   @media (max-width: 40rem) {
     .ledger { display: none; }

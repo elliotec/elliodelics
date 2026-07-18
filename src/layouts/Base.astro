@@ -52,9 +52,15 @@ const { title, description } = Astro.props;
   <body>
     <slot />
     <script>
-      // .io gates the reveal styles; set here so a stalled bundle can never
-      // strand below-fold content at opacity 0
-      document.documentElement.classList.add('io');
+      // the page never hides content — what animates is the drawing
+      // itself. The observer flips .draw containers to .in as they
+      // arrive; every draw's resting state is the finished artwork
+      // (from-states live in the keyframes), so print, crawlers, and
+      // inspectors always see the completed page.
+      // The positive rootMargin fires BEFORE the element enters the
+      // viewport: the resting state is the finished drawing, so a trigger
+      // after visibility would flash the finished art, blank it, and
+      // redraw — armed offscreen, it only ever appears mid-draw.
       const observer = new IntersectionObserver(
         (entries) => {
           for (const entry of entries) {
@@ -64,9 +70,9 @@ const { title, description } = Astro.props;
             }
           }
         },
-        { rootMargin: '0px 0px -12% 0px' }
+        { rootMargin: '0px 0px 18% 0px' }
       );
-      document.querySelectorAll('.reveal').forEach((el) => observer.observe(el));
+      document.querySelectorAll('.draw').forEach((el) => observer.observe(el));
     </script>
   </body>
 </html>

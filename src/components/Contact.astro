@@ -4,10 +4,17 @@ const email = 'mike@elliodelics.com';
 
 <section class="contact" id="contact" aria-labelledby="contact-title" tabindex="-1">
   <div class="container">
-    <h2 class="display big reveal" id="contact-title">
+    <h2 class="display big draw" id="contact-title">
       Tell us what you’re building<span class="dot">.</span>
     </h2>
-    <div class="actions reveal" style="--reveal-delay: 0.1s">
+    {/* filled by the service cues — the subject handoff, said out loud,
+        right above the mail link where the post-scroll eye lands.
+        Dismissing it resets the link to a plain address. */}
+    <p class="mono echo" data-subject-echo hidden>
+      <span data-echo-text></span>
+      <button class="echo-clear" type="button" aria-label="clear the subject">×</button>
+    </p>
+    <div class="actions">
       <a class="mail" href={`mailto:${email}`} data-magnet>
         {email}
         <span class="sweep" aria-hidden="true"></span>
@@ -19,10 +26,10 @@ const email = 'mike@elliodelics.com';
       </button>
       <span class="sr-only" role="status"></span>
     </div>
-    <p class="mono next reveal" style="--reveal-delay: 0.15s">
-      goes straight to Mike · no funnel, no sales team<br />
-      a few engagements a year · replies typically within a few days
-    </p>
+    <div class="mono next">
+      <p>goes straight to Mike · no funnel, no sales team</p>
+      <p>the first call is free · replies usually within a few days</p>
+    </div>
   </div>
 </section>
 
@@ -30,10 +37,31 @@ const email = 'mike@elliodelics.com';
   .contact:focus-visible { outline: none; } /* scroll target, not a control */
 
   .next {
-    margin: 1.6rem 0 0;
+    margin: 2rem 0 0;
     color: var(--ink-dim);
     max-width: 62ch;
   }
+  .next p { margin: 0; }
+  .next p + p { margin-block-start: 0.6em; }
+
+  /* acid annotation above the mail link: it describes what the link will do.
+     Appears mid-scroll (off-screen), so its layout shift is never seen. */
+  .echo {
+    margin: clamp(2rem, 6vh, 3.5rem) 0 -1.4rem;
+    color: var(--acid);
+  }
+
+  .echo-clear {
+    background: none;
+    border: none;
+    color: var(--ink-dim);
+    font: inherit;
+    cursor: pointer;
+    /* ≥44px target without growing the line */
+    padding: 1em;
+    margin: -1em -1em -1em -0.4em;
+  }
+  .echo-clear:hover { color: var(--acid); }
 
   .contact {
     background: var(--void-abyss);
@@ -51,7 +79,16 @@ const email = 'mike@elliodelics.com';
     margin: 0;
   }
 
-  .dot { color: var(--acid); }
+  .dot {
+    color: var(--acid);
+    display: inline-block; /* scale needs a box */
+  }
+  .big.draw.in .dot {
+    animation: dot-pop 1.2s var(--ease-expo) 0.55s backwards;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .big.draw.in .dot { animation: none; }
+  }
 
   .actions {
     margin-block-start: clamp(3rem, 8vh, 5.5rem);
@@ -158,28 +195,39 @@ const email = 'mike@elliodelics.com';
 
 <script>
   // copy-to-clipboard with visible + announced confirmation, and an honest
-  // failure state (clipboard can be blocked or unavailable)
+  // failure state (clipboard can be blocked or unavailable). One tracked
+  // timer, so a double-click can't stack timeouts and flicker the state.
   const btn = document.querySelector<HTMLButtonElement>('[data-copy]');
   const status = document.querySelector<HTMLElement>('.actions [role="status"]');
+  let copyTimer: ReturnType<typeof setTimeout>;
   btn?.addEventListener('click', async () => {
+    clearTimeout(copyTimer);
     try {
       await navigator.clipboard.writeText(btn.dataset.copy!);
       btn.classList.remove('failed');
       btn.classList.add('did');
       if (status) status.textContent = 'Email address copied.';
-      setTimeout(() => btn.classList.remove('did'), 1600);
+      copyTimer = setTimeout(() => btn.classList.remove('did'), 1600);
     } catch {
       btn.classList.remove('did');
       btn.classList.add('failed');
       if (status) status.textContent = 'Copy failed. Use the email link instead.';
-      setTimeout(() => btn.classList.remove('failed'), 2400);
+      copyTimer = setTimeout(() => btn.classList.remove('failed'), 2400);
     }
+  });
+
+  // dismissing the subject echo resets the mail link to a plain address
+  const echoWrap = document.querySelector<HTMLElement>('[data-subject-echo]');
+  echoWrap?.querySelector('.echo-clear')?.addEventListener('click', () => {
+    echoWrap.hidden = true;
+    const m = document.querySelector<HTMLAnchorElement>('.contact .mail');
+    m?.setAttribute('href', m.getAttribute('href')!.split('?')[0]);
   });
 
   // magnetic pull on the email link — skipped for reduced motion
   const mail = document.querySelector<HTMLAnchorElement>('[data-magnet]');
   if (mail && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-    const strength = 0.22;
+    const strength = 0.1; /* alive, not lunging */
     mail.style.transition = 'translate 0.3s cubic-bezier(0.22, 1, 0.36, 1)';
     mail.addEventListener('pointermove', (e) => {
       const r = mail.getBoundingClientRect();

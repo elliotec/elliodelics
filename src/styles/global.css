@@ -144,37 +144,24 @@ a {
   white-space: nowrap;
 }
 
-/* -- scroll reveal (enhancement only: visible without JS) -----
-   Gated on .io, set by the observer script itself: if that bundle
-   never runs, nothing is ever hidden. */
+/* -- schematic draw-ins ---------------------------------------
+   Nothing on the page hides and waits: content is present from the first
+   frame, always. What animates is the drawing itself — rules sweep in,
+   stroke glyphs draw, dots pop — when a .draw container earns .in from
+   the observer. Every from-state lives inside these keyframes, so a
+   renderer that never runs animations (print, crawlers, inspectors,
+   headless capture) shows the finished drawing. */
 
-html.io .reveal {
-  opacity: 0;
-  transform: translateY(2.5rem);
-  transition:
-    opacity 0.9s var(--ease-out),
-    transform 0.9s var(--ease-out);
-  transition-delay: var(--reveal-delay, 0s);
+@keyframes stroke-draw {
+  from { stroke-dashoffset: 1; }
 }
 
-html.io .reveal.in {
-  opacity: 1;
-  transform: none;
+@keyframes sweep-in {
+  from { clip-path: inset(0 100% 0 0); }
 }
 
-@media (prefers-reduced-motion: reduce) {
-  html.io .reveal {
-    opacity: 1;
-    transform: none;
-    transition: none;
-  }
-}
-
-@media print {
-  html.io .reveal {
-    opacity: 1;
-    transform: none;
-  }
+@keyframes dot-pop {
+  from { scale: 0; }
 }
 
 /* -- forced colors (Windows High Contrast) --------------------
