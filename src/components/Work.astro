@@ -49,7 +49,7 @@ const cases = [
 ];
 ---
 
-<section class="work" aria-labelledby="work-title">
+<section class="work" id="field-reports" aria-labelledby="work-title" tabindex="-1">
   <span class="sr-only" id="new-tab-note">opens in new tab</span>
   <div class="container">
   <h2 class="display sec-title" id="work-title">Field reports<span class="dot">.</span></h2>
@@ -92,6 +92,9 @@ const cases = [
     background: var(--void-deep);
     padding-block: var(--space-section);
   }
+
+  /* scroll target only — the ring belongs on controls, not sections */
+  .work:focus-visible { outline: none; }
 
   .sec-title {
     font-size: var(--text-h2);

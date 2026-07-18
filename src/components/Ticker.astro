@@ -24,7 +24,7 @@ const pairs = [
     reduced motion, where nothing moves and there's nothing to pause.
     Descendants of role=button are presentational, so the sr-only vocabulary
     list lives outside as a sibling. */}
-<div class="ticker">
+<div class="ticker" id="ticker">
   <div class="ticker-track" aria-hidden="true">
     {[0, 1].map(() => (
       <span class="ticker-run">

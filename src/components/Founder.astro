@@ -1,7 +1,7 @@
 ---
 ---
 
-<section class="founder" aria-labelledby="founder-title">
+<section class="founder" id="founder" aria-labelledby="founder-title" tabindex="-1">
   <div class="container inner">
     <h2 class="sr-only" id="founder-title">Who runs elliodelics</h2>
     <div class="founder-grid">
@@ -99,6 +99,9 @@
     background: var(--void);
     padding-block: var(--space-section);
   }
+
+  /* scroll target only — the ring belongs on controls, not sections */
+  .founder:focus-visible { outline: none; }
 
   .inner {
     max-width: 58rem;

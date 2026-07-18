@@ -6,12 +6,12 @@
 <footer class="footer">
   <div class="container inner">
     <p class="mono">elliodelics © {new Date().getFullYear()}</p>
-    <p class="mono dim">software engineering for the psychedelic industry</p>
+    <p class="mono dim">code and compliance for the psychedelic industry</p>
     <p class="mono dim">no cookies, no trackers</p>
   </div>
   {/* the proof pages, promoted from shy footer links to a labeled index —
       the receipts a compliance-minded visitor came to check */}
-  <nav class="container records mono" aria-label="on the record">
+  <nav class="container records mono" id="on-the-record" aria-label="on the record" tabindex="-1">
     <p class="records-title dim">on the record</p>
     <ul>
       <li><a href="/accessibility">accessibility</a><span class="dim"> · built to WCAG 2.2 AAA, with the evidence</span></li>
@@ -44,6 +44,9 @@
     padding-block: 1.6rem 2rem;
     margin-block-start: 2.2rem;
   }
+
+  /* scroll target only — the ring belongs on controls, not sections */
+  .records:focus-visible { outline: none; }
 
   .records-title {
     margin: 0 0 1rem;

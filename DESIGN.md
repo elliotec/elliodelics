@@ -199,6 +199,7 @@ The component vocabulary is small and stroke-drawn: links, one pill button, hair
 
 ### Navigation
 - A single top bar inside the hero: the wordmark left, mono email right (hidden below 40rem — the contact section carries the address). No menu, no hamburger. In-page cue links do the wayfinding.
+- Every band carries a stable, linkable anchor: `#top` (hero), `#manifesto`, `#ticker`, `#services`, `#field-reports`, `#founder`, `#contact`, and `#on-the-record` (the footer index). Scroll-target sections take `tabindex="-1"` with the focus ring suppressed (the ring belongs on controls); the ticker keeps its script-managed tabindex.
 
 ### Footer
 - Three mono lines (`elliodelics © year`, the tagline, `no cookies, no trackers`) plus the "on the record" index on the abyss band: the six proof pages as a hairline-ruled, grid-laid ledger — acid link + dim one-line descriptor each (`accessibility · built to WCAG 2.2 AAA, with the evidence`). The proof pages are the compliance positioning's receipts, so they get a labeled index, not shy links. The `<footer>` lives outside `<main>` and every section so it maps to the `contentinfo` landmark; the contact section carves out its height (`min-height: calc(88svh - 8rem)`) so contact plus footer still read as one viewport. The footer is shared across all pages.
