@@ -41,10 +41,19 @@ const email = 'mike@elliodelics.com';
   .next {
     margin: 2rem 0 0;
     color: var(--ink-dim);
-    max-width: 62ch;
+    /* wide enough that the longest line (first-call · replies) plus its
+       ✺ marker stays on one line at desktop widths */
+    max-width: 70ch;
   }
   .next p { margin: 0; }
   .next p + p { margin-block-start: 0.6em; }
+  /* each line is its own fragment, and the mark says so — the ✺ is the
+     system's annotation glyph (empty alt keeps screen readers quiet) */
+  .next p::before {
+    content: '✺ ' / '';
+    color: var(--acid);
+    font-size: 0.85em;
+  }
 
   /* acid annotation above the mail link: it describes what the link will do.
      Appears mid-scroll (off-screen), so its layout shift is never seen. */
@@ -86,7 +95,7 @@ const email = 'mike@elliodelics.com';
     display: inline-block; /* scale needs a box */
   }
   .big.draw.in .dot {
-    animation: dot-pop 1.2s var(--ease-expo) 0.55s backwards;
+    animation: dot-pop 1.8s var(--ease-expo) 0.65s backwards;
   }
   @media (prefers-reduced-motion: reduce) {
     .big.draw.in .dot { animation: none; }

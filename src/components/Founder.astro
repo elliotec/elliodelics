@@ -211,12 +211,12 @@
     stroke-dasharray: 1;
   }
   .diagram.draw.in .stroke path {
-    animation: stroke-draw 2s var(--ease-out) backwards;
+    animation: stroke-draw 3s var(--ease-out) backwards;
   }
   /* the schematic draws in reading order: ring, bonds, chain, phosphate */
-  .diagram.draw.in .stroke path:nth-child(n + 5) { animation-delay: 0.5s; }
-  .diagram.draw.in .stroke path:nth-child(n + 7) { animation-delay: 1s; }
-  .diagram.draw.in .stroke path:nth-child(10) { animation-delay: 1.5s; }
+  .diagram.draw.in .stroke path:nth-child(n + 5) { animation-delay: 0.8s; }
+  .diagram.draw.in .stroke path:nth-child(n + 7) { animation-delay: 1.6s; }
+  .diagram.draw.in .stroke path:nth-child(10) { animation-delay: 2.4s; }
   @media (prefers-reduced-motion: reduce) {
     .diagram.draw.in .stroke path { animation: none; }
   }
